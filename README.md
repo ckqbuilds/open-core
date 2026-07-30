@@ -51,8 +51,14 @@ by env vars (`AI_BASE_URL` / `AI_API_KEY` / `AI_MODEL`; see `.env.example`). The
 stays server-side; the widget hides itself when unconfigured. Answers are grounded in
 the recalls/outbreaks the app has loaded, not free-form generation.
 
-Dev needs two processes: `npm run dev` (Vite, proxies `/api`) and `npm run server`
-(the chat backend). Production is one process: `npm start` (build + serve on `PORT`).
+Dev is **one process**: `npm run dev` serves the app *and* the chat API (`/api/*`) via a
+Vite plugin — no separate server needed. Configure a provider in `.env.local` and the chat
+widget appears; leave it unset and the widget hides itself. Production is also one process:
+`npm start` (build + serve the bundle on `PORT`) using the standalone Node server in `server/`.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
 
 ## Integrity rule (important)
 
