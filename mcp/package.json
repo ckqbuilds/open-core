@@ -1,0 +1,17 @@
+{
+  "name": "opencore-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing live FDA/CDC food recalls, active outbreaks, and local food resources as tools.",
+  "type": "module",
+  "bin": {
+    "opencore-mcp": "index.mjs"
+  },
+  "files": ["index.mjs", "data.mjs", "README.md"],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  }
+}

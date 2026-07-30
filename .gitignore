@@ -1,0 +1,15 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env.local
+scrape.log
+public/outbreaks.json
+
+# Local tooling / personal — not for the public repo
+.neuver/
+.claude/
+CLAUDE.md
+
+# TypeScript incremental build cache
+*.tsbuildinfo

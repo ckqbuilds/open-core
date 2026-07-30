@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 50 20% 98%;
+    --foreground: 60 4% 6%;
+    --card: 48 24% 99%;
+    --card-foreground: 60 4% 6%;
+    --primary: 122 100% 26%;
+    --primary-foreground: 60 20% 98%;
+    --secondary: 50 12% 94%;
+    --secondary-foreground: 60 4% 20%;
+    --muted: 50 12% 94%;
+    --muted-foreground: 45 3% 45%;
+    --accent: 152 55% 40%;
+    --accent-foreground: 60 20% 98%;
+    --destructive: 0 62% 52%;
+    --destructive-foreground: 60 20% 98%;
+    --border: 48 14% 86%;
+    --input: 48 14% 86%;
+    --ring: 122 60% 34%;
+    --radius: 0.75rem;
+
+    /* viz palette — validated categorical + status (light) */
+    --viz-surface: #fcfcfb;
+    --viz-ink: #0b0b0b;
+    --viz-ink-2: #52514e;
+    --viz-muted: #898781;
+    --viz-grid: #e1e0d9;
+    --viz-axis: #c3c2b7;
+    --viz-s1: #2a78d6;
+    --viz-s2: #eb6834;
+    --viz-s3: #1baf7a;
+    --viz-s4: #eda100;
+    --status-good: #0ca30c;
+    --status-warning: #fab219;
+    --status-serious: #ec835a;
+    --status-critical: #d03b3b;
+  }
+
+  .dark {
+    --background: 60 4% 5%;
+    --foreground: 60 6% 98%;
+    --card: 60 3% 9%;
+    --card-foreground: 60 6% 98%;
+    --primary: 122 60% 42%;
+    --primary-foreground: 60 6% 98%;
+    --secondary: 60 3% 15%;
+    --secondary-foreground: 60 6% 92%;
+    --muted: 60 3% 15%;
+    --muted-foreground: 48 6% 66%;
+    --accent: 152 50% 44%;
+    --accent-foreground: 60 6% 98%;
+    --destructive: 0 68% 62%;
+    --destructive-foreground: 60 6% 98%;
+    --border: 60 3% 18%;
+    --input: 60 3% 18%;
+    --ring: 122 50% 50%;
+
+    --viz-surface: #1a1a19;
+    --viz-ink: #ffffff;
+    --viz-ink-2: #c3c2b7;
+    --viz-muted: #898781;
+    --viz-grid: #2c2c2a;
+    --viz-axis: #383835;
+    --viz-s1: #3987e5;
+    --viz-s2: #d95926;
+    --viz-s3: #199e70;
+    --viz-s4: #c98500;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+}
