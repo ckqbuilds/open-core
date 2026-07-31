@@ -1,4 +1,5 @@
 import { isChatConfigured, providerConfig, streamChat } from "./chat.mjs";
+import { fetchUsdaMarkets, isMarketsConfigured } from "./markets.mjs";
 
 /**
  * Vite dev plugin: serves /api/chat and /api/chat/status inside the Vite dev
@@ -17,6 +18,32 @@ export function chatDevPlugin() {
       server.middlewares.use("/api/chat/status", (_req, res) => {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ enabled: isChatConfigured(), model: providerConfig().model || null }));
+      });
+
+      // USDA farmers markets near a lat/lng.
+      server.middlewares.use("/api/markets", async (req, res) => {
+        const url = new URL(req.url ?? "", "http://localhost");
+        const x = url.searchParams.get("x");
+        const y = url.searchParams.get("y");
+        const radius = url.searchParams.get("radius");
+        res.setHeader("Content-Type", "application/json");
+        if (!isMarketsConfigured()) {
+          res.statusCode = 503;
+          res.end(JSON.stringify({ error: "markets_disabled", message: "Set USDA_API_KEY" }));
+          return;
+        }
+        if (!x || !y) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: "bad_request", message: "x and y required" }));
+          return;
+        }
+        try {
+          const markets = await fetchUsdaMarkets({ x, y, radius: radius ? Number(radius) : 25 });
+          res.end(JSON.stringify({ markets }));
+        } catch (err) {
+          res.statusCode = 502;
+          res.end(JSON.stringify({ error: "usda_error", message: String(err?.message ?? err) }));
+        }
       });
 
       server.middlewares.use("/api/chat", async (req, res) => {

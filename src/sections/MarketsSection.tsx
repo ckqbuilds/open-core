@@ -1,4 +1,4 @@
-import { Loader2, Sprout } from "lucide-react";
+import { Loader2, Sprout, Globe, Phone } from "lucide-react";
 import { findMarketsNear } from "@/data/markets";
 import { isMapsEnabled } from "@/data/mapbox";
 import type { GeoZip, Market } from "@/data/types";
@@ -6,6 +6,12 @@ import { useAsync } from "@/hooks/useAsync";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapViewLazy as MapView, type MapMarker } from "@/components/MapViewLazy";
 import { EmptyState, InfoNote, MapsDisabledNote } from "@/components/common";
+
+function formatPhone(digits: string): string {
+  return digits.length === 10
+    ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    : digits;
+}
 
 export function MarketsSection({ geo }: { geo: GeoZip | null }) {
   const mapsOn = isMapsEnabled();
@@ -34,8 +40,8 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
     <div className="space-y-6">
       <InfoNote>
         Buying whole, local produce and washing it yourself lets you control handling and reduce
-        exposure to recalled pre-packaged products. Markets below come from Mapbox within 25 miles of{" "}
-        {geo.place}. Always confirm hours before visiting.
+        exposure to recalled pre-packaged products. Markets below come from the USDA Local Food
+        Directories within 25 miles of {geo.place}. Always confirm hours before visiting — call ahead.
       </InfoNote>
 
       {markets.error && (
@@ -83,7 +89,7 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                       {m.address && (
                         <div className="text-xs text-muted-foreground">{m.address}</div>
                       )}
-                      <div className="mt-2 flex items-center gap-3 text-xs">
+                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                         <span className="tabular-nums text-muted-foreground">
                           {(m.distanceMi ?? 0).toFixed(1)} mi
                         </span>
@@ -95,7 +101,31 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                         >
                           Map
                         </a>
+                        {m.phone && (
+                          <a
+                            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+                            href={`tel:+1${m.phone}`}
+                          >
+                            <Phone className="size-3" />
+                            {formatPhone(m.phone)}
+                          </a>
+                        )}
+                        {m.website && (
+                          <a
+                            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+                            href={m.website}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Globe className="size-3" /> Website
+                          </a>
+                        )}
                       </div>
+                      {m.updatedAt && (
+                        <div className="mt-1 text-[11px] text-muted-foreground">
+                          USDA listing updated {m.updatedAt}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </CardContent>

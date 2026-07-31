@@ -4,7 +4,7 @@ import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { buildContext, chatStatus, streamChat, type ChatMessage } from "@/data/chat";
 import { MarkdownMessage, parseAssistant } from "@/components/MarkdownMessage";
-import type { GeoZip } from "@/data/types";
+import { useZipContext } from "@/hooks/ZipContext";
 import { Button } from "@/components/ui/button";
 
 const SUGGESTIONS = [
@@ -14,7 +14,8 @@ const SUGGESTIONS = [
   "How do I avoid getting sick from lettuce?",
 ];
 
-export function ChatWidget({ geo }: { geo: GeoZip | null }) {
+export function ChatWidget() {
+  const { geo } = useZipContext();
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -107,7 +108,8 @@ export function ChatWidget({ geo }: { geo: GeoZip | null }) {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="fixed right-4 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg transition-transform motion-safe:hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
           aria-label="Ask about recalls and outbreaks"
         >
           <MessageCircle className="size-5" />
@@ -203,7 +205,7 @@ export function ChatWidget({ geo }: { geo: GeoZip | null }) {
             {error && <p className="text-xs text-destructive">{error}</p>}
           </div>
 
-          <div className="border-t p-3">
+          <div className="border-t px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <form
               onSubmit={(e) => {
                 e.preventDefault();

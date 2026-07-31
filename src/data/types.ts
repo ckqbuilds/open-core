@@ -124,6 +124,9 @@ export interface Market {
   distanceMi?: number;
   products?: string;
   website?: string;
+  phone?: string;
+  /** Free-text "last updated" from the USDA directory, e.g. "Jun 24th, 2021". */
+  updatedAt?: string;
   source: "USDA" | "OSM" | "Mapbox";
 }
 

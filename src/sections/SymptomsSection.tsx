@@ -208,7 +208,7 @@ function RiskGroupPicker({
   );
 }
 
-function PathogenCard({
+export function PathogenCard({
   pathogen: p,
   selected,
   activeOutbreaks,

@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
 import { isChatConfigured, providerConfig, streamChat } from "./chat.mjs";
+import { fetchUsdaMarkets, isMarketsConfigured } from "./markets.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -15,6 +16,31 @@ app.use(express.json({ limit: "256kb" }));
 // Capability probe so the client can hide the chat UI when unconfigured.
 app.get("/api/chat/status", (_req, res) => {
   res.json({ enabled: isChatConfigured(), model: providerConfig().model || null });
+});
+
+// USDA farmers markets near a lat/lng. Key stays server-side.
+app.get("/api/markets", async (req, res) => {
+  if (!isMarketsConfigured()) {
+    res.status(503).json({ error: "markets_disabled", message: "Set USDA_API_KEY" });
+    return;
+  }
+  const { x, y, radius } = req.query;
+  if (x == null || y == null) {
+    res.status(400).json({ error: "bad_request", message: "x and y required" });
+    return;
+  }
+  const controller = new AbortController();
+  req.on("close", () => controller.abort());
+  try {
+    const markets = await fetchUsdaMarkets(
+      { x, y, radius: radius ? Number(radius) : 25 },
+      controller.signal
+    );
+    res.json({ markets });
+  } catch (err) {
+    if (controller.signal.aborted) return;
+    res.status(502).json({ error: "usda_error", message: String(err?.message ?? err) });
+  }
 });
 
 // Provider-agnostic streaming chat proxy. Secret key stays here, never shipped.

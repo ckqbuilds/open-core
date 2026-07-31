@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,19 +8,19 @@
     --foreground: 60 4% 6%;
     --card: 48 24% 99%;
     --card-foreground: 60 4% 6%;
-    --primary: 122 100% 26%;
+    --primary: 142 46% 30%;
     --primary-foreground: 60 20% 98%;
     --secondary: 50 12% 94%;
     --secondary-foreground: 60 4% 20%;
     --muted: 50 12% 94%;
     --muted-foreground: 45 3% 45%;
-    --accent: 152 55% 40%;
+    --accent: 152 48% 38%;
     --accent-foreground: 60 20% 98%;
     --destructive: 0 62% 52%;
     --destructive-foreground: 60 20% 98%;
     --border: 48 14% 86%;
     --input: 48 14% 86%;
-    --ring: 122 60% 34%;
+    --ring: 142 46% 38%;
     --radius: 0.75rem;
 
     /* viz palette — validated categorical + status (light) */
@@ -46,19 +45,19 @@
     --foreground: 60 6% 98%;
     --card: 60 3% 9%;
     --card-foreground: 60 6% 98%;
-    --primary: 122 60% 42%;
+    --primary: 142 48% 46%;
     --primary-foreground: 60 6% 98%;
     --secondary: 60 3% 15%;
     --secondary-foreground: 60 6% 92%;
     --muted: 60 3% 15%;
     --muted-foreground: 48 6% 66%;
-    --accent: 152 50% 44%;
+    --accent: 152 44% 46%;
     --accent-foreground: 60 6% 98%;
     --destructive: 0 68% 62%;
     --destructive-foreground: 60 6% 98%;
     --border: 60 3% 18%;
     --input: 60 3% 18%;
-    --ring: 122 50% 50%;
+    --ring: 142 46% 52%;
 
     --viz-surface: #1a1a19;
     --viz-ink: #ffffff;
@@ -79,5 +78,17 @@
     @apply bg-background text-foreground;
     font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Respect reduced-motion: neutralize transitions/animations, keep status spinners. */
+@media (prefers-reduced-motion: reduce) {
+  *:not(.animate-spin),
+  *:not(.animate-spin)::before,
+  *:not(.animate-spin)::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
