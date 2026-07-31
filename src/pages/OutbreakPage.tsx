@@ -14,6 +14,9 @@ import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
 import { EmptyState } from "@/components/common";
 
+/** How far back "Related recalls" reaches. Older recalls are treated as stale. */
+const RELATED_RECALL_WINDOW_YEARS = 3;
+
 export function OutbreakPage() {
   const { refId } = useParams<{ refId: string }>();
   const { geo } = useZipContext();
@@ -34,9 +37,17 @@ export function OutbreakPage() {
     ? matchedPathogen?.matchTerms[0] ?? ob.pathogen.split(/[\s,]/)[0]
     : "";
 
+  // Only surface recalls from the last few years — an ongoing outbreak's
+  // "related recalls" shouldn't dredge up terminated recalls from a decade ago.
+  const recallSince = useMemo(() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - RELATED_RECALL_WINDOW_YEARS);
+    return d.toISOString().slice(0, 10).replace(/-/g, "");
+  }, []);
+
   const relatedRecalls = useAsync<Recall[]>(
-    (signal) => fetchRecallsByTerm(recallTerm, 12, signal),
-    [recallTerm],
+    (signal) => fetchRecallsByTerm(recallTerm, 12, signal, recallSince),
+    [recallTerm, recallSince],
     Boolean(recallTerm)
   );
 

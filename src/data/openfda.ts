@@ -76,14 +76,24 @@ function orClauses(clauses: string[]): string {
   return clauses.map((c) => `(${c})`).join(" OR ");
 }
 
-/** Recalls whose reason or product mentions a pathogen/term of interest. */
-export function fetchRecallsByTerm(term: string, limit = 50, signal?: AbortSignal) {
+/**
+ * Recalls whose reason or product mentions a pathogen/term of interest.
+ * `sinceDate` (openFDA YYYYMMDD) floors the report_date so stale recalls —
+ * e.g. terminated 2014 Class I recalls — don't surface under a current
+ * outbreak. Omit it to search the full history.
+ */
+export function fetchRecallsByTerm(
+  term: string,
+  limit = 50,
+  signal?: AbortSignal,
+  sinceDate?: string
+) {
   const q = term.replace(/"/g, "");
-  return fetchRecalls({
-    search: orClauses([`reason_for_recall:"${q}"`, `product_description:"${q}"`]),
-    limit,
-    signal,
-  });
+  const termClause = orClauses([`reason_for_recall:"${q}"`, `product_description:"${q}"`]);
+  const search = sinceDate
+    ? `(${termClause}) AND report_date:[${sinceDate} TO 99991231]`
+    : termClause;
+  return fetchRecalls({ search, limit, signal });
 }
 
 /** Recent produce/leafy-green and pathogen recalls relevant to this tracker. */
