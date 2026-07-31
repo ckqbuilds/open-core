@@ -16,6 +16,16 @@ export interface Recall {
   city?: string;
   state?: string;
   country?: string;
+  /** Regulating agency. Absent ⇒ FDA (openFDA), the original source. */
+  agency?: "FDA" | "FSIS";
+  /** Link to the official recall notice (FSIS provides one; openFDA does not). */
+  url?: string;
+  /**
+   * Canonical pathogen id (matches Pathogen.id in symptoms.ts) detected from the
+   * recall text, when one is named. Used only to correlate a recall with an
+   * outbreak of the same pathogen — never to assert a confirmed shared event.
+   */
+  pathogen?: string;
 }
 
 /** A geocoded US ZIP centroid. */
@@ -115,6 +125,14 @@ export interface Outbreak {
 }
 
 /** A farmers market near a ZIP. */
+/** The five USDA Local Food Directory types the keyed API exposes. */
+export type UsdaDirectory =
+  | "farmersmarket"
+  | "csa"
+  | "onfarmmarket"
+  | "foodhub"
+  | "agritourism";
+
 export interface Market {
   id: string;
   name: string;
@@ -127,6 +145,8 @@ export interface Market {
   phone?: string;
   /** Free-text "last updated" from the USDA directory, e.g. "Jun 24th, 2021". */
   updatedAt?: string;
+  /** Which USDA directory this listing came from (USDA source only). */
+  directory?: UsdaDirectory;
   source: "USDA" | "OSM" | "Mapbox";
 }
 

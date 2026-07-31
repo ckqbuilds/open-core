@@ -24,7 +24,7 @@ app.get("/api/markets", async (req, res) => {
     res.status(503).json({ error: "markets_disabled", message: "Set USDA_API_KEY" });
     return;
   }
-  const { x, y, radius } = req.query;
+  const { x, y, radius, directory } = req.query;
   if (x == null || y == null) {
     res.status(400).json({ error: "bad_request", message: "x and y required" });
     return;
@@ -33,7 +33,7 @@ app.get("/api/markets", async (req, res) => {
   req.on("close", () => controller.abort());
   try {
     const markets = await fetchUsdaMarkets(
-      { x, y, radius: radius ? Number(radius) : 25 },
+      { x, y, radius: radius ? Number(radius) : 25, directory },
       controller.signal
     );
     res.json({ markets });

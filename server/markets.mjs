@@ -1,14 +1,27 @@
 /**
- * USDA Local Food Directories — farmers markets (server-side).
+ * USDA Local Food Directories (server-side).
  *
- * The keyed endpoint (/api/farmersmarket/) returns the full directory with
+ * The keyed endpoints (/api/<directory>/) return the full directory with
  * coordinates and a precomputed distance, unlike the partial `data_share`
- * endpoint. The key stays here; the browser calls our /api/markets proxy.
+ * endpoint. The same key works across all five directory types. The key stays
+ * here; the browser calls our /api/markets proxy with ?directory=.
  *
  * Env: USDA_API_KEY
  */
 
-const BASE = "https://www.usdalocalfoodportal.com/api/farmersmarket/";
+const PORTAL = "https://www.usdalocalfoodportal.com/api";
+
+/** Directory types the keyed API exposes, with a fallback name for blank rows. */
+const DIRECTORIES = {
+  farmersmarket: "Farmers market",
+  csa: "CSA farm",
+  onfarmmarket: "On-farm market",
+  foodhub: "Food hub",
+  agritourism: "Agritourism farm",
+};
+
+/** Valid directory values, for callers that want to validate input. */
+export const MARKET_DIRECTORIES = Object.keys(DIRECTORIES);
 
 // Browser-like headers — the portal's WAF 403s bare/bot requests.
 const HEADERS = {
@@ -43,10 +56,17 @@ function normalizePhone(p) {
   return digits.length >= 10 ? digits.slice(-10) : null;
 }
 
-/** Fetch farmers markets within `radius` miles of a lat/lng. */
-export async function fetchUsdaMarkets({ x, y, radius = 25 }, signal) {
+/**
+ * Fetch USDA local-food listings within `radius` miles of a lat/lng.
+ * `directory` selects which of the five directories to query; an unknown value
+ * falls back to farmers markets.
+ */
+export async function fetchUsdaMarkets({ x, y, radius = 25, directory }, signal) {
   const key = process.env.USDA_API_KEY;
   if (!key) throw new Error("USDA_API_KEY not set");
+
+  const dir = DIRECTORIES[directory] ? directory : "farmersmarket";
+  const fallbackName = DIRECTORIES[dir];
 
   const params = new URLSearchParams({
     apikey: key,
@@ -54,7 +74,7 @@ export async function fetchUsdaMarkets({ x, y, radius = 25 }, signal) {
     y: String(y),
     radius: String(radius),
   });
-  const res = await fetch(`${BASE}?${params}`, { headers: HEADERS, signal });
+  const res = await fetch(`${PORTAL}/${dir}/?${params}`, { headers: HEADERS, signal });
   if (!res.ok) throw new Error(`USDA API ${res.status}`);
   const json = await res.json();
   const rows = Array.isArray(json?.data) ? json.data : Array.isArray(json) ? json : [];
@@ -66,7 +86,7 @@ export async function fetchUsdaMarkets({ x, y, radius = 25 }, signal) {
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
       return {
         id: String(r.listing_id ?? `${lat},${lng}`),
-        name: r.listing_name ?? "Farmers market",
+        name: r.listing_name ?? fallbackName,
         address: clean(r.location_address) ?? clean(r.location_street),
         lat,
         lng,
@@ -75,6 +95,7 @@ export async function fetchUsdaMarkets({ x, y, radius = 25 }, signal) {
         website: normalizeUrl(clean(r.media_website)),
         phone: normalizePhone(r.contact_phone),
         updatedAt: clean(r.updatetime),
+        directory: dir,
         source: "USDA",
       };
     })

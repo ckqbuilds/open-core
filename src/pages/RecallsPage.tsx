@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Loader2, RotateCcw } from "lucide-react";
 import { fetchRelevantRecalls } from "@/data/openfda";
+import { loadFsisRecalls } from "@/data/fsis";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
@@ -24,6 +25,11 @@ const STATUS_OPTIONS = [
   { value: "Completed", label: "Completed" },
   { value: "Terminated", label: "Terminated" },
 ];
+const AGENCY_OPTIONS = [
+  { value: "all", label: "Both agencies" },
+  { value: "FDA", label: "FDA (openFDA)" },
+  { value: "FSIS", label: "USDA FSIS — meat & poultry" },
+];
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
@@ -31,8 +37,21 @@ export function RecallsPage() {
   const [classFilter, setClassFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [scopeFilter, setScopeFilter] = useState("mystate");
+  const [agencyFilter, setAgencyFilter] = useState("all");
 
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
+  const fsis = useAsync<Recall[]>(
+    async (signal) => (await loadFsisRecalls(signal)).recalls,
+    []
+  );
+
+  // The two regulatory feeds, newest first. FSIS covers meat/poultry openFDA can't.
+  const combined = useMemo(() => {
+    const key = (r: Recall) => r.reportDate ?? r.recallInitiationDate ?? "";
+    return [...(recalls.data ?? []), ...(fsis.data ?? [])].sort((a, b) =>
+      key(b).localeCompare(key(a))
+    );
+  }, [recalls.data, fsis.data]);
 
   const scopeOptions = [
     { value: "all", label: "Anywhere" },
@@ -41,21 +60,27 @@ export function RecallsPage() {
   ];
 
   const filtered = useMemo(() => {
-    let list = recalls.data ?? [];
+    let list = combined;
+    if (agencyFilter !== "all") list = list.filter((r) => (r.agency ?? "FDA") === agencyFilter);
     if (classFilter !== "all") list = list.filter((r) => r.classification === classFilter);
     if (statusFilter !== "all") list = list.filter((r) => r.status === statusFilter);
     if (scopeFilter === "nationwide") list = list.filter((r) => r.nationwide);
     else if (scopeFilter === "mystate" && geo)
       list = list.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr));
     return list;
-  }, [recalls.data, classFilter, statusFilter, scopeFilter, geo]);
+  }, [combined, agencyFilter, classFilter, statusFilter, scopeFilter, geo]);
 
-  const total = (recalls.data ?? []).length;
-  const filtersActive = classFilter !== "all" || statusFilter !== "all" || scopeFilter !== "mystate";
+  const total = combined.length;
+  const filtersActive =
+    classFilter !== "all" ||
+    statusFilter !== "all" ||
+    scopeFilter !== "mystate" ||
+    agencyFilter !== "all";
   const resetFilters = () => {
     setClassFilter("all");
     setStatusFilter("all");
     setScopeFilter("mystate");
+    setAgencyFilter("all");
   };
 
   return (
@@ -64,14 +89,22 @@ export function RecallsPage() {
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Active recalls</h1>
           <p className="text-sm text-muted-foreground">
-            Produce and pathogen recalls from the openFDA food enforcement database, updated weekly
-            by the FDA. Filter by severity, status, and distribution.
+            Two regulatory feeds together: produce and pathogen recalls from the openFDA food
+            enforcement database (FDA), plus meat, poultry, and egg recalls from USDA FSIS. Filter by
+            agency, severity, status, and distribution.
           </p>
         </div>
         <KeyButton />
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
+        <Select
+          label="Filter by agency"
+          value={agencyFilter}
+          onChange={setAgencyFilter}
+          options={AGENCY_OPTIONS}
+          className="w-full min-w-[11rem] sm:w-auto"
+        />
         <Select
           label="Filter by severity class"
           value={classFilter}

@@ -18,6 +18,7 @@ export function RecallRow({ recall }: { recall: Recall }) {
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant={tone}>{recall.classification}</Badge>
           <Badge variant="outline">{recall.status}</Badge>
+          <Badge variant="secondary">{recall.agency === "FSIS" ? "USDA FSIS" : "FDA"}</Badge>
           {recall.nationwide && <Badge variant="secondary">Nationwide</Badge>}
           {!recall.nationwide &&
             recall.distributionStates.slice(0, 6).map((s) => (
@@ -32,7 +33,19 @@ export function RecallRow({ recall }: { recall: Recall }) {
         <p className="mt-2 text-sm font-medium">{recall.productDescription}</p>
         <p className="mt-1 text-sm text-muted-foreground">{recall.reason}</p>
         <p className="mt-1.5 text-xs text-muted-foreground">
-          Recalling firm: {recall.recallingFirm} · #{recall.recallNumber}
+          Recalling firm: {recall.recallingFirm} ·{" "}
+          {recall.url ? (
+            <a
+              href={recall.url}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              #{recall.recallNumber}
+            </a>
+          ) : (
+            <>#{recall.recallNumber}</>
+          )}
         </p>
       </CardContent>
     </Card>

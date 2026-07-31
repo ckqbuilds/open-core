@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Map as MapIcon } from "lucide-react";
+import { Map as MapIcon, Navigation, Phone, Globe } from "lucide-react";
 import { mapboxToken } from "@/data/mapbox";
 
 export interface MapMarker {
@@ -11,6 +11,16 @@ export interface MapMarker {
   label: string;
   sublabel?: string;
   color: string;
+  address?: string;
+  distanceMi?: number;
+  phone?: string; // 10-digit string, no formatting
+  website?: string; // full https URL
+}
+
+function formatPhone(digits: string): string {
+  return digits.length === 10
+    ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    : digits;
 }
 
 /**
@@ -136,6 +146,39 @@ export function MapView({
               {selected.sublabel && (
                 <div className="truncate text-xs text-muted-foreground">{selected.sublabel}</div>
               )}
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                {selected.distanceMi != null && (
+                  <span className="tabular-nums text-muted-foreground">
+                    {selected.distanceMi.toFixed(1)} mi
+                  </span>
+                )}
+                <a
+                  className="inline-flex items-center gap-1 text-primary hover:underline"
+                  href={`https://maps.apple.com/?daddr=${selected.lat},${selected.lng}&q=${encodeURIComponent(selected.label)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Navigation className="size-3" /> Directions
+                </a>
+                {selected.phone && (
+                  <a
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    href={`tel:+1${selected.phone}`}
+                  >
+                    <Phone className="size-3" /> {formatPhone(selected.phone)}
+                  </a>
+                )}
+                {selected.website && (
+                  <a
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    href={selected.website}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Globe className="size-3" /> Website
+                  </a>
+                )}
+              </div>
             </div>
             <button
               className="rounded px-2 py-0.5 text-xs text-muted-foreground hover:bg-secondary"

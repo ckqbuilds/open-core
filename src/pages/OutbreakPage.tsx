@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Loader2, MapPin, Stethoscope, Package } from "lucide-react";
 import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByTerm } from "@/data/openfda";
+import { loadFsisRecalls, correlateFsisRecalls } from "@/data/fsis";
 import { PATHOGENS, matchesOutbreakPathogen } from "@/data/symptoms";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
@@ -49,6 +50,17 @@ export function OutbreakPage() {
     (signal) => fetchRecallsByTerm(recallTerm, 12, signal, recallSince),
     [recallTerm, recallSince],
     Boolean(recallTerm)
+  );
+
+  // USDA FSIS meat/poultry recalls of the same pathogen, within ~6 months of this
+  // outbreak's posting — surfaced as "possibly related", not a confirmed link.
+  const fsis = useAsync<Recall[]>(
+    async (signal) => (await loadFsisRecalls(signal)).recalls,
+    []
+  );
+  const fsisRelated = useMemo(
+    () => correlateFsisRecalls(fsis.data ?? [], matchedPathogen?.id ?? null, ob?.datePosted ?? null),
+    [fsis.data, matchedPathogen, ob?.datePosted]
   );
 
   const backLink = (
@@ -108,6 +120,23 @@ export function OutbreakPage() {
             {(relatedRecalls.data ?? []).slice(0, 8).map((r) => (
               <RecallRow key={r.id} recall={r} />
             ))}
+          </div>
+        )}
+
+        {fsisRelated.length > 0 && (
+          <div className="mt-6">
+            <h3 className="text-sm font-semibold">USDA FSIS — possibly related</h3>
+            <p className="mb-3 mt-1 text-xs text-muted-foreground">
+              Meat, poultry, or egg recalls from USDA FSIS naming the same pathogen
+              {matchedPathogen ? ` (${matchedPathogen.name})` : ""} within about six months of this
+              investigation. Matched on pathogen and timeframe only — the agencies share no outbreak
+              ID, so this is a possible connection, not a confirmed link.
+            </p>
+            <div className="space-y-3">
+              {fsisRelated.slice(0, 6).map((r) => (
+                <RecallRow key={r.id} recall={r} />
+              ))}
+            </div>
           </div>
         )}
       </section>

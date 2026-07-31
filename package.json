@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "scrape": "node scripts/scrape-outbreaks.mjs",
+    "scrape:fsis": "node scripts/scrape-fsis.mjs",
     "server": "node --env-file-if-exists=.env.local --env-file-if-exists=.env server/index.mjs",
     "start": "npm run build && node --env-file-if-exists=.env.local --env-file-if-exists=.env server/index.mjs"
   },
