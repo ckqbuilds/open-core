@@ -25,11 +25,32 @@ const RECALL_CLASSES: KeyRow[] = [
     meaning:
       "Unlikely to cause harm — usually a labeling or quality issue (e.g. an undeclared minor ingredient).",
   },
+  {
+    badge: <Badge variant="serious">Public Health Alert</Badge>,
+    term: "USDA FSIS alert",
+    meaning:
+      "Issued by USDA FSIS when there is a food-safety concern but no formal recall — often because the product is no longer available for purchase. Treat as a warning to check what you have.",
+  },
+];
+
+const RECALL_AGENCY: KeyRow[] = [
+  {
+    badge: <Badge variant="secondary">FDA</Badge>,
+    term: "FDA (openFDA)",
+    meaning:
+      "FDA-regulated foods — produce, packaged goods, seafood, and more — from the openFDA food-enforcement database.",
+  },
+  {
+    badge: <Badge variant="secondary">USDA FSIS</Badge>,
+    term: "USDA FSIS",
+    meaning:
+      "Meat, poultry, and processed-egg products, which the FDA feed does not cover. Pulled from USDA FSIS recalls and public health alerts.",
+  },
 ];
 
 const RECALL_STATUS: KeyRow[] = [
   { badge: <Badge variant="outline">Ongoing</Badge>, term: "Ongoing", meaning: "Recall is still in progress; product may still be on shelves." },
-  { badge: <Badge variant="outline">Completed</Badge>, term: "Completed", meaning: "Recalling firm has finished its recall actions." },
+  { badge: <Badge variant="outline">Completed</Badge>, term: "Completed", meaning: "The recalling firm has finished its recall actions (FDA and FSIS)." },
   { badge: <Badge variant="outline">Terminated</Badge>, term: "Terminated", meaning: "FDA has determined the recall is complete and closed it out." },
 ];
 
@@ -59,13 +80,15 @@ function Section({ title, rows }: { title: string; rows: KeyRow[] }) {
 export function ClassificationKey() {
   return (
     <div className="space-y-5">
+      <Section title="Data source (agency)" rows={RECALL_AGENCY} />
       <Section title="Recall classification (severity)" rows={RECALL_CLASSES} />
       <Section title="Recall status" rows={RECALL_STATUS} />
       <Section title="Outbreak status" rows={OUTBREAK_STATUS} />
       <p className="border-t pt-3 text-xs text-muted-foreground">
-        Classes and statuses follow the FDA's own definitions. "Named in the official record" means a
-        company FDA or CDC explicitly listed — it is not a judgment that a location is currently
-        unsafe.
+        Classes and statuses follow each agency's own definitions (FDA and USDA FSIS). "Named in the
+        official record" means a company FDA or CDC explicitly listed — it is not a judgment that a
+        location is currently unsafe. On an outbreak page, "USDA FSIS — possibly related" recalls are
+        matched by pathogen and timeframe only, not a confirmed shared investigation.
       </p>
     </div>
   );

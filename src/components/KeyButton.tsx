@@ -21,9 +21,9 @@ export function KeyButton() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>How to read the classifications</DialogTitle>
+          <DialogTitle>How to read this data</DialogTitle>
           <DialogDescription>
-            What the severity classes, statuses, and "named in the record" labels mean.
+            What the data sources, severity classes, statuses, and "named in the record" labels mean.
           </DialogDescription>
         </DialogHeader>
         <ClassificationKey />
