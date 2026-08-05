@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Loader2, RotateCcw } from "lucide-react";
+import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2 } from "lucide-react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
 import type { Recall } from "@/data/types";
@@ -11,6 +11,8 @@ import { Select } from "@/components/ui/select";
 import { RecallTrendChart } from "@/components/RecallTrendChart";
 import { RecallRow } from "@/components/RecallRow";
 import { KeyButton } from "@/components/KeyButton";
+import { PageHeader } from "@/components/PageHeader";
+import { StatCard } from "@/components/StatCard";
 import { EmptyState } from "@/components/common";
 
 const CLASS_OPTIONS = [
@@ -53,6 +55,16 @@ export function RecallsPage() {
     );
   }, [recalls.data, fsis.data]);
 
+  const stats = useMemo(
+    () => ({
+      total: combined.length,
+      classI: combined.filter((r) => r.classification === "Class I").length,
+      fsis: combined.filter((r) => r.agency === "FSIS").length,
+      nationwide: combined.filter((r) => r.nationwide).length,
+    }),
+    [combined]
+  );
+
   const scopeOptions = [
     { value: "all", label: "Anywhere" },
     { value: "nationwide", label: "Nationwide only" },
@@ -84,54 +96,75 @@ export function RecallsPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Active recalls</h1>
-          <p className="text-sm text-muted-foreground">
-            Two regulatory feeds together: produce and pathogen recalls from the openFDA food
-            enforcement database (FDA), plus meat, poultry, and egg recalls from USDA FSIS. Filter by
-            agency, severity, status, and distribution.
-          </p>
-        </div>
-        <KeyButton />
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        icon={<Package className="size-6 text-primary" />}
+        title="Active recalls"
+        description="Two regulatory feeds together: produce and pathogen recalls from the openFDA food enforcement database (FDA), plus meat, poultry, and egg recalls from USDA FSIS."
+        actions={<KeyButton />}
+      />
 
-      <div className="flex flex-wrap items-center gap-2">
-        <Select
-          label="Filter by agency"
-          value={agencyFilter}
-          onChange={setAgencyFilter}
-          options={AGENCY_OPTIONS}
-          className="w-full min-w-[11rem] sm:w-auto"
-        />
-        <Select
-          label="Filter by severity class"
-          value={classFilter}
-          onChange={setClassFilter}
-          options={CLASS_OPTIONS}
-          className="w-full min-w-[10rem] sm:w-auto"
-        />
-        <Select
-          label="Filter by status"
-          value={statusFilter}
-          onChange={setStatusFilter}
-          options={STATUS_OPTIONS}
-          className="w-full min-w-[8rem] sm:w-auto"
-        />
-        <Select
-          label="Filter by distribution"
-          value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
-          onChange={setScopeFilter}
-          options={scopeOptions}
-          className="w-full min-w-[9rem] sm:w-auto"
-        />
-        {filtersActive && (
-          <Button variant="ghost" size="sm" onClick={resetFilters}>
-            <RotateCcw className="size-4" /> Reset
-          </Button>
-        )}
-      </div>
+      {!recalls.loading && !recalls.error && (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <StatCard label="Recalls tracked" value={stats.total} icon={<Package className="size-4" />} />
+          <StatCard
+            label="Class I — most serious"
+            value={stats.classI}
+            icon={<ShieldAlert className="size-4" />}
+            tone="critical"
+          />
+          <StatCard
+            label="USDA FSIS"
+            value={stats.fsis}
+            icon={<Beef className="size-4" />}
+            hint="meat & poultry"
+            tone="accent"
+          />
+          <StatCard
+            label="Nationwide"
+            value={stats.nationwide}
+            icon={<Globe2 className="size-4" />}
+          />
+        </div>
+      )}
+
+      <Card>
+        <CardContent className="flex flex-wrap items-end gap-2 p-4">
+          <Select
+            label="Filter by agency"
+            value={agencyFilter}
+            onChange={setAgencyFilter}
+            options={AGENCY_OPTIONS}
+            className="w-full min-w-[11rem] sm:w-auto"
+          />
+          <Select
+            label="Filter by severity class"
+            value={classFilter}
+            onChange={setClassFilter}
+            options={CLASS_OPTIONS}
+            className="w-full min-w-[10rem] sm:w-auto"
+          />
+          <Select
+            label="Filter by status"
+            value={statusFilter}
+            onChange={setStatusFilter}
+            options={STATUS_OPTIONS}
+            className="w-full min-w-[8rem] sm:w-auto"
+          />
+          <Select
+            label="Filter by distribution"
+            value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
+            onChange={setScopeFilter}
+            options={scopeOptions}
+            className="w-full min-w-[9rem] sm:w-auto"
+          />
+          {filtersActive && (
+            <Button variant="ghost" size="sm" onClick={resetFilters}>
+              <RotateCcw className="size-4" /> Reset
+            </Button>
+          )}
+        </CardContent>
+      </Card>
 
       {recalls.loading && (
         <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">

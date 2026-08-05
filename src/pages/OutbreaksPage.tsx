@@ -1,16 +1,19 @@
 import { useMemo } from "react";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle, Users, FileWarning, FileText } from "lucide-react";
+import { Spinner } from "@heroui/react";
 import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import { useAsync } from "@/hooks/useAsync";
 import { OutbreakTile } from "@/components/OutbreakTile";
 import { FreshnessBadge } from "@/components/FreshnessBadge";
+import { PageHeader } from "@/components/PageHeader";
+import { StatCard } from "@/components/StatCard";
 import { EmptyState } from "@/components/common";
 
-/** Home: every active FDA CORE outbreak as a tile that links to its own page. */
+/** Home: KPI row over every active FDA CORE outbreak, each tile linking out. */
 export function OutbreaksPage() {
   const outbreaks = useAsync<LiveOutbreaks>((signal) => loadOutbreaks(signal), []);
 
-  const activeOutbreaks = useMemo(() => {
+  const active = useMemo(() => {
     const list = outbreaks.data?.outbreaks ?? [];
     return list
       .filter((o) => o.status === "active")
@@ -20,41 +23,65 @@ export function OutbreaksPage() {
       });
   }, [outbreaks.data]);
 
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="size-5 text-[var(--status-critical)]" />
-          <h1 className="text-xl font-semibold tracking-tight">
-            Active outbreaks
-            {activeOutbreaks.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-muted-foreground">
-                {activeOutbreaks.length} tracked
-              </span>
-            )}
-          </h1>
-        </div>
-        <FreshnessBadge live={outbreaks.data} loading={outbreaks.loading} />
-      </div>
+  const stats = useMemo(() => {
+    const cases = active.reduce((sum, o) => sum + (o.caseCount ?? 0), 0);
+    return {
+      count: active.length,
+      cases,
+      withRecall: active.filter((o) => o.recallInitiated).length,
+      detailed: active.filter((o) => o.detailed).length,
+    };
+  }, [active]);
 
-      <p className="max-w-2xl text-sm text-muted-foreground">
-        Every active foodborne-illness investigation on the FDA CORE table. Tap one to see everything
-        tracked for it — cases, the companies named in the record, related recalls, how to recognize
-        the illness, and named locations near you.
-      </p>
+  return (
+    <div className="space-y-8">
+      <PageHeader
+        icon={<AlertTriangle className="size-6 text-[var(--status-critical)]" />}
+        title="Active outbreaks"
+        description="Every active foodborne-illness investigation on the FDA CORE table. Open one for its cases, the companies named in the record, related recalls, how to recognize the illness, and named locations near you."
+        actions={<FreshnessBadge live={outbreaks.data} loading={outbreaks.loading} />}
+      />
 
       {outbreaks.loading ? (
-        <div className="flex h-24 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Loading FDA outbreak table…
+        <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
+          <Spinner size="lg" /> Loading FDA outbreak table…
         </div>
-      ) : activeOutbreaks.length === 0 ? (
+      ) : active.length === 0 ? (
         <EmptyState>No active outbreaks are being tracked right now.</EmptyState>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {activeOutbreaks.map((ob) => (
-            <OutbreakTile key={ob.id} outbreak={ob} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <StatCard
+              label="Active investigations"
+              value={stats.count}
+              icon={<AlertTriangle className="size-4" />}
+              tone="critical"
+            />
+            <StatCard
+              label="Reported cases"
+              value={stats.cases.toLocaleString()}
+              icon={<Users className="size-4" />}
+              hint="across tracked outbreaks"
+            />
+            <StatCard
+              label="With a recall"
+              value={stats.withRecall}
+              icon={<FileWarning className="size-4" />}
+              tone="accent"
+            />
+            <StatCard
+              label="Detailed profiles"
+              value={stats.detailed}
+              icon={<FileText className="size-4" />}
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {active.map((ob) => (
+              <OutbreakTile key={ob.id} outbreak={ob} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

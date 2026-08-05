@@ -1,19 +1,18 @@
-import { Stethoscope, Sprout } from "lucide-react";
+import { Stethoscope, Sprout, GraduationCap } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SymptomsSection } from "@/sections/SymptomsSection";
 import { GrowSection } from "@/sections/GrowSection";
+import { PageHeader } from "@/components/PageHeader";
 
 /** Educational section: how to recognize the illnesses + how to grow your own. */
 export function LearnPage() {
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">Learn</h1>
-        <p className="text-sm text-muted-foreground">
-          Recognize the illnesses these outbreaks cause, and grow your own produce to control what
-          you eat.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        icon={<GraduationCap className="size-6 text-primary" />}
+        title="Learn"
+        description="Recognize the illnesses these outbreaks cause, and grow your own produce to control what you eat."
+      />
 
       <Tabs defaultValue="symptoms">
         <TabsList>

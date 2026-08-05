@@ -101,8 +101,9 @@ export function OutbreakPage() {
 
       <OutbreakDetail outbreak={ob} />
 
+      <div className="grid gap-8 lg:grid-cols-3">
       {/* Related recalls for this pathogen */}
-      <section>
+      <section className="lg:col-span-2">
         <div className="mb-3 flex items-center gap-2">
           <Package className="size-4 text-muted-foreground" />
           <h2 className="text-lg font-semibold">Related recalls</h2>
@@ -143,16 +144,15 @@ export function OutbreakPage() {
 
       {/* Recognize the illness — matched CDC symptom card */}
       {matchedPathogen && (
-        <section>
+        <section className="lg:col-span-1">
           <div className="mb-3 flex items-center gap-2">
             <Stethoscope className="size-4 text-muted-foreground" />
             <h2 className="text-lg font-semibold">Recognize the illness</h2>
           </div>
-          <div className="max-w-2xl">
-            <PathogenCard pathogen={matchedPathogen} selected={selected} activeOutbreaks={[]} />
-          </div>
+          <PathogenCard pathogen={matchedPathogen} selected={selected} activeOutbreaks={[]} />
         </section>
       )}
+      </div>
 
       {/* Named locations near you — scoped to THIS outbreak's entities */}
       <section>

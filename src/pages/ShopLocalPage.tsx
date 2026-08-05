@@ -1,21 +1,20 @@
+import { ShoppingBasket } from "lucide-react";
 import { MarketsSection } from "@/sections/MarketsSection";
 import { DIRECTORIES } from "@/data/markets";
 import { useZipContext } from "@/hooks/ZipContext";
 import { Card, CardContent } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
 /** Shop-safer alternative: USDA local food directories near your ZIP. */
 export function ShopLocalPage() {
   const { geo } = useZipContext();
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">Shop local</h1>
-        <p className="text-sm text-muted-foreground">
-          Local food sources near you, from the USDA Local Food Directories. Buying whole, local
-          produce and washing it yourself lets you control handling and sidestep recalled
-          pre-packaged products.
-        </p>
-      </div>
+      <PageHeader
+        icon={<ShoppingBasket className="size-6 text-primary" />}
+        title="Shop local"
+        description="Local food sources near you, from the USDA Local Food Directories. Buying whole, local produce and washing it yourself lets you control handling and sidestep recalled pre-packaged products."
+      />
 
       <MarketsSection geo={geo} />
 
