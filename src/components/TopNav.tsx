@@ -6,7 +6,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { to: "/", label: "Outbreaks", end: true },
+  { to: "/", label: "Foods", end: true },
+  { to: "/outbreaks", label: "Outbreaks" },
   { to: "/recalls", label: "Active recalls" },
   { to: "/shop-local", label: "Shop local" },
   { to: "/learn", label: "Learn" },

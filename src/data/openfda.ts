@@ -96,6 +96,27 @@ export function fetchRecallsByTerm(
   return fetchRecalls({ search, limit, signal });
 }
 
+/**
+ * Recalls whose product description matches any of a food category's terms.
+ * ORs `product_description:"<term>"` across the terms, optionally floored to a
+ * recency window (openFDA YYYYMMDD). Empty `terms` (the "Other" bucket) yields
+ * no query and resolves to []. Used by the food-first detail page.
+ */
+export function fetchRecallsByFood(
+  terms: string[],
+  limit = 50,
+  signal?: AbortSignal,
+  sinceDate?: string
+) {
+  const clean = terms.map((t) => t.replace(/"/g, "").trim()).filter(Boolean);
+  if (clean.length === 0) return Promise.resolve<Recall[]>([]);
+  const termClause = orClauses(clean.map((t) => `product_description:"${t}"`));
+  const search = sinceDate
+    ? `(${termClause}) AND report_date:[${sinceDate} TO 99991231]`
+    : termClause;
+  return fetchRecalls({ search, limit, signal });
+}
+
 /** Recent produce/leafy-green and pathogen recalls relevant to this tracker. */
 export function fetchRelevantRecalls(limit = 60, signal?: AbortSignal) {
   const clauses = [

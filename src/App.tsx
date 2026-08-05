@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ZipProvider } from "@/hooks/ZipContext";
 import { TopNav } from "@/components/TopNav";
 import { ChatWidget } from "@/components/ChatWidget";
+import { FoodsPage } from "@/pages/FoodsPage";
+import { FoodPage } from "@/pages/FoodPage";
 import { OutbreaksPage } from "@/pages/OutbreaksPage";
 import { OutbreakPage } from "@/pages/OutbreakPage";
 import { RecallsPage } from "@/pages/RecallsPage";
@@ -17,7 +19,9 @@ export default function App() {
 
           <main className="container py-6">
             <Routes>
-              <Route path="/" element={<OutbreaksPage />} />
+              <Route path="/" element={<FoodsPage />} />
+              <Route path="/food/:foodId" element={<FoodPage />} />
+              <Route path="/outbreaks" element={<OutbreaksPage />} />
               <Route path="/outbreak/:refId" element={<OutbreakPage />} />
               <Route path="/recalls" element={<RecallsPage />} />
               <Route path="/shop-local" element={<ShopLocalPage />} />
