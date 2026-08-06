@@ -11,6 +11,8 @@ import { FoodTile } from "@/components/FoodTile";
 import { OutbreakTile } from "@/components/OutbreakTile";
 import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
+import { FeaturedLocal } from "@/components/FeaturedLocal";
+import { useZipContext } from "@/hooks/ZipContext";
 import { EmptyState, InfoNote } from "@/components/common";
 
 interface FoodsData {
@@ -20,6 +22,7 @@ interface FoodsData {
 
 /** Home: affected foods, grouped into commodity categories, each tile linking out. */
 export function FoodsPage() {
+  const { geo } = useZipContext();
   const data = useAsync<FoodsData>(async (signal) => {
     const [live, fda, fsis] = await Promise.all([
       loadOutbreaks(signal),
@@ -55,6 +58,8 @@ export function FoodsPage() {
         title="What's affected right now"
         description="Foods named in current FDA, CDC, and USDA FSIS activity, grouped by commodity. Pick a food to see the active outbreaks, the recalls across all three agencies, the companies named in the record, locations near you, and what to do if you're sick."
       />
+
+      <FeaturedLocal geo={geo} />
 
       {data.loading ? (
         <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
