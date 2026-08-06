@@ -9,7 +9,6 @@ const LINKS = [
   { to: "/", label: "Foods", end: true },
   { to: "/outbreaks", label: "Outbreaks" },
   { to: "/recalls", label: "Active recalls" },
-  { to: "/check", label: "Check a product" },
   { to: "/shop-local", label: "Shop local" },
   { to: "/learn", label: "Learn" },
 ];

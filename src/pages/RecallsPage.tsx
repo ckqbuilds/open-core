@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { RecallTrendChart } from "@/components/RecallTrendChart";
 import { RecallRow } from "@/components/RecallRow";
+import { ProductCheck } from "@/components/ProductCheck";
 import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
@@ -103,6 +104,8 @@ export function RecallsPage() {
         description="Two regulatory feeds together: produce and pathogen recalls from the openFDA food enforcement database (FDA), plus meat, poultry, and egg recalls from USDA FSIS."
         actions={<KeyButton />}
       />
+
+      <ProductCheck recalls={combined} />
 
       {!recalls.loading && !recalls.error && (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

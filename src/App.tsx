@@ -8,7 +8,6 @@ import { OutbreaksPage } from "@/pages/OutbreaksPage";
 import { OutbreakPage } from "@/pages/OutbreakPage";
 import { RecallsPage } from "@/pages/RecallsPage";
 import { ShopLocalPage } from "@/pages/ShopLocalPage";
-import { CheckPage } from "@/pages/CheckPage";
 import { LearnPage } from "@/pages/LearnPage";
 
 export default function App() {
@@ -26,7 +25,8 @@ export default function App() {
               <Route path="/outbreak/:refId" element={<OutbreakPage />} />
               <Route path="/recalls" element={<RecallsPage />} />
               <Route path="/shop-local" element={<ShopLocalPage />} />
-              <Route path="/check" element={<CheckPage />} />
+              {/* Barcode check moved onto the Recalls page; keep old links working. */}
+              <Route path="/check" element={<Navigate to="/recalls" replace />} />
               <Route path="/learn" element={<LearnPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
