@@ -90,6 +90,20 @@ export function AvoidanceCard({ item }: { item: AvoidanceItem }) {
           )}
         </div>
       )}
+
+      {item.retailListUrl && (
+        <div className="mt-1.5">
+          <a
+            href={item.retailListUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          >
+            <ExternalLink className="size-3" />
+            See the stores that received this — official FSIS retail list (PDF) →
+          </a>
+        </div>
+      )}
     </Card>
   );
 }

@@ -31,6 +31,13 @@ export interface Recall {
   /** Link to the official recall notice (FSIS provides one; openFDA does not). */
   url?: string;
   /**
+   * Link to FSIS's official retail distribution-list PDF — the stores that
+   * received the recalled product, as published by FSIS. Present only when the
+   * notice carries one. We link to the agency's document; we never parse store
+   * names from it (honors the named-only rule).
+   */
+  retailListUrl?: string;
+  /**
    * Canonical pathogen id (matches Pathogen.id in symptoms.ts) detected from the
    * recall text, when one is named. Used only to correlate a recall with an
    * outbreak of the same pathogen — never to assert a confirmed shared event.

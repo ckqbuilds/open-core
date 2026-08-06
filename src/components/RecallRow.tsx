@@ -59,6 +59,19 @@ export function RecallRow({ recall }: { recall: Recall }) {
         ) : (
           <>#{recall.recallNumber}</>
         )}
+        {recall.retailListUrl && (
+          <>
+            {" · "}
+            <a
+              href={recall.retailListUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              Retail list (PDF)
+            </a>
+          </>
+        )}
       </p>
     </Card>
   );

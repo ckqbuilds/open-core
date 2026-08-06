@@ -1,13 +1,35 @@
 {
-  "generatedAt": "2026-07-31T23:23:17.444Z",
+  "generatedAt": "2026-08-06T19:27:53.636Z",
   "source": "https://www.fsis.usda.gov/fsis/api/recall/v/1",
   "sourceLabel": "USDA FSIS Recalls & Public Health Alerts",
-  "count": 190,
+  "count": 189,
   "recalls": [
+    {
+      "id": "fsis-012-2026",
+      "recallNumber": "012-2026",
+      "status": "Ongoing",
+      "classification": "Class I",
+      "productDescription": "62.4-oz. ALUMINUM PAN WITH PLASTIC OVERWRAP containing \"Ukrop's Baked Spaghetti - Bulk\" and BEST BY dates from 07/08/26 through 08/05/26 on the label and bears establishment number \"EST. 19979\" in the mark of inspection.,14.8-oz. CARDBOARD TRAY WITH PLASTIC OVERWRAP containing \"Ukrop's Baked Spaghetti\" and BEST BY dates from 07/08/26 through 08/05/26 on the label and bears establishment number \"EST. 19979\" in the mark of inspection.,48-oz. ALUMINUM PAN WITH PLASTIC OVERWRAP containing \"Ukrop's Chicken Cobbler - Bulk\" and BEST BY dates from 07/08/26 through 08/05/26 on the label and bears establishment number \"P-19979\" in the mark of inspection.,11.6-oz. CARDBOARD TRAY WITH PLASTIC OVERWRAP containing \"Ukrop's Chicken Cobbler\" and BEST BY dates from 07/08/26 through 08/05/26 on the label and bears establishment number \"P-19979\" in the mark of inspection.",
+      "reason": "Product Contamination",
+      "recallingFirm": "Ukrop's Homestyle Foods",
+      "distributionPattern": "North Carolina,Virginia,West Virginia",
+      "distributionStates": [
+        "NC",
+        "VA",
+        "WV"
+      ],
+      "nationwide": false,
+      "reportDate": "20260731",
+      "recallInitiationDate": "20260731",
+      "country": "US",
+      "agency": "FSIS",
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ukrops-homestyle-foods-recalls-spaghetti-and-chicken-products-due-possible-foreign",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-08/RC-012-2026-Retail-List.pdf"
+    },
     {
       "id": "fsis-PHA-07302026-01",
       "recallNumber": "PHA-07302026-01",
-      "status": "Ongoing",
+      "status": "Completed",
       "classification": "Public Health Alert",
       "productDescription": "8-oz. plastic packages containing portions of \"CURRY CHICKEN SALAD\" with a USE BY: 07/30/2026 date stamp on the lid.",
       "reason": "Product Contamination",
@@ -65,7 +87,8 @@
       "recallInitiationDate": "20260724",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/maple-leaf-foods-inc--recalls-not-ready-eat-nrte-bacon-product-imported-without"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/maple-leaf-foods-inc--recalls-not-ready-eat-nrte-bacon-product-imported-without",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-07/RC-011-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-010-2026",
@@ -155,7 +178,8 @@
       "recallInitiationDate": "20260625",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/resers-fine-foods-inc--recalls-ready-eat-pasta-salad-product-due-misbranding-and"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/resers-fine-foods-inc--recalls-ready-eat-pasta-salad-product-due-misbranding-and",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-07/RC-009-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-06252026-01",
@@ -218,7 +242,8 @@
       "recallInitiationDate": "20260531",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/synear-foods-usa-llc-recalls-frozen-pork-and-crab-soup-dumpling-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/synear-foods-usa-llc-recalls-frozen-pork-and-crab-soup-dumpling-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-06/RC-007-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-05242026-01",
@@ -413,7 +438,8 @@
       "recallInitiationDate": "20260303",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ajinomoto-foods-north-america-inc--expands-recall-chicken-and-pork-fried-rice-ramen"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ajinomoto-foods-north-america-inc--expands-recall-chicken-and-pork-fried-rice-ramen",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-04/RC-005-2026-EXP-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-03012026-01",
@@ -447,7 +473,8 @@
       "recallInitiationDate": "20260222",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/rosina-food-products-inc--recalls-ready-eat-frozen-meatball-products-due-possible"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/rosina-food-products-inc--recalls-ready-eat-frozen-meatball-products-due-possible",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-03/RC-006-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-005-2026",
@@ -464,7 +491,8 @@
       "recallInitiationDate": "20260219",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ajinomoto-foods-north-america-inc--recalls-chicken-fried-rice-products-due-0"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ajinomoto-foods-north-america-inc--recalls-chicken-fried-rice-products-due-0",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-02/RC-005-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-004-2026",
@@ -487,7 +515,8 @@
       "recallInitiationDate": "20260219",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/sobico-usa-llc-recalls-siluriformes-fish-products-imported-without-benefit-import"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/sobico-usa-llc-recalls-siluriformes-fish-products-imported-without-benefit-import",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-02/RC-004-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-003-2026",
@@ -509,7 +538,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/cs-beef-packers-llc-recalls-ground-beef-products-may-be-contaminated-e--coli-o145",
-      "pathogen": "ecoli"
+      "pathogen": "ecoli",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-02/RC-003-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-002-2026",
@@ -526,7 +556,8 @@
       "recallInitiationDate": "20260203",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/mays-chemical-company-puerto-rico-recalls-frozen-raw-pork-boneless-loins-imported"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/mays-chemical-company-puerto-rico-recalls-frozen-raw-pork-boneless-loins-imported",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-02/RC-002-2026-Retail-List.pdf"
     },
     {
       "id": "fsis-001-2026",
@@ -577,7 +608,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/mountain-west-food-group-llc-recalls-ground-beef-products-due-possible-e--coli-o26",
-      "pathogen": "ecoli"
+      "pathogen": "ecoli",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-01/RC-042-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-041-2025",
@@ -594,7 +626,8 @@
       "recallInitiationDate": "20251219",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/olympia-provisions-recalls-ready-eat-holiday-kielbasa-sausage-products-due-possible"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/olympia-provisions-recalls-ready-eat-holiday-kielbasa-sausage-products-due-possible",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-01/RC-041-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-040-2025",
@@ -639,7 +672,8 @@
       "recallInitiationDate": "20251214",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/la-guadalupana-foods-llc-recalls-ready-eat-frozen-tamales-due-misbranding-and"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/la-guadalupana-foods-llc-recalls-ready-eat-frozen-tamales-due-misbranding-and",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2026-01/RC-039-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-038-2025",
@@ -681,7 +715,8 @@
       "recallInitiationDate": "20251209",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ghanaianway-restaurant-and-grocery-llc-recalls-fresh-salted-lamb-products-produced"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ghanaianway-restaurant-and-grocery-llc-recalls-fresh-salted-lamb-products-produced",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-12/RC-037-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-036-2025",
@@ -698,7 +733,8 @@
       "recallInitiationDate": "20251104",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/brazilian-taste-recalls-frozen-chicken-and-beef-croquette-products-due-misbranding"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/brazilian-taste-recalls-frozen-chicken-and-beef-croquette-products-due-misbranding",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-12/RC-036-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-035-2025",
@@ -715,7 +751,8 @@
       "recallInitiationDate": "20251027",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/e-a--sween-company-recalls-pulled-pork-sandwich-products-due-possible-foreign-matter"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/e-a--sween-company-recalls-pulled-pork-sandwich-products-due-possible-foreign-matter",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-12/RC-035-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-034-2025",
@@ -732,7 +769,8 @@
       "recallInitiationDate": "20251025",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/hormel-foods-corporation-recalls-ready-eat-frozen-chicken-products-due-possible"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/hormel-foods-corporation-recalls-ready-eat-frozen-chicken-products-due-possible",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-12/RC-034-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-033-2025",
@@ -749,7 +787,8 @@
       "recallInitiationDate": "20251024",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/lsi-inc--recalls-bbq-pork-jerky-product-due-possible-foreign-matter-contamination"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/lsi-inc--recalls-bbq-pork-jerky-product-due-possible-foreign-matter-contamination",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-12/RC-033-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-032-2025",
@@ -767,7 +806,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/m-c-i--foods-inc--recalls-ready-eat-breakfast-burrito-and-wrap-products-due-possible",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-11/RC_032-2025_Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-10072025-01",
@@ -820,7 +860,8 @@
       "recallInitiationDate": "20251004",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/foster-poultry-farms-llc-recalls-chicken-corn-dog-and-ground-turkey-a-stick-products"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/foster-poultry-farms-llc-recalls-chicken-corn-dog-and-ground-turkey-a-stick-products",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-11/RC-031-2025-Retail--List_0.pdf"
     },
     {
       "id": "fsis-030-2025",
@@ -837,7 +878,8 @@
       "recallInitiationDate": "20250927",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/hillshire-brands-company-recalls-corn-dog-and-sausage-a-stick-products-due-possible"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/hillshire-brands-company-recalls-corn-dog-and-sausage-a-stick-products-due-possible",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-11/RC-030-2025-Retail-List_Part_1.pdf"
     },
     {
       "id": "fsis-PHA-09252025-01",
@@ -892,7 +934,8 @@
       "recallInitiationDate": "20250915",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/quality-poultry-seafood-inc--recalls-various-catfish-fillet-products-produced"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/quality-poultry-seafood-inc--recalls-various-catfish-fillet-products-produced",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-09/RC_029-2025_Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-09102025-01",
@@ -947,7 +990,8 @@
       "recallInitiationDate": "20250820",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/sabrositos-hondurenos-llc-recalls-various-meat-products-produced-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/sabrositos-hondurenos-llc-recalls-various-meat-products-produced-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-09/RC_028-2025_Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-07302025-01",
@@ -992,7 +1036,8 @@
       "recallInitiationDate": "20250729",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ada-valley-meat-company-recalls-ready-eat-ground-beef-products-due-possible-foreign"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ada-valley-meat-company-recalls-ready-eat-ground-beef-products-due-possible-foreign",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-08/RC-027-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-07272025-01",
@@ -1027,7 +1072,8 @@
       "recallInitiationDate": "20250717",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/kayem-foods-inc--recalls-ready-eat-chicken-sausage-products-due-possible-foreign"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/kayem-foods-inc--recalls-ready-eat-chicken-sausage-products-due-possible-foreign",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-08/RC-026-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-07112025-01",
@@ -1066,7 +1112,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/kraft-heinz-foods-company-recalls-turkey-bacon-products-due-possible-listeria",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-07/RC-025-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-07022025-01",
@@ -1117,7 +1164,8 @@
       "recallInitiationDate": "20250625",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/starway-international-group-llc-expands-recall-ineligible-frozen-siluriformes-fish"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/starway-international-group-llc-expands-recall-ineligible-frozen-siluriformes-fish",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-06/RC-021-2025-EXP-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-06202025-01",
@@ -1154,7 +1202,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/freshrealm-recalls-chicken-fettuccine-alfredo-products-due-possible-listeria",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-06/RC-023-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-022-2025",
@@ -1171,7 +1220,8 @@
       "recallInitiationDate": "20250613",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/king-tallow-llc-recalls-beef-tallow-products-produced-without-benefit-inspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/king-tallow-llc-recalls-beef-tallow-products-produced-without-benefit-inspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-06/RC-022-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-021-2025",
@@ -1188,7 +1238,8 @@
       "recallInitiationDate": "20250612",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/starway-international-group-llc-recalls-ineligible-frozen-siluriformes-fish-ball"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/starway-international-group-llc-recalls-ineligible-frozen-siluriformes-fish-ball",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-06/RC-021-2025-EXP-Retail-List.pdf"
     },
     {
       "id": "fsis-020-2025",
@@ -1205,7 +1256,8 @@
       "recallInitiationDate": "20250603",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/springville-meat-cold-storage-co--inc--recalls-beef-jerky-beef-snack-stick-products"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/springville-meat-cold-storage-co--inc--recalls-beef-jerky-beef-snack-stick-products",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-06/RC-020-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-06032025-01",
@@ -1276,7 +1328,8 @@
       "recallInitiationDate": "20250528",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/hormel-foods-corporation-recalls-canned-beef-stew-product-due-possible-foreign"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/hormel-foods-corporation-recalls-canned-beef-stew-product-due-possible-foreign",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-06/RC-018-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-05222025-01",
@@ -1312,7 +1365,8 @@
       "recallInitiationDate": "20250520",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/snack-mania-brazilian-delights-corp--recalls-ready-eat-chicken-coxinhas-products"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/snack-mania-brazilian-delights-corp--recalls-ready-eat-chicken-coxinhas-products",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-05/RC-017-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-016-2025",
@@ -1332,7 +1386,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/bourgeois-smokehouse-recalls-ready-eat-smoked-andouille-sausage-products-due",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-05/RC-016-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-015-2025",
@@ -1351,7 +1406,8 @@
       "recallInitiationDate": "20250516",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/fijian-import-export-co--inc--recalls-ready-eat-meat-pie-products-imported-without"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/fijian-import-export-co--inc--recalls-ready-eat-meat-pie-products-imported-without",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-05/RC-015-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-05132025-01",
@@ -1392,7 +1448,8 @@
       "recallInitiationDate": "20250502",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ferrarini-usa-inc--recalls-ready-eat-prosciutto-products-imported-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ferrarini-usa-inc--recalls-ready-eat-prosciutto-products-imported-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-05/RC-014-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-05012025-002",
@@ -1448,7 +1505,8 @@
       "recallInitiationDate": "20250429",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/smith-packing-llc-recalls-sausage-and-sliced-meat-and-poultry-products-due-sodium"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/smith-packing-llc-recalls-sausage-and-sliced-meat-and-poultry-products-due-sodium",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-05/RC-013-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-012-2025",
@@ -1467,7 +1525,8 @@
       "recallInitiationDate": "20250424",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/acc-central-kitchen-llc-recalls-pork-bun-products-due-misbranding-and-undeclared"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/acc-central-kitchen-llc-recalls-pork-bun-products-due-misbranding-and-undeclared",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-05/RC-012-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-04192025-01",
@@ -1529,7 +1588,8 @@
       "recallInitiationDate": "20250405",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/johnsonville-llc-recalls-cheddar-bratwurst-product-due-possible-foreign-matter"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/johnsonville-llc-recalls-cheddar-bratwurst-product-due-possible-foreign-matter",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-04/RC-011-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-010-2025",
@@ -1601,7 +1661,8 @@
       "recallInitiationDate": "20250320",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/idaho-smokehouse-partners-recalls-ready-eat-beef-stick-products-due-possible-foreign"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/idaho-smokehouse-partners-recalls-ready-eat-beef-stick-products-due-possible-foreign",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-03/RC-008-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-007-2025",
@@ -1628,7 +1689,8 @@
       "recallInitiationDate": "20250225",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ct-produce-wholesale-inc--dba-lv-food-supply-recalls-ineligible-frozen-dried"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ct-produce-wholesale-inc--dba-lv-food-supply-recalls-ineligible-frozen-dried",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-02/RC-007-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-006-2025",
@@ -1662,7 +1724,8 @@
       "recallInitiationDate": "20250212",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/common-sense-soap-recalls-beef-tallow-products-produced-without-benefit-inspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/common-sense-soap-recalls-beef-tallow-products-produced-without-benefit-inspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-02/RC-005-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-02122025-01",
@@ -1704,7 +1767,8 @@
       "recallInitiationDate": "20250131",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/djs-boudain-llc-recalls-sausage-link-products-due-possible-foreign-matter"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/djs-boudain-llc-recalls-sausage-link-products-due-possible-foreign-matter",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-02/RC-004-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-01272025-01",
@@ -1770,7 +1834,8 @@
       "recallInitiationDate": "20250113",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/products-llc-dba-meyer-wholesale-recalls-ready-eat-and-raw-sausage-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/products-llc-dba-meyer-wholesale-recalls-ready-eat-and-raw-sausage-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-01/RC-002-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-001-2025",
@@ -1787,7 +1852,8 @@
       "recallInitiationDate": "20250111",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/bestway-sandwiches-inc--recalls-frozen-chicken-and-cheese-taquito-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/bestway-sandwiches-inc--recalls-frozen-chicken-and-cheese-taquito-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2025-01/RC-001-2025-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-01082025-01",
@@ -1844,7 +1910,8 @@
       "recallInitiationDate": "20241220",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/impero-foods-meats-inc--recalls-raw-pork-sausage-products-produced-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/impero-foods-meats-inc--recalls-raw-pork-sausage-products-produced-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-12/RC-034-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-033-2024",
@@ -1863,7 +1930,8 @@
       "recallInitiationDate": "20241220",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ralphs-packing-company-recalls-ready-eat-pork-and-beef-bologna-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ralphs-packing-company-recalls-ready-eat-pork-and-beef-bologna-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-12/RC-033-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-032-2024",
@@ -1884,7 +1952,8 @@
       "recallInitiationDate": "20241219",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/nail-factory-recalls-ineligible-frozen-siluriformes-fish-products-imported-vietnam"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/nail-factory-recalls-ineligible-frozen-siluriformes-fish-products-imported-vietnam",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-12/RC-032-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-12042024-01",
@@ -1959,7 +2028,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/yu-shang-food-inc--recalls-ready-eat-meat-and-poultry-products-due-possible-0",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-12/RC-030-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-031-2024",
@@ -1995,7 +2065,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/yu-shang-food-inc--recalls-ready-eat-meat-and-poultry-products-due-possible-listeria",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-12/RC-030-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-029-2024",
@@ -2015,7 +2086,8 @@
       "recallInitiationDate": "20241029",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/a-tu-gusto-llc-recalls-frozen-croquette-products-produced-without-benefit-inspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/a-tu-gusto-llc-recalls-frozen-croquette-products-produced-without-benefit-inspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-11/RC-029-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-10242024-01",
@@ -2060,7 +2132,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/brucepac-recalls-ready-eat-meat-and-poultry-products-due-possible-listeria",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-10/RC-028-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-10082024-01",
@@ -2100,7 +2173,8 @@
       "recallInitiationDate": "20240927",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/pork-dynasty-inc--recalls-ready-eat-fried-pork-skin-products-due-misbranding-and"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/pork-dynasty-inc--recalls-ready-eat-fried-pork-skin-products-due-misbranding-and",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-10/RC-027-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-026-2024",
@@ -2119,7 +2193,8 @@
       "recallInitiationDate": "20240912",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/dearborn-sausage-company-inc--recalls-wiener-products-due-misbranding-and-undeclared"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/dearborn-sausage-company-inc--recalls-wiener-products-due-misbranding-and-undeclared",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-09/Recalls_Consignee_024-2024_24SEPT2024.pdf"
     },
     {
       "id": "fsis-025-2024",
@@ -2142,7 +2217,8 @@
       "recallInitiationDate": "20240830",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/hickory-hollow-jerky-recalls-ready-eat-jerky-products-produced-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/hickory-hollow-jerky-recalls-ready-eat-jerky-products-produced-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-09/RC-025-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-08162024-01",
@@ -2176,7 +2252,8 @@
       "recallInitiationDate": "20240816",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/perdue-foods-llc-recalls-frozen-ready-eat-chicken-breast-nugget-and-tender-products"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/perdue-foods-llc-recalls-frozen-ready-eat-chicken-breast-nugget-and-tender-products",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-09/RC-024-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-023-2024-EXP",
@@ -2194,7 +2271,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/boars-head-provisions-co--expands-recall-ready-eat-meat-and-poultry-products-due",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-09/RC-023-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-023-2024",
@@ -2212,7 +2290,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/boars-head-provisions-co--recalls-ready-eat-liverwurst-and-other-deli-meat-products",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-09/RC-023-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-022-2024",
@@ -2232,7 +2311,8 @@
       "recallInitiationDate": "20240715",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/aw-farms-recalls-ready-eat-hot-dog-products-produced-without-benefit-inspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/aw-farms-recalls-ready-eat-hot-dog-products-produced-without-benefit-inspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-07/RC-022-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-021-2024",
@@ -2252,7 +2332,8 @@
       "recallInitiationDate": "20240713",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/taylors-sausage-inc--recalls-ready-eat-landjaeger-sausage-products-due-misbranding"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/taylors-sausage-inc--recalls-ready-eat-landjaeger-sausage-products-due-misbranding",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-07/RC-021-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-07102024-01",
@@ -2297,7 +2378,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/al-safa-us-llc-recalls-frozen-ready-eat-chicken-products-due-possible-listeria",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-07/RC-020-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-019-2024",
@@ -2353,7 +2435,8 @@
       "recallInitiationDate": "20240612",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/bonneval-foods-llc-recalls-barbecue-pork-skin-product-due-misbranding-and-undeclared"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/bonneval-foods-llc-recalls-barbecue-pork-skin-product-due-misbranding-and-undeclared",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-06/RecallRetailConsignee_018-2024_24JUN2024.pdf"
     },
     {
       "id": "fsis-PHA-06102024-01",
@@ -2411,7 +2494,8 @@
       "recallInitiationDate": "20240604",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/south-american-meat-inc--recalls-frozen-raw-beef-products-imported-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/south-american-meat-inc--recalls-frozen-raw-beef-products-imported-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-06/RC-017-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-05022024-01",
@@ -2448,7 +2532,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/cargill-meat-solutions-recalls-ground-beef-products-due-possible-e--coli-o157h7",
-      "pathogen": "ecoli"
+      "pathogen": "ecoli",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-05/RC-016-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-015-2024",
@@ -2473,7 +2558,8 @@
       "recallInitiationDate": "20240426",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/802-vt-frozen-recalls-frozen-meat-pizza-products-due-misbranding-and-undeclared"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/802-vt-frozen-recalls-frozen-meat-pizza-products-due-misbranding-and-undeclared",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-05/RC-015-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-014-2024",
@@ -2499,7 +2585,8 @@
       "recallInitiationDate": "20240424",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/consup-north-america-inc--recalls-ready-eat-sliced-prosciutto-product-produced"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/consup-north-america-inc--recalls-ready-eat-sliced-prosciutto-product-produced",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-05/RC-014-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-04202024-001",
@@ -2601,7 +2688,8 @@
       "recallInitiationDate": "20240307",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/salm-partners-llc-recalls-johnsonville-polish-kielbasa-turkey-sausage-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/salm-partners-llc-recalls-johnsonville-polish-kielbasa-turkey-sausage-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-03/RC-011-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-010-2024",
@@ -2618,7 +2706,8 @@
       "recallInitiationDate": "20240302",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/cj-foods-manufacturing-beaumont-corporation-recalls-trader-joes-chicken-soup"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/cj-foods-manufacturing-beaumont-corporation-recalls-trader-joes-chicken-soup",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-03/RC-010-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-009-2024",
@@ -2698,7 +2787,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/don-novo-son-recalls-ready-eat-meat-products-due-possible-listeria-contamination",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-03/RC-007-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-006-2024",
@@ -2716,7 +2806,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/fratelli-beretta-usa-inc--recalls-ready-eat-charcuterie-meat-products-due-possible",
-      "pathogen": "salmonella"
+      "pathogen": "salmonella",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-03/RC_006-2024_15MAR2024.pdf"
     },
     {
       "id": "fsis-PHA-02082024-01",
@@ -2770,7 +2861,8 @@
       "recallInitiationDate": "20240203",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/hormel-foods-recalls-ready-eat-spiced-deli-ham-products-due-misbranding-and"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/hormel-foods-recalls-ready-eat-spiced-deli-ham-products-due-misbranding-and",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-02/RC-005-2024_Retail_Distribution_List.pdf"
     },
     {
       "id": "fsis-004-2024",
@@ -2794,7 +2886,8 @@
       "recallInitiationDate": "20240202",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/macgregors-meat-and-seafood-ltd-recalls-frozen-ready-eat-pork-products-imported"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/macgregors-meat-and-seafood-ltd-recalls-frozen-ready-eat-pork-products-imported",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-02/RC-004-2024_Retail_Distribution_List.pdf"
     },
     {
       "id": "fsis-003-2024",
@@ -2867,7 +2960,8 @@
       "recallInitiationDate": "20240105",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/salm-partners-llc-recalls-ready-eat-turkey-kielbasa-products-due-possible-extraneous"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/salm-partners-llc-recalls-ready-eat-turkey-kielbasa-products-due-possible-extraneous",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-01/RC-002-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-01042024-01",
@@ -2914,7 +3008,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/fratelli-beretta-usa-inc--recalls-busseto-foods-brand-ready-eat-charcuterie-meat",
-      "pathogen": "salmonella"
+      "pathogen": "salmonella",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-01/RC-001-2024-Retail-List.pdf"
     },
     {
       "id": "fsis-065-2023",
@@ -2952,7 +3047,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/scanga-meat-company-recalls-ground-beef-products-due-possible-e--coli-o103",
-      "pathogen": "ecoli"
+      "pathogen": "ecoli",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2024-01/RC-064-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-063-2023",
@@ -2969,7 +3065,8 @@
       "recallInitiationDate": "20231215",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/simmons-prepared-foods-inc--recalls-boneless-chicken-bites-products-due-possible"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/simmons-prepared-foods-inc--recalls-boneless-chicken-bites-products-due-possible",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-12/RC-063-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-12072023-01",
@@ -3003,7 +3100,8 @@
       "recallInitiationDate": "20231207",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/wayne-farms-llc-recalls-ready-eat-chicken-breast-products-may-be-undercooked-0"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/wayne-farms-llc-recalls-ready-eat-chicken-breast-products-may-be-undercooked-0",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-12/RC-062-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-061-2023",
@@ -3021,7 +3119,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/garland-ventures-recalls-ready-eat-chicken-fried-rice-products-due-possible-listeria",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-12/RC-061-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-060-2023",
@@ -3043,7 +3142,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/pelleh-poultry-corp--recalls-ready-eat-beef-and-poultry-products-due-possible",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-12/RC-060-2023_Retail_Distribution_List.pdf"
     },
     {
       "id": "fsis-059-2023",
@@ -3134,7 +3234,8 @@
       "recallInitiationDate": "20231104",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/tyson-foods-inc--recalls-chicken-patty-product-due-possible-foreign-matter"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/tyson-foods-inc--recalls-chicken-patty-product-due-possible-foreign-matter",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-11/RC-057-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-056-2023",
@@ -3155,7 +3256,8 @@
       "recallInitiationDate": "20231102",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/fairmont-foods-inc--recalls-frozen-spaghetti-loops-meat-sauce-entree-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/fairmont-foods-inc--recalls-frozen-spaghetti-loops-meat-sauce-entree-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-11/RC-056-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-055-2023",
@@ -3174,7 +3276,8 @@
       "recallInitiationDate": "20231031",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/qdelicia-recalls-ready-eat-empanada-products-produced-without-benefit-inspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/qdelicia-recalls-ready-eat-empanada-products-produced-without-benefit-inspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-11/RC-055-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-054-2023",
@@ -3193,7 +3296,8 @@
       "recallInitiationDate": "20231030",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/olymel-recalls-ready-eat-ham-products-imported-without-benefit-import-reinspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/olymel-recalls-ready-eat-ham-products-imported-without-benefit-import-reinspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-11/RC-054-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-053-2023",
@@ -3216,7 +3320,8 @@
       "recallInitiationDate": "20231023",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/capitology-llc-recalls-ineligible-pork-chicharrones-products-imported-honduras"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/capitology-llc-recalls-ineligible-pork-chicharrones-products-imported-honduras",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC-053-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-052-2023",
@@ -3233,7 +3338,8 @@
       "recallInitiationDate": "20231020",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/del-valle-import-and-export-llc-recalls-pork-chorizo-products-produced-without"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/del-valle-import-and-export-llc-recalls-pork-chorizo-products-produced-without",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-11/RC_052-2023_retail_list.pdf"
     },
     {
       "id": "fsis-051-2023",
@@ -3250,7 +3356,8 @@
       "recallInitiationDate": "20231019",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/east-coast-food-distributors-inc--recalls-ineligible-pork-chicharrones-products"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/east-coast-food-distributors-inc--recalls-ineligible-pork-chicharrones-products",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC-051-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-050-2023",
@@ -3267,7 +3374,8 @@
       "recallInitiationDate": "20231019",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/aunt-kittys-foods-inc--recalls-canned-ready-eat-chicken-pot-pie-soup-products-due"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/aunt-kittys-foods-inc--recalls-canned-ready-eat-chicken-pot-pie-soup-products-due",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC-050-2023-Retail-Distribution-List.pdf"
     },
     {
       "id": "fsis-049-2023",
@@ -3285,7 +3393,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/phu-huong-food-company-recalls-ready-eat-beef-and-poultry-meatball-products-due",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC-049-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-048-2023",
@@ -3302,7 +3411,8 @@
       "recallInitiationDate": "20231016",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/mrs--pasta-recalls-frozen-meat-pasta-products-produced-without-benefit-inspection"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/mrs--pasta-recalls-frozen-meat-pasta-products-produced-without-benefit-inspection",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-11/RC-048-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-047-2023",
@@ -3320,7 +3430,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/don-miguel-foods-recalls-frozen-ready-eat-carne-asada-burrito-products-due-possible",
-      "pathogen": "listeria"
+      "pathogen": "listeria",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC-047-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-10062023-02",
@@ -3381,7 +3492,8 @@
       "recallInitiationDate": "20230925",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/del-valle-import-and-export-llc-recalls-ineligible-pork-chicharrones-product"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/del-valle-import-and-export-llc-recalls-ineligible-pork-chicharrones-product",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC_046-2023_10032023.pdf"
     },
     {
       "id": "fsis-045-2023",
@@ -3443,7 +3555,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/american-foods-group-llc-recalls-ground-beef-products-due-possible-e--coli-o103",
-      "pathogen": "ecoli"
+      "pathogen": "ecoli",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-09/RC_044-2023_22SEP2023.pdf"
     },
     {
       "id": "fsis-PHA-09132023-01",
@@ -3486,7 +3599,8 @@
       "recallInitiationDate": "20230909",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/custom-made-meals-llc-recalls-bacon-wrapped-chicken-products-due-misbranding-and"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/custom-made-meals-llc-recalls-bacon-wrapped-chicken-products-due-misbranding-and",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-09/RC_043-2023-Retail_Distribution_List.pdf"
     },
     {
       "id": "fsis-042-2023",
@@ -3503,7 +3617,8 @@
       "recallInitiationDate": "20230907",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/empacadora-frape-usa-llc-recalls-pork-products-imported-without-benefit-import"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/empacadora-frape-usa-llc-recalls-pork-products-imported-without-benefit-import",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-09/RC-042-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-041-2023",
@@ -3522,7 +3637,8 @@
       "recallInitiationDate": "20230905",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/ajc-international-inc--recalls-frozen-raw-pork-products-imported-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/ajc-international-inc--recalls-frozen-raw-pork-products-imported-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/RC_041-2023_Retail_Distribution_List.pdf"
     },
     {
       "id": "fsis-040-2023",
@@ -3539,7 +3655,8 @@
       "recallInitiationDate": "20230902",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/conagra-brands-inc--recalls-banquet-brand-frozen-chicken-strips-entree-due-possible"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/conagra-brands-inc--recalls-banquet-brand-frozen-chicken-strips-entree-due-possible",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-10/Recall_040-2023-Retail_Distribution_List.pdf"
     },
     {
       "id": "fsis-039-2023",
@@ -3564,7 +3681,8 @@
       "recallInitiationDate": "20230902",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/hillshire-brands-company-recalls-smoked-sausage-products-due-possible-foreign-matter"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/hillshire-brands-company-recalls-smoked-sausage-products-due-possible-foreign-matter",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-09/RC_039_2023_%20Retail_List.pdf"
     },
     {
       "id": "fsis-038-2023",
@@ -3584,7 +3702,8 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/dean-peeler-meatworks-llc-recalls-fresh-ground-beef-products-due-possible-e--coli",
-      "pathogen": "ecoli"
+      "pathogen": "ecoli",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-09/RC-038-2023-Retail-List.pdf"
     },
     {
       "id": "fsis-PHA-082523-02",
@@ -3644,7 +3763,8 @@
       "recallInitiationDate": "20230815",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/bellboy-import-corporation-recalls-frozen-raw-pork-products-produced-without-benefit"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/bellboy-import-corporation-recalls-frozen-raw-pork-products-produced-without-benefit",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-08/RC-037-2023-Retail-Distribution.pdf"
     },
     {
       "id": "fsis-036-2023",
@@ -3664,7 +3784,8 @@
       "recallInitiationDate": "20230809",
       "country": "US",
       "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/e-n-a--meat-packing-inc--recalls-frozen-raw-beef-and-lamb-products-produced-without"
+      "url": "https://www.fsis.usda.gov/recalls-alerts/e-n-a--meat-packing-inc--recalls-frozen-raw-beef-and-lamb-products-produced-without",
+      "retailListUrl": "https://www.fsis.usda.gov/sites/default/files/distro_list/2023-08/RC-036-2023-Retail-Distribution.pdf"
     },
     {
       "id": "fsis-PHA-080723-01",
@@ -3682,42 +3803,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/fsis-issues-public-health-alert-fresh-salads-and-wraps-meat-and-poultry-due-possible"
-    },
-    {
-      "id": "fsis-035-2023",
-      "recallNumber": "035-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• 20-oz. Box packages containing “RESTAURANT QUALITY AT HOME Crazy Cuizine Chicken POTSTICKERS ASIAN STYLE GYOZA DUMPLINGS WITH DIPPING SAUCE” with a “Use by” date of 12 14 2024.",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Day-Lee Foods Inc.",
-      "distributionPattern": "California",
-      "distributionStates": [
-        "CA"
-      ],
-      "nationwide": false,
-      "reportDate": "20230805",
-      "recallInitiationDate": "20230805",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/day-lee-foods-inc--recalls-frozen-ready-eat-poultry-products-due-misbranding-and"
-    },
-    {
-      "id": "fsis-PHA-08042023-01",
-      "recallNumber": "PHA-08042023-01",
-      "status": "Completed",
-      "classification": "Public Health Alert",
-      "productDescription": "• Approximately 1.5-lb. plastic tray packages containing “USDA CHOICE BLACK ANGUS BEEF FROM ALDI, BEEF FOR CARNE PICADA” with a “Use or Freeze by” date of Aug. 22, 2023, Julian Date 206, and time stamp between 08:43 through 09:23.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Cargill Meat Solutions Corporation",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20230804",
-      "recallInitiationDate": "20230804",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/recalls-alerts/fsis-issues-public-health-alert-raw-beef-product-due-possible-foreign-matter"
     }
   ]
 }

@@ -136,12 +136,30 @@ function recallUrl(r) {
   return null;
 }
 
+/**
+ * FSIS `field_distro_list` names the retail-distribution-list PDF for a recall
+ * (the stores that received the product) — filename only, e.g.
+ * "RC-012-2026-Retail-List.pdf". May be an array or a string. Returns the bare
+ * filename, or null when the recall has no retail list.
+ */
+function distroFilename(r) {
+  const raw = r.field_distro_list;
+  const first = Array.isArray(raw) ? raw[0] : raw;
+  const s = String(first ?? "").trim();
+  if (!s) return null;
+  // Guard against an anchor/path leaking in — keep just the filename.
+  const name = s.replace(/<[^>]+>/g, " ").trim().split(/[/\\]/).pop();
+  return /\.pdf$/i.test(name) ? name : null;
+}
+
 function normalize(r) {
   const { states, nationwide } = parseStates(pick(r, "field_states", "field_state"));
   const reportDate = toYmd(pick(r, "field_recall_date", "field_year_recall_date"));
   const recallNumber = clean(pick(r, "field_recall_number")) ?? "—";
   const active = /true|active|open/i.test(String(pick(r, "field_active_notice") ?? ""));
   return {
+    // Temp prop consumed by enrichRetailLists, stripped before writing.
+    _distroFile: distroFilename(r),
     id: `fsis-${recallNumber}`,
     recallNumber,
     status: active ? "Ongoing" : "Completed",
@@ -203,6 +221,62 @@ function englishOnly(recalls) {
   });
 }
 
+/**
+ * Find the retail-distribution-list PDF path in a recall notice page's HTML.
+ * Prefers the href whose filename matches `distroFile`; else any distro_list
+ * PDF. Returns a site-relative path (…/distro_list/…/<file>.pdf) or null.
+ */
+function extractDistroHref(html, distroFile) {
+  const re = /\/sites\/default\/files\/distro_list\/[^"'\s)]+?\.pdf/gi;
+  const hrefs = [...new Set(html.match(re) ?? [])];
+  if (hrefs.length === 0) return null;
+  if (distroFile) {
+    const want = distroFile.toLowerCase();
+    const exact = hrefs.find((h) => {
+      const file = decodeURIComponent(h.split("/").pop() ?? "").toLowerCase();
+      return file === want;
+    });
+    if (exact) return exact;
+  }
+  return hrefs[0];
+}
+
+/**
+ * Enrich kept recalls that carry a retail distribution list: fetch each notice
+ * page and capture the official retail-list PDF URL as `retailListUrl`. Link
+ * only — we never parse store names (stays on the named-only rule). Bounded
+ * concurrency; a failed/absent page just leaves the URL undefined and never
+ * throws out of the run.
+ */
+async function enrichRetailLists(recalls) {
+  const targets = recalls.filter((r) => r._distroFile && r.url);
+  let captured = 0;
+  let idx = 0;
+  const CONCURRENCY = 4;
+  async function worker() {
+    while (idx < targets.length) {
+      const rec = targets[idx++];
+      try {
+        const pageUrl = rec.url.replace(/^http:\/\//i, "https://");
+        const res = await fetch(pageUrl, { headers: HEADERS });
+        if (!res.ok) continue;
+        const html = await res.text();
+        const path = extractDistroHref(html, rec._distroFile);
+        if (path) {
+          rec.retailListUrl = `${RECALL_BASE}${path}`;
+          captured++;
+        }
+      } catch {
+        // Tolerate per-page failures — the recall just shows no retail-list link.
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  console.log(
+    `Captured ${captured} retail-list URLs (of ${targets.length} recalls with a distro list)`
+  );
+}
+
 async function main() {
   const res = await fetch(API, { headers: HEADERS });
   if (!res.ok) throw new Error(`FSIS API ${res.status} (WAF may be blocking this host)`);
@@ -218,6 +292,12 @@ async function main() {
     .filter((r) => r.reportDate && r.reportDate >= floor)
     .sort((a, b) => (b.reportDate ?? "").localeCompare(a.reportDate ?? ""))
     .slice(0, MAX_RECORDS);
+
+  // Capture each recall's official FSIS retail-distribution-list PDF (link only).
+  await enrichRetailLists(recalls);
+
+  // Drop temp props so the written record shape = normalized + retailListUrl?.
+  for (const r of recalls) delete r._distroFile;
 
   const payload = {
     generatedAt: new Date().toISOString(),

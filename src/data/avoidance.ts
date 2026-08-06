@@ -110,6 +110,12 @@ export interface AvoidanceItem {
   agency: "FDA" | "FSIS" | "CDC";
   /** Link to the official notice, when one exists. */
   url?: string;
+  /**
+   * Link to FSIS's official retail distribution-list PDF (the stores that
+   * received the product), when the recall carries one. An FSIS document — not
+   * our inference.
+   */
+  retailListUrl?: string;
   /** Display date of the source record. */
   sourceDate?: string;
 }
@@ -131,6 +137,7 @@ export function toAvoidanceItem(recall: Recall): AvoidanceItem {
     classification: recall.classification,
     agency: recall.agency ?? "FDA",
     url: recall.url,
+    retailListUrl: recall.retailListUrl,
     sourceDate: recall.reportDate ?? recall.recallInitiationDate,
   };
 }
