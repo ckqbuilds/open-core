@@ -4,8 +4,7 @@ import { ScanBarcode, Loader2, Search } from "lucide-react";
 import { lookupBarcode, type OffProduct } from "@/data/openfoodfacts";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
-import { matchRecalls } from "@/data/barcodeMatch";
-import type { Recall } from "@/data/types";
+import { matchRecalls, type RecallMatches } from "@/data/barcodeMatch";
 import { useAsync } from "@/hooks/useAsync";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ import { BarcodeVerdict } from "@/components/BarcodeVerdict";
 
 interface CheckResult {
   off: OffProduct | null;
-  matches: Recall[];
+  matches: RecallMatches;
 }
 
 /**
@@ -189,7 +188,9 @@ export function CheckPage() {
           </Card>
 
           {/* Never dead-end: offer a brand/food search path into the recall feed. */}
-          {(offMissed || result.data.matches.length === 0) && (
+          {(offMissed ||
+            (result.data.matches.exact.length === 0 &&
+              result.data.matches.possible.length === 0)) && (
             <Card className="border-dashed">
               <CardContent className="p-4 text-sm">
                 <p className="font-medium">Want to double-check by name?</p>

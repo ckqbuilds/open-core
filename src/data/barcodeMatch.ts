@@ -1,8 +1,10 @@
-// TODO(integration): upgrade to exact match against recall.upcs once the
-// supplier-brand-avoidance feature lands that field. This is a deliberately
-// COARSE text match for v1 — good for surfacing a likely hit, never a proof of
-// safety. FDA/FSIS recall data remains the only authority; Open Food Facts here
-// only supplies the product/brand identity we search against.
+// Matches a scanned barcode against the current recall feeds. Two tiers:
+//  - EXACT: the code equals a UPC the recall notice lists (recall.upcs), or the
+//    code appears verbatim in the notice's code_info — i.e. this exact package.
+//  - POSSIBLE: a brand/product token from the Open Food Facts identity appears in
+//    a recall's product description — same brand, maybe a different item.
+// FDA/FSIS recall data is the only authority; Open Food Facts only supplies the
+// product/brand identity we search against. A non-match is never a safety proof.
 
 import type { Recall } from "@/data/types";
 import type { OffProduct } from "@/data/openfoodfacts";
@@ -31,35 +33,55 @@ function tokenize(text: string): string[] {
     .filter((t) => t.length >= MIN_TOKEN && !STOPWORDS.has(t));
 }
 
+/** Digits only, leading zeros stripped — so UPC-A (12) and EAN-13 (0 + UPC-A) compare equal. */
+function normUpc(s: string): string {
+  return s.replace(/\D/g, "").replace(/^0+/, "");
+}
+
+export interface RecallMatches {
+  /** Matched by UPC / code — this specific package. */
+  exact: Recall[];
+  /** Matched by brand or product name — same brand, verify it's the same item. */
+  possible: Recall[];
+}
+
 /**
- * COARSE recall match for the in-store barcode check.
- *
- * A recall is returned if EITHER:
- *  - the raw barcode digits appear verbatim in the recall's product description
- *    or reason (some notices cite UPCs inline), OR
- *  - any brand / product-name token (length ≥ 4, case-insensitive) from the OFF
- *    identity appears in the recall's product description.
- *
- * Coverage is uneven by design; a non-match is NOT a safety guarantee — callers
- * must phrase the negative honestly ("not named in any current recall").
+ * Tiered recall match for the in-store barcode check. Exact (UPC/code) hits take
+ * precedence; brand-token hits are surfaced separately as "possible". Coverage is
+ * uneven by design — callers must phrase a non-match honestly ("not named in any
+ * current recall"), never as "safe".
  */
 export function matchRecalls(
   off: OffProduct | null,
   code: string,
   recalls: Recall[]
-): Recall[] {
+): RecallMatches {
   const digits = code.replace(/\D/g, "");
+  const codeNorm = normUpc(code);
   const tokens = off
     ? Array.from(new Set([...tokenize(off.brands.join(" ")), ...tokenize(off.name ?? "")]))
     : [];
 
-  return recalls.filter((r) => {
-    const desc = r.productDescription.toLowerCase();
-    const reason = r.reason.toLowerCase();
+  const exact: Recall[] = [];
+  const possible: Recall[] = [];
 
-    if (digits.length >= 8 && (desc.includes(digits) || reason.includes(digits))) {
-      return true;
+  for (const r of recalls) {
+    const upcHit =
+      codeNorm.length >= 8 && (r.upcs ?? []).some((u) => normUpc(u) === codeNorm);
+    const inlineHit =
+      digits.length >= 8 &&
+      ((r.codeInfo ?? "").includes(digits) ||
+        r.productDescription.includes(digits) ||
+        r.reason.includes(digits));
+
+    if (upcHit || inlineHit) {
+      exact.push(r);
+      continue;
     }
-    return tokens.some((t) => desc.includes(t));
-  });
+    if (tokens.some((t) => r.productDescription.toLowerCase().includes(t))) {
+      possible.push(r);
+    }
+  }
+
+  return { exact, possible };
 }

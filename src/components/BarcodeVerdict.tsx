@@ -1,37 +1,52 @@
 import { Card, Chip } from "@heroui/react";
 import { AlertTriangle, ShieldCheck, ExternalLink } from "lucide-react";
 import type { Recall } from "@/data/types";
+import type { RecallMatches } from "@/data/barcodeMatch";
 // Read-only reuse of the shared classification → chip-color mapping.
 import { classificationColor } from "@/components/RecallRow";
 
 /**
- * The one-line verdict for an in-store barcode check.
+ * The verdict for an in-store barcode check.
  *
  * The authority is FDA/FSIS recall data — Open Food Facts only supplied the
- * product identity we searched. We NEVER say "safe": a non-match is phrased as
- * "not named in any current recall", which is the honest claim we can make.
+ * product identity we searched. An exact hit means the barcode matches a recall's
+ * listed UPC; a "possible" hit means the brand matches but maybe not this exact
+ * item. We NEVER say "safe": a non-match is phrased as "not named in any current
+ * recall", the honest claim we can make.
  */
-export function BarcodeVerdict({ matches }: { matches: Recall[] }) {
-  if (matches.length > 0) return <Recalled matches={matches} />;
+export function BarcodeVerdict({ matches }: { matches: RecallMatches }) {
+  if (matches.exact.length > 0) return <Recalled recalls={matches.exact} tier="exact" />;
+  if (matches.possible.length > 0) return <Recalled recalls={matches.possible} tier="possible" />;
   return <NotFound />;
 }
 
-function Recalled({ matches }: { matches: Recall[] }) {
+function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possible" }) {
+  const exact = tier === "exact";
+  const accent = exact ? "var(--status-critical)" : "var(--warning)";
+  const title = exact
+    ? recalls.length === 1
+      ? "This product is under recall"
+      : `This product matches ${recalls.length} current recalls`
+    : "A matching product may be recalled";
+  const blurb = exact
+    ? "The barcode matches the recalled product code in the official FDA/FSIS record below. Confirm the lot/date codes on your package against the notice."
+    : "A product from this brand is under recall, but the barcode didn't match a listed code — check the item and package against the notice below to see if it's the same one.";
+
   return (
-    <Card className="border-[var(--status-critical)]/40 bg-[var(--status-critical)]/5 p-4">
+    <Card
+      className="p-4"
+      style={{ borderColor: `color-mix(in oklab, ${accent} 40%, transparent)`, backgroundColor: `color-mix(in oklab, ${accent} 5%, transparent)` }}
+    >
       <div className="flex items-start gap-3">
-        <AlertTriangle className="mt-0.5 size-5 shrink-0 text-[var(--status-critical)]" />
+        <AlertTriangle className="mt-0.5 size-5 shrink-0" style={{ color: accent }} />
         <div className="min-w-0 flex-1">
-          <p className="text-base font-semibold text-[var(--status-critical)]">
-            Named in {matches.length === 1 ? "a current recall" : `${matches.length} current recalls`}
+          <p className="text-base font-semibold" style={{ color: accent }}>
+            {title}
           </p>
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            This product appears to match {matches.length === 1 ? "an" : ""} official FDA/FSIS recall
-            record below. Confirm the details against the linked notice before acting.
-          </p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{blurb}</p>
 
           <ul className="mt-3 space-y-3">
-            {matches.map((r) => (
+            {recalls.map((r) => (
               <li key={r.id} className="rounded-md border bg-card p-3">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Chip color={classificationColor(r.classification)} variant="soft" size="sm">
