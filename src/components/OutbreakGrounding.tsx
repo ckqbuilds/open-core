@@ -3,8 +3,10 @@ import { ExternalLink, Lightbulb } from "lucide-react";
 import type { Outbreak, SourceCitation } from "@/data/types";
 import type { Pathogen } from "@/data/symptoms";
 import { extractSerotype, fetchSerotypeContext } from "@/data/beam";
+import { fetchPathogenHistory } from "@/data/nors";
 import { useAsync } from "@/hooks/useAsync";
 import { SourceLink } from "@/components/common";
+import { Sparkline } from "@/components/Sparkline";
 
 /**
  * Plain-English grounding block for an outbreak. It de-scares the cryptic
@@ -32,6 +34,15 @@ export function OutbreakGrounding({
     beamEnabled
   );
   const context = beamEnabled ? beam.data : null;
+
+  // NORS historical base rates apply to ANY matched pathogen with a NORS term
+  // (broader than the Salmonella-only BEAM layer). Null term / no rows → the
+  // hook resolves to null and the band below is omitted.
+  const history = useAsync(
+    (signal) => fetchPathogenHistory(pathogen?.id ?? "", signal),
+    [pathogen?.id],
+    pathogen != null
+  );
 
   return (
     <Card className="border-accent/30 bg-accent/5 p-5">
@@ -83,6 +94,40 @@ export function OutbreakGrounding({
             >
               <ExternalLink className="size-3" />
               CDC BEAM Dashboard
+            </a>
+          </div>
+        )}
+
+        {history.data && (
+          <div className="space-y-2 border-t border-accent/20 pt-3">
+            <p className="text-xs font-medium text-foreground">How common is this?</p>
+            <p>
+              CDC records about{" "}
+              <span className="font-medium text-foreground">
+                {history.data.avgOutbreaksPerYear}
+              </span>{" "}
+              {pathogen?.name} foodborne outbreaks a year on average (
+              {history.data.firstYear}–{history.data.lastYear}), around{" "}
+              <span className="font-medium text-foreground">
+                {history.data.avgIllnessesPerYear.toLocaleString()}
+              </span>{" "}
+              illnesses/year.
+            </p>
+            <Sparkline
+              values={history.data.recent.map((r) => r.outbreaks)}
+              ariaLabel={`${pathogen?.name} foodborne outbreaks per year, ${history.data.firstYear}–${history.data.lastYear}`}
+            />
+            <p className="text-xs text-muted-foreground">
+              reported outbreaks/yr · last 10 years
+            </p>
+            <a
+              href={history.data.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+            >
+              <ExternalLink className="size-3" />
+              CDC NORS (historical, finalized annual figures — not this outbreak’s counts)
             </a>
           </div>
         )}
