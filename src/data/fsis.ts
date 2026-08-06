@@ -1,4 +1,5 @@
 import type { Recall } from "./types";
+import { extractUpcs } from "./avoidance";
 
 export interface FsisFeed {
   generatedAt: string | null;
@@ -18,7 +19,14 @@ export async function loadFsisRecalls(signal?: AbortSignal): Promise<FsisFeed> {
     if (!res.ok) throw new Error(String(res.status));
     const feed = await res.json();
     if (!Array.isArray(feed.recalls)) throw new Error("bad feed");
-    return { generatedAt: feed.generatedAt ?? null, recalls: feed.recalls as Recall[], stale: false };
+    // Best-effort UPCs: FSIS leans on establishment (EST) numbers and lot codes,
+    // so barcodes are usually absent — extract from the product text when the
+    // notice does print them, and leave upcs undefined otherwise.
+    const recalls = (feed.recalls as Recall[]).map((r) => {
+      const upcs = extractUpcs(r.codeInfo, r.productDescription);
+      return upcs.length > 0 ? { ...r, upcs } : r;
+    });
+    return { generatedAt: feed.generatedAt ?? null, recalls, stale: false };
   } catch (err) {
     if (signal?.aborted) throw err;
     return { generatedAt: null, recalls: [], stale: true };

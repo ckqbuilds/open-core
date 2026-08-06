@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Loader2, MapPin, Stethoscope, Package } from "lucide-react";
+import { ArrowLeft, Loader2, MapPin, Stethoscope, Package, ShoppingCart } from "lucide-react";
 import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByTerm } from "@/data/openfda";
 import { loadFsisRecalls, correlateFsisRecalls } from "@/data/fsis";
@@ -11,6 +11,13 @@ import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { useZipContext } from "@/hooks/ZipContext";
 import { OutbreakDetail } from "@/components/OutbreakDetail";
 import { RecallRow } from "@/components/RecallRow";
+import { AvoidanceCard } from "@/components/AvoidanceCard";
+import {
+  toAvoidanceItem,
+  avoidanceFromEntities,
+  dedupeAvoidance,
+  sortAvoidance,
+} from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
 import { EmptyState } from "@/components/common";
@@ -63,6 +70,14 @@ export function OutbreakPage() {
     [fsis.data, matchedPathogen, ob?.datePosted]
   );
 
+  // Shelf-recognition digest for this outbreak: curated named-entity brands +
+  // the related recall records. Named sources only — no supply-chain inference.
+  const avoidance = useMemo(() => {
+    const entityItems = avoidanceFromEntities(ob?.namedEntities ?? []);
+    const recallItems = [...(relatedRecalls.data ?? []), ...fsisRelated].map(toAvoidanceItem);
+    return sortAvoidance(dedupeAvoidance([...entityItems, ...recallItems]));
+  }, [ob?.namedEntities, relatedRecalls.data, fsisRelated]);
+
   const backLink = (
     <Link
       to="/"
@@ -100,6 +115,25 @@ export function OutbreakPage() {
       {backLink}
 
       <OutbreakDetail outbreak={ob} />
+
+      {/* What to avoid on the shelf — the shelf-recognition digest */}
+      {avoidance.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ShoppingCart className="size-4 text-[color:var(--status-critical)]" />
+            <h2 className="text-lg font-semibold">What to avoid on the shelf</h2>
+          </div>
+          <p className="max-w-2xl text-sm text-muted-foreground">
+            Pulled from the official recall notice — the brands and package codes to check. Being
+            listed means the product is under recall, not that a store is unsafe.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {avoidance.map((item) => (
+              <AvoidanceCard key={item.id} item={item} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="grid gap-8 lg:grid-cols-3">
       {/* Related recalls for this pathogen */}

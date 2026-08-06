@@ -16,6 +16,16 @@ export interface Recall {
   city?: string;
   state?: string;
   country?: string;
+  /**
+   * Raw package/lot code text from the official notice (openFDA `code_info`).
+   * Holds UPCs and date/lot codes exactly as the recall states them.
+   */
+  codeInfo?: string;
+  /**
+   * UPC/EAN/GTIN barcodes extracted from `codeInfo` + `productDescription`,
+   * normalized to digits-only. Only present when the notice discloses them.
+   */
+  upcs?: string[];
   /** Regulating agency. Absent ⇒ FDA (openFDA), the original source. */
   agency?: "FDA" | "FSIS";
   /** Link to the official recall notice (FSIS provides one; openFDA does not). */

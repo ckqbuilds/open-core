@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Activity, Package, Stethoscope, MapPin, Loader2 } from "lucide-react";
+import { ArrowLeft, Activity, Package, Stethoscope, MapPin, Loader2, ShoppingCart } from "lucide-react";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByFood } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
@@ -19,6 +19,13 @@ import { useZipContext } from "@/hooks/ZipContext";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { OutbreakTile } from "@/components/OutbreakTile";
 import { RecallRow } from "@/components/RecallRow";
+import { AvoidanceCard } from "@/components/AvoidanceCard";
+import {
+  toAvoidanceItem,
+  avoidanceFromEntities,
+  dedupeAvoidance,
+  sortAvoidance,
+} from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
 import { PageHeader } from "@/components/PageHeader";
@@ -73,6 +80,16 @@ export function FoodPage() {
     );
   }, [entry]);
 
+  // Shelf-recognition digest: what to check for at the store, built from the
+  // official recall records + the curated named entities for this food. Named
+  // sources only — nothing inferred.
+  const avoidance = useMemo(() => {
+    if (!entry) return [];
+    const fromRecalls = [...entry.fdaRecalls, ...entry.fsisRecalls].map(toAvoidanceItem);
+    const fromEntities = avoidanceFromEntities(entry.namedEntities);
+    return sortAvoidance(dedupeAvoidance([...fromRecalls, ...fromEntities]));
+  }, [entry]);
+
   const backLink = (
     <Link
       to="/"
@@ -125,6 +142,25 @@ export function FoodPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 {entry.outbreaks.map((ob) => (
                   <OutbreakTile key={ob.id} outbreak={ob} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* What to avoid on the shelf — the shelf-recognition digest */}
+          {avoidance.length > 0 && (
+            <section className="space-y-3">
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="size-4 text-[color:var(--status-critical)]" />
+                <h2 className="text-lg font-semibold">What to avoid on the shelf</h2>
+              </div>
+              <p className="max-w-2xl text-sm text-muted-foreground">
+                Pulled from the official recall notice — the brands and package codes to check.
+                Being listed means the product is under recall, not that a store is unsafe.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {avoidance.map((item) => (
+                  <AvoidanceCard key={item.id} item={item} />
                 ))}
               </div>
             </section>

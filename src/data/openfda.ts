@@ -1,5 +1,6 @@
 import type { Recall } from "./types";
 import { parseDistributionStates } from "./geo";
+import { extractUpcs } from "./avoidance";
 
 const BASE = "https://api.fda.gov/food/enforcement.json";
 
@@ -8,6 +9,7 @@ interface RawEnforcement {
   status?: string;
   classification?: string;
   product_description?: string;
+  code_info?: string;
   reason_for_recall?: string;
   recalling_firm?: string;
   distribution_pattern?: string;
@@ -27,6 +29,8 @@ function normalize(raw: RawEnforcement, idx: number): Recall {
     status: raw.status ?? "Unknown",
     classification: raw.classification ?? "—",
     productDescription: raw.product_description ?? "",
+    codeInfo: raw.code_info,
+    upcs: extractUpcs(raw.code_info, raw.product_description),
     reason: raw.reason_for_recall ?? "",
     recallingFirm: raw.recalling_firm ?? "—",
     distributionPattern: pattern,
