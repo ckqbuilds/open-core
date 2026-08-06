@@ -1,7 +1,9 @@
 import { Card, Chip } from "@heroui/react";
+import { Link } from "react-router-dom";
 import { ExternalLink, Lightbulb } from "lucide-react";
 import type { Outbreak, SourceCitation } from "@/data/types";
 import type { Pathogen } from "@/data/symptoms";
+import { classifyOutbreak } from "@/data/contaminants";
 import { extractSerotype, fetchSerotypeContext } from "@/data/beam";
 import { fetchPathogenHistory } from "@/data/nors";
 import { useAsync } from "@/hooks/useAsync";
@@ -71,6 +73,25 @@ export function OutbreakGrounding({
 
         {serotype && pathogen?.summary && (
           <p>{pathogen.summary}</p>
+        )}
+
+        {pathogen && (
+          <p>
+            This is a <span className="font-medium text-foreground">biological</span> contaminant
+            {classifyOutbreak(pathogen).subtype && (
+              <>
+                {" "}
+                — a{" "}
+                <span className="italic text-foreground">
+                  {classifyOutbreak(pathogen).subtype}
+                </span>
+              </>
+            )}
+            . <Link to="/learn" className="font-medium text-primary hover:underline">
+              How contamination types work
+            </Link>
+            .
+          </p>
         )}
 
         {context && (

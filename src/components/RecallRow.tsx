@@ -1,5 +1,7 @@
 import { Card, Chip } from "@heroui/react";
 import type { Recall } from "@/data/types";
+import { classifyRecall } from "@/data/contaminants";
+import { ContaminantBadge } from "@/components/ContaminantBadge";
 import { formatFdaDate } from "@/lib/utils";
 
 type ChipColor = "danger" | "warning" | "default" | "success" | "accent";
@@ -27,6 +29,7 @@ export function RecallRow({ recall }: { recall: Recall }) {
         <Chip color={recall.agency === "FSIS" ? "accent" : "default"} variant="soft" size="sm">
           {recall.agency === "FSIS" ? "USDA FSIS" : "FDA"}
         </Chip>
+        <ContaminantBadge classification={classifyRecall(recall)} />
         {recall.nationwide && (
           <Chip color="default" variant="soft" size="sm">
             Nationwide

@@ -1,7 +1,8 @@
-import { Stethoscope, Sprout, GraduationCap } from "lucide-react";
+import { Stethoscope, Sprout, GraduationCap, Biohazard } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SymptomsSection } from "@/sections/SymptomsSection";
 import { GrowSection } from "@/sections/GrowSection";
+import { ContaminationSection } from "@/sections/ContaminationSection";
 import { PageHeader } from "@/components/PageHeader";
 
 /** Educational section: how to recognize the illnesses + how to grow your own. */
@@ -19,12 +20,18 @@ export function LearnPage() {
           <TabsTrigger value="symptoms">
             <Stethoscope className="size-4" /> Signs &amp; care
           </TabsTrigger>
+          <TabsTrigger value="contamination">
+            <Biohazard className="size-4" /> Contamination types
+          </TabsTrigger>
           <TabsTrigger value="grow">
             <Sprout className="size-4" /> Grow your own
           </TabsTrigger>
         </TabsList>
         <TabsContent value="symptoms">
           <SymptomsSection />
+        </TabsContent>
+        <TabsContent value="contamination">
+          <ContaminationSection />
         </TabsContent>
         <TabsContent value="grow">
           <GrowSection />

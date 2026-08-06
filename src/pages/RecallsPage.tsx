@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2 } from "lucide-react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
+import { classifyRecall } from "@/data/contaminants";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
@@ -33,6 +34,14 @@ const AGENCY_OPTIONS = [
   { value: "FDA", label: "FDA (openFDA)" },
   { value: "FSIS", label: "USDA FSIS — meat & poultry" },
 ];
+const TYPE_OPTIONS = [
+  { value: "all", label: "Any hazard type" },
+  { value: "biological", label: "🦠 Biological" },
+  { value: "chemical", label: "⚗️ Chemical" },
+  { value: "physical", label: "🔩 Physical" },
+  { value: "allergenic", label: "🥜 Allergenic" },
+  { value: "other", label: "🏷️ Quality / labeling" },
+];
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
@@ -41,6 +50,7 @@ export function RecallsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [scopeFilter, setScopeFilter] = useState("mystate");
   const [agencyFilter, setAgencyFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
 
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
   const fsis = useAsync<Recall[]>(
@@ -80,20 +90,23 @@ export function RecallsPage() {
     if (scopeFilter === "nationwide") list = list.filter((r) => r.nationwide);
     else if (scopeFilter === "mystate" && geo)
       list = list.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr));
+    if (typeFilter !== "all") list = list.filter((r) => classifyRecall(r).type === typeFilter);
     return list;
-  }, [combined, agencyFilter, classFilter, statusFilter, scopeFilter, geo]);
+  }, [combined, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, geo]);
 
   const total = combined.length;
   const filtersActive =
     classFilter !== "all" ||
     statusFilter !== "all" ||
     scopeFilter !== "mystate" ||
-    agencyFilter !== "all";
+    agencyFilter !== "all" ||
+    typeFilter !== "all";
   const resetFilters = () => {
     setClassFilter("all");
     setStatusFilter("all");
     setScopeFilter("mystate");
     setAgencyFilter("all");
+    setTypeFilter("all");
   };
 
   return (
@@ -160,6 +173,13 @@ export function RecallsPage() {
             onChange={setScopeFilter}
             options={scopeOptions}
             className="w-full min-w-[9rem] sm:w-auto"
+          />
+          <Select
+            label="Filter by contaminant type"
+            value={typeFilter}
+            onChange={setTypeFilter}
+            options={TYPE_OPTIONS}
+            className="w-full min-w-[10rem] sm:w-auto"
           />
           {filtersActive && (
             <Button variant="ghost" size="sm" onClick={resetFilters}>
