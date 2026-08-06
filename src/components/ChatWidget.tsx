@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Sparkles, Maximize2, Minimize2 } from "lucide-react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { buildContext, chatStatus, streamChat, type ChatMessage } from "@/data/chat";
@@ -14,10 +14,17 @@ const SUGGESTIONS = [
   "How do I avoid getting sick from lettuce?",
 ];
 
+/** Unobtrusive bottom-right popover (default) vs a large centered panel (maximized). */
+const DEFAULT_PANEL =
+  "fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden border bg-card shadow-2xl h-[80vh] rounded-t-xl sm:inset-x-auto sm:bottom-4 sm:right-4 sm:h-[560px] sm:w-[380px] sm:rounded-xl";
+const EXPANDED_PANEL =
+  "fixed inset-2 z-50 flex flex-col overflow-hidden border bg-card shadow-2xl rounded-xl sm:inset-y-8 sm:left-1/2 sm:right-auto sm:w-[min(760px,92vw)] sm:-translate-x-1/2";
+
 export function ChatWidget() {
   const { geo } = useZipContext();
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -119,19 +126,39 @@ export function ChatWidget() {
 
       {/* Panel */}
       {open && (
-        <div className="fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden border bg-card shadow-2xl sm:inset-x-auto sm:bottom-4 sm:right-4 sm:h-[560px] sm:w-[380px] sm:rounded-xl h-[80vh] rounded-t-xl">
-          <div className="flex items-center justify-between border-b bg-card px-4 py-3">
+        <>
+          {expanded && (
+            <div
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              aria-hidden
+              onClick={() => setExpanded(false)}
+            />
+          )}
+          <div className={expanded ? EXPANDED_PANEL : DEFAULT_PANEL}>
+            <div className="flex items-center justify-between border-b bg-card px-4 py-3">
             <div className="flex items-center gap-2">
               <Sparkles className="size-4 text-primary" />
               <span className="text-sm font-semibold">Ask about recalls &amp; outbreaks</span>
             </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="rounded-md p-1 text-muted-foreground hover:bg-secondary"
-              aria-label="Close chat"
-            >
-              <X className="size-4" />
-            </button>
+            <div className="flex items-center gap-0.5">
+              <button
+                onClick={() => setExpanded((v) => !v)}
+                className="rounded-md p-1 text-muted-foreground hover:bg-secondary"
+                aria-label={expanded ? "Restore chat size" : "Maximize chat"}
+              >
+                {expanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+              </button>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setExpanded(false);
+                }}
+                className="rounded-md p-1 text-muted-foreground hover:bg-secondary"
+                aria-label="Close chat"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
@@ -234,7 +261,8 @@ export function ChatWidget() {
               AI can be wrong. Confirm against the linked FDA/CDC sources. Not medical advice.
             </p>
           </div>
-        </div>
+          </div>
+          </>
       )}
     </>
   );
