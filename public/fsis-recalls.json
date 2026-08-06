@@ -2,7 +2,7 @@
   "generatedAt": "2026-07-31T23:23:17.444Z",
   "source": "https://www.fsis.usda.gov/fsis/api/recall/v/1",
   "sourceLabel": "USDA FSIS Recalls & Public Health Alerts",
-  "count": 254,
+  "count": 190,
   "recalls": [
     {
       "id": "fsis-PHA-07302026-01",
@@ -1587,23 +1587,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/cargill-kitchen-solutions-recalls-liquid-egg-products-due-unapproved-substance"
     },
     {
-      "id": "fsis-009-2025",
-      "recallNumber": "009-2025",
-      "status": "Completed",
-      "classification": "Class III",
-      "productDescription": "• Caja de 32 oz. (2 lb.) que contiene “egg beaters ORIGINAL LIQUID EGG SUBSTITUTE” (SUSTITUTO DE HUEVO LÍQUIDO ORIGINAL) y fecha de \"USAR ANTES DEL\" 10 AGO 2025., • Caja de 32 oz. (2 lb.) que contiene “egg beaters CAGE-FREE ORIGINAL LIQUID EGG SUBSTITUTE” (SUSTITUTO DE HUEVO LÍQUIDO ORIGINAL LIBRE DE JAULA) y fecha de \"USAR ANTES DEL\" 09 AGO 2025., • Caja de 32 oz. (2 lb.) que contiene “egg beaters CAGE-FREE ORIGINAL FROZEN EGG SUBSTITUTE” (SUSTITUTO DE HUEVO LÍQUIDO ORIGINAL LIBRE DE JAULA CONGELADO) y fecha de \"USAR ANTES DEL\" 07 AGO 2026., • Caja de 32 oz. (2 lb.) que contiene “Bob Evans Better’n Eggs Made with Real Egg Whites” (Better'n Eggs hecho con claras de huevo de verdad Bob Evans) y fecha de \"USAR ANTES DEL\" 10 AGO 2025.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Cargill Kitchen Solutions, Inc.",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20250328",
-      "recallInitiationDate": "20250328",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/cargill-kitchen-solutions-retira-productos-de-huevo-liquido-debido-a-una-sustancia-no"
-    },
-    {
       "id": "fsis-008-2025",
       "recallNumber": "008-2025",
       "status": "Completed",
@@ -1665,23 +1648,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/lpk1-recalls-ready-eat-chicken-caesar-wrap-products-due-misbranding-and-undeclared"
     },
     {
-      "id": "fsis-006-2025",
-      "recallNumber": "006-2025",
-      "status": "Completed",
-      "classification": "Class II",
-      "productDescription": "• Envases transparentes tipo concha de 10 oz. que contienen “thoughtfully handmade just for you Chicken Caesar Wrap with parmesan cheese lettuce, Caesar dressing\" (Rollo de César de Pollo con queso parmesano, lechuga, aderezo César, cuidadosamente hechos",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Fresh & Ready Foods LLC",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20250223",
-      "recallInitiationDate": "20250223",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/lpk1-retira-productos-de-rollo-de-cesar-de-pollo-listos-para-consumir-debido-a-un-error-de"
-    },
-    {
       "id": "fsis-005-2025",
       "recallNumber": "005-2025",
       "status": "Completed",
@@ -1697,23 +1663,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/common-sense-soap-recalls-beef-tallow-products-produced-without-benefit-inspection"
-    },
-    {
-      "id": "fsis-005-2025",
-      "recallNumber": "005-2025",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Frasco de vidrio de 24 fl-oz. que contiene “PREMIUM QUALITY GOODS Grass-fed beef TALLOW Lady May ALL NATURAL” (SEBO de res alimentada con pasto Lady May TOTALMENTE NATURAL) ,• Estuche plástico de 2 lb. que contiene “PREMIUM QUALITY GOODS Grass-fed beef TALLOW Lady May ALL NATURAL” (SEBO de res alimentada con pasto Lady May TOTALMENTE NATURAL) ,• Estuche plástico de 7.8-8 lb. (1 gal) que contiene “PREMIUM QUALITY GOODS Grass-fed beef TALLOW Lady May ALL NATURAL” (SEBO de res alimentada con pasto Lady May TOTALMENTE NATURAL),• Estuche plástico de 16 lb. que contiene “PREMIUM QUALITY GOODS Grass-fed beef TALLOW Lady May ALL NATURAL” (SEBO de res alimentada con pasto Lady May TOTALMENTE NATURAL)",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Company Contact Owner, Lady May Tallow Chris McDonald 601-270-7410 may@ladymaytallow.com",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20250212",
-      "recallInitiationDate": "20250212",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/common-sense-retira-productos-de-sebo-de-res-producidos-sin-el-beneficio-de-la-inspeccion"
     },
     {
       "id": "fsis-PHA-02122025-01",
@@ -1756,27 +1705,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/djs-boudain-llc-recalls-sausage-link-products-due-possible-foreign-matter"
-    },
-    {
-      "id": "fsis-004-2025",
-      "recallNumber": "004-2025",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "WASHINGTON, 31 de ene. de 2025 - D.J.’s Boudain, LLC, una compañía de Beaumont, Texas, está retirando del mercado aproximadamente 17 720 libras de productos de salchicha boudain que podrían estar contaminadas con materia extraña, específicamente con pedazos de un bolígrafo, anunció hoy el Servicio de Inocuidad e Inspección de Alimentos (FSIS, por sus siglas en inglés) del Departamento de Agricultura de los EE.UU. Los artículos frescos y congelados de salchicha boudain fueron producidos el 23 de enero de 2025. La lista de los productos sujetos a la retirada puede consultarse aquí: [ ver listado de productos ]. Las etiquetas de los productos afectados pueden encontrarse aquí: [ ver etiquetas ]. Los productos objeto de la retirada están marcados con el número de establecimiento \"EST. 13246\" dentro del sello de inspección del USDA. Estos productos fueron enviados a distribuidores, restaurantes y establecimientos comerciales en Louisiana, Mississippi y Texas. El problema se descubrió cuando el establecimiento recibió una queja de una cliente que indicaba haber encontrado un pedazo de un bolígrafo al momento de consumir el producto de salchicha Original Boudain. There has been one reported oral injury associated with consumption of this product. El FSIS no ha recibido reportes adicionales que indiquen lesiones o enfermedades debidas al consumo de estos productos. Toda persona que tenga inquietudes acerca de una lesión debe contactar a un proveedor de servicios de salud. El FSIS muestra preocupación debido a que parte del producto puede estar en los refrigeradores o congeladores de los consumidores, minoristas o restaurantes. Se le urge a los consumidores que compraron estos productos que no los consuman. Se le urge a los restaurantes que no sirvan estos productos. Estos productos deben ser desechados o devueltos al punto de venta. El FSIS realiza revisiones sobre la efectividad de retirada de manera rutinaria para verificar que las empresas que realicen una retirada se la notifiquen a sus clientes y que se sigan los pasos necesarios para asegurarse de que el producto ya no esté al alcance de los consumidores. Cuando están disponibles, las listas de distribución al detalle se publican en el sitio web del FSIS www.fsis.usda.gov/avisos . Los consumidores y medios con preguntas acerca de esta retirada pueden contactar a Jonathan Wallace, Vicepresidente de operaciones de DJ’s Boudain, LLC, al 409-842-0558 ext. 111 ó en jwallace@djsboudain.com . Los consumidores que tengan preguntas sobre inocuidad de alimentos pueden llamar a la línea directa gratuita del USDA sobre Carnes y Aves al 888-MPHotline (888-674-6854) o enviar una pregunta por correo electrónico a MPHotline@usda.gov . Los consumidores que necesiten reportar un problema con productos de carne, aves o de huevos, pueden acceder al Sistema Electrónico de Seguimiento de Quejas de Consumidores las 24 horas del día en https://foodcomplaint.fsis.usda.gov/eCCF/ .",
-      "reason": "Product Contamination",
-      "recallingFirm": "D. J.'s Boudain, LLC",
-      "distributionPattern": "Louisiana,Mississippi,Texas",
-      "distributionStates": [
-        "LA",
-        "MS",
-        "TX"
-      ],
-      "nationwide": false,
-      "reportDate": "20250131",
-      "recallInitiationDate": "20250131",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/djs-boudain-llc-retira-productos-de-salchicha-debido-a-una-posible-contaminacion-con"
     },
     {
       "id": "fsis-PHA-01272025-01",
@@ -1825,25 +1753,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/custom-food-solutions-recalls-ready-eat-frozen-drunken-chicken-product-due"
     },
     {
-      "id": "fsis-003-2025",
-      "recallNumber": "003-2025",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Cajas de 60-lb. que contienen estuches de 12, 5-lb. de “YATS DRUNKEN CHICKEN COOKED CHICKEN THIGH MEAT IN A SPICY TOMATO SAUCE WITH BEER” (POLLO BORRACHO DE CONTRA MUSLO EN SALSA DE TOMATE PICANTE CON CERVEZA YATS) con códigos de lote 4074, 4102, 4130, 41",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Custom Food Solutions, LLC",
-      "distributionPattern": "Indiana",
-      "distributionStates": [
-        "IN"
-      ],
-      "nationwide": false,
-      "reportDate": "20250122",
-      "recallInitiationDate": "20250122",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/custom-food-solutions-retira-productos-congelados-de-pollo-borracho-listos-para-consumir"
-    },
-    {
       "id": "fsis-002-2025",
       "recallNumber": "002-2025",
       "status": "Completed",
@@ -1864,26 +1773,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/products-llc-dba-meyer-wholesale-recalls-ready-eat-and-raw-sausage-products-due"
     },
     {
-      "id": "fsis-002-2025",
-      "recallNumber": "002-2025",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques al vacío de 5\" x 8\" que contienen “Otto Meyer’s Premium Sausage POLISH SAUSAGE” (SALCHICHA POLACA Salchicha Premium Otto Meyer's) con códigos de lote`, 24304, 24318, 24326, 24346 indicados en una etiqueta autoadhesiva.,Empaques a granel en bolsas de plástico transparentes de 12\" x 24\" que contienen “Otto Meyer’s Premium Sausage POTATO SAUSAGE” (SALCHICHA DE PAPA Salchicha Premium Otto Meyer's) con las fechas 1/6/25 y 1/7/25 escritas a mano sobre la etiqueta.",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "UP Products, LLC",
-      "distributionPattern": "Michigan,Wisconsin",
-      "distributionStates": [
-        "MI",
-        "WI"
-      ],
-      "nationwide": false,
-      "reportDate": "20250113",
-      "recallInitiationDate": "20250113",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/products-llc-dba-meyer-wholesale-retira-productos-de-salchicha-cruda-listos-para-consumir"
-    },
-    {
       "id": "fsis-001-2025",
       "recallNumber": "001-2025",
       "status": "Completed",
@@ -1899,23 +1788,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/bestway-sandwiches-inc--recalls-frozen-chicken-and-cheese-taquito-products-due"
-    },
-    {
-      "id": "fsis-001-2025",
-      "recallNumber": "001-2025",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques de cartón de 20 oz. que contienen “CASA MAMITA CHICKEN & CHEESE TAQUITOS,” (TAQUITOS DE POLLO Y QUESO CASA MAMITA) con fechas de \"mejor consumir antes\" del 07/03/25 y 09/25/25 en la cubierta inferior.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Bestway Sandwiches Inc.",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20250111",
-      "recallInitiationDate": "20250111",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/bestway-sandwiches-inc--retira-productos-congelados-de-taquito-de-pollo-y-queso-debido-a"
     },
     {
       "id": "fsis-PHA-01082025-01",
@@ -1975,27 +1847,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/impero-foods-meats-inc--recalls-raw-pork-sausage-products-produced-without-benefit"
     },
     {
-      "id": "fsis-034-2024",
-      "recallNumber": "034-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón blancas de 10-lb que contienen una bolsa plástica de \"Old World Italian Sausage” (Salchicha Italiana del Viejo Mundo) con el texto \"rope\" (longaniza) escrito sobre la caja. ,• Cajas de cartón blancas de 10-lb que contienen una bolsa plástica de \"Old World Italian Sausage” (Salchicha Italiana del Viejo Mundo) con el texto \"link\" (salchicha) escrito sobre la caja.",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Impero Foods & Meats, Inc.",
-      "distributionPattern": "Delaware,Maryland,Pennsylvania",
-      "distributionStates": [
-        "DE",
-        "MD",
-        "PA"
-      ],
-      "nationwide": false,
-      "reportDate": "20241220",
-      "recallInitiationDate": "20241220",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/impero-foods-meats-inc--retira-productos-de-salchicha-de-cerdo-cruda-que-fueron-producidos"
-    },
-    {
       "id": "fsis-033-2024",
       "recallNumber": "033-2024",
       "status": "Completed",
@@ -2013,25 +1864,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/ralphs-packing-company-recalls-ready-eat-pork-and-beef-bologna-products-due"
-    },
-    {
-      "id": "fsis-033-2024",
-      "recallNumber": "033-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques al vacío en forma de tubo de16-oz. (1 LB) ó pesos varios (más grandes que 16-oz.) de “Ralph’s CIRCLE R BRAND GARLIC BOLOGNA” (BOLONIA DE AJO MARCA CIRCLE R Ralph's) con códigos de lote 0093, 0654, 0804, 1074, 1153, 1224, 1374, 1774, 1924, 2572,• Empaques al vacío en forma de tubo de16-oz. (1 LB) ó pesos varios (más grandes que 16-oz.) de “Ralph’s CIRCLE R BRAND GARLIC BOLOGNA with Jalapeños” (BOLONIA DE AJO con Jalapeños MARCA CIRCLE R Ralph's) con códigos de lote 0804, 1074, 1224, 1233, 135",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Ralph's Packing Company",
-      "distributionPattern": "Oklahoma",
-      "distributionStates": [
-        "OK"
-      ],
-      "nationwide": false,
-      "reportDate": "20241220",
-      "recallInitiationDate": "20241220",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/ralphs-packing-company-retira-productos-de-bolonia-cerdo-y-res-listos-para-consumir-debido"
     },
     {
       "id": "fsis-032-2024",
@@ -2148,24 +1980,6 @@
       "pathogen": "ecoli"
     },
     {
-      "id": "fsis-031-2024",
-      "recallNumber": "031-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "WASHINGTON, 20 de nov. de 2024 – Wolverine Packing Co., una compañía en Detroit, Mich., está retirando aproximadamente 167 277 libras de productos de carne de res molida que podrían estar contaminados con E. coli O157:H7, anunció hoy el Servicio de Inocuidad e Inspección de Alimentos (FSIS, por sus siglas en inglés) del Departamento de Agricultura de los EE.UU. Los productos frescos tienen una fecha de \"usar antes del día\" del 11/14/2024 y los productos congelados están etiquetados con la fecha de producción del 10 22 24. Vea la lista completa de productos aquí . Ver etiquetas . Los productos objeto de la retirada están marcados con el número de establecimiento \"EST. 2574B\" dentro del sello de inspección del USDA. Estos productos fueron enviados a restaurantes a nivel nacional. El problema se descubrió cuando el FSIS fue notificado por el Departamento de Agricultura de Minnesota de un grupo de personas enfermas que habían reportado haber consumido la carne de res molida antes de enfermarse. El FSIS fue notificado de las enfermedades el 13 de noviembre de 2024, y trabajando junto con los departamentos de agricultura y salud de Minnesota, el FSIS determinó que existía un vínculo entre los productos de carne de res molida de Wolverine Packing Co. y el foco de la enfermedad. El 20 de noviembre de 2024, el Departamento de Agricultura de Minnesota obtuvo una muestra de carne de res molida como parte de la investigación que resultó positiva para E. coli O157. Hasta ahora, 15 pacientes en este caso han sido identificados en un estado (localidad) con la aparición de la enfermedad ocurriendo entre el 2 de noviembre de 2024 y el 10 de noviembre de 2024. El FSIS continua trabajando en esta investigación con los departamentos de agricultura y de salud de Minnesota. Cualquier persona que tenga inquietudes acerca de una enfermedad debe contactar a un proveedor de servicios de salud. La E. coli O157: H7 es una bacteria potencialmente letal que puede causar deshidratación, diarrea con sangrado y calambres abdominales de 2 a 8 días (3 a 4 días, en promedio) después de la exposición al organismo. Si bien la mayoría de las personas se recuperan en una semana, algunas desarrollan una falla renal llamada síndrome urémico hemolítico (HUS por sus siglas en inglés). Está condición se puede dar en personas de cualquier edad pero es más común en los niños menores de 5 años y en los adultos mayores. Se caracteriza por hematomas frecuentes, palidez y disminución del gasto urinario. Las personas que presenten estos síntomas deben buscar atención médica de emergencia inmediatamente. El FSIS muestra preocupación debido a que parte del producto puede estar en los refrigeradores o congeladores de los restaurantes. Se le urge a los restaurantes que no sirvan estos productos. Estos productos deben ser desechados o devueltos al punto de venta. El FSIS realiza revisiones sobre la efectividad de retirada de manera rutinaria para verificar que las empresas que realicen una retirada se la notifiquen a sus clientes y que se sigan los pasos necesarios para asegurarse de que el producto ya no esté al alcance de los consumidores. El FSIS recomienda a todos los consumidores que preparen de forma segura sus productos cárnicos crudos, tanto frescos como congelados, y que sólo consuman carne de res molida que haya sido cocinada a una temperatura de 160 F. La única forma de confirmar que la carne de res molida ha sido cocinada a una temperatura lo suficientemente alta como para matar las bacterias dañinas es utilizar un termómetro para alimentos que mida la temperatura interna, https://www.fsis.usda.gov/safetempchart . Los consumidores y miembros de los medios que tengan preguntas sobre la retirada se pueden contactar con Don Tanner, representante de la empresa al 248-762-1533. Los consumidores que tengan preguntas sobre inocuidad de alimentos pueden llamar a la línea directa gratuita del USDA sobre Carnes y Aves al 888-MPHotline (888-674-6854) o enviar una pregunta por correo electrónico a MPHotline@usda.gov . Los consumidores que necesiten reportar un problema con productos de carne, aves o de huevos, pueden acceder al Sistema Electrónico de Seguimiento de Quejas de Consumidores las 24 horas del día en https://foodcomplaint.fsis.usda.gov/eCCF/ .",
-      "reason": "Product Contamination",
-      "recallingFirm": "Wolverine Packing Co.",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20241120",
-      "recallInitiationDate": "20241120",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/wolverine-packing-co--retira-productos-de-carne-de-res-molida-debido-a-una-posible",
-      "pathogen": "ecoli"
-    },
-    {
       "id": "fsis-030-2024",
       "recallNumber": "030-2024",
       "status": "Completed",
@@ -2202,26 +2016,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/a-tu-gusto-llc-recalls-frozen-croquette-products-produced-without-benefit-inspection"
-    },
-    {
-      "id": "fsis-029-2024",
-      "recallNumber": "029-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Caja de 32 oz. que contiene “A TU GUSTO PALADAR POLLO (CHICKEN) CROQUETAS (CROQUETTES)” ,• Caja de 32 oz. que contiene “A TU GUSTO PALADAR CHORIZO (SAUSAGE) CROQUETAS (CROQUETTES).” ,• Caja de 32 oz. que contiene “A TU GUSTO PALADAR PESCADO (FISH) CROQUETAS (CROQUETTES).” ,• Caja de 32 oz. que contiene “A TU GUSTO PALADAR JAMON (HAM) CROQUETAS (CROQUETTES).”",
-      "reason": "Produced Without Benefit of Inspection,Unreported Allergens",
-      "recallingFirm": "Company Contact A Tu Gusto, LLC Jose Garcia atugustojg@gmail.com",
-      "distributionPattern": "Florida,Texas",
-      "distributionStates": [
-        "FL",
-        "TX"
-      ],
-      "nationwide": false,
-      "reportDate": "20241029",
-      "recallInitiationDate": "20241029",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/a-tu-gusto-llc-retira-productos-de-croquetas-congeladas-producidos-sin-el-beneficio-de-la"
     },
     {
       "id": "fsis-PHA-10242024-01",
@@ -2269,24 +2063,6 @@
       "pathogen": "listeria"
     },
     {
-      "id": "fsis-028-2024",
-      "recallNumber": "028-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Nota del editor: 11 de oct. de 2024 - El FSIS quiere asegurarse de que los consumidores estén al tanto de que algunos de los productos retirados pueden estar marcados con un número de establecimiento diferente en su etiqueta debido a su distribución y procesamiento posterior por parte de otros establecimientos. Se le urge a los consumidores que revisen cuidadosamente la información, incluyendo la información del producto y etiqueta , incluida en el Comunicado de Retirada de carne y aves listos para consumir de BrucePac . Nota del editor: 10 de oct. de 2024 - La lista se ha actualizado para incluir productos adicionales que hacen uso de los productos de carne y aves listos para consumir que fueron retirados. Por favor revise de nuevo repetidamente ya que es posible que se agreguen otros productos. WASHINGTON, 9 de oct. de 2024 - BrucePac, a Durant, un establecimiento en Durant, Okla., está retirando aproximadamente 9 986 245 libras de productos de carne y aves listos para consumir (RTE, ready-to-eat, en inglés) que podrían estar adulterados con Listeria monocytogenes, anunció hoy el Servicio de Inocuidad e Inspección de los Alimentos (FSIS, por sus siglas en inglés) del Departamento de Agricultura de los EE.UU. Los artículos de carne y aves listos para consumir fueron producidos del 19 de junio de 2024 al 8 de octubre de 2024. Estos productos fueron enviados a otros establecimientos y distribuidores a nivel nacional y posteriormente distribuidos a restaurantes e instituciones. La información específica de las etiquetas de los productos y el listado de productos se divulgará cuando se disponga de ella. Los productos objeto de la retirada están marcados con los números de establecimiento \"51205\" ó \"P-51205\" dentro o debajo del sello de inspección del USDA. El problema se descubrió después de que el FSIS realizase las pruebas de rutna sobre el producto terminado que contiene los productos de aves RTE producidos por BrucePac y obtuvieran confirmación del resultado positivo para la Listeria monocytogenes. La investigación posterior del FSIS identificó al pollo RTE de BrucePac como la fuente de Listeria monocytogenes. No ha habido reportes confirmados de reacciones adversas debido al consumo de estos productos. Cualquier persona que tenga inquietudes acerca de una enfermedad debe contactar a un proveedor de servicios de salud. El consumo de alimentos contaminados con L. monocytogenes puede causar listeriosis, una infección grave que afecta principalmente a los adultos mayores, a las personas con sistemas inmunes debilitados, a las mujeres embarazadas y a sus bebés recién nacidos. Es menos común que las personas que no pertenecen a estos grupos de alto riesgo se vean afectadas. La listeriosis puede causar fiebre, dolores musculares, dolor de cabeza, tortícolis, pérdida del equilibrio y convulsiones, que a menudo los anteceden la diarrea y otros síntomas gastrointestinales. Una infección invasiva se extiende más allá del tracto gastrointestinal. En las mujeres embarazadas, la infección puede causar abortos espontáneos, partos prematuros o infecciones potencialmente letales para el recién nacido. Además puede causar infecciones graves o que pueden causar la muerte de adultos mayores y personas con sistemas inmunes debilitados. La listeriosis se trata con antibióticos. Las personas en las categorías de alto riesgo que sufran de síntomas similares a los de la gripa en los dos meses siguientes al consumo de comida contaminada deben buscar atención médica e informarle al proveedor de servicios de salud del consumo de la comida contaminada. El FSIS muestra preocupación debido a que parte del producto puede estar a disposición para ser usado en restaurantes, instituciones y demás establecimientos. Estos otros establecimientos pueden haber usado la carne y aves afectadas en productos RTE que pueden estar en las estanterías de tiendas o en los refrigeradores o congeladores de los consumidores. Se insta a los restaurantes, instituciones y demás establecimientos a no servir o usar estos productos. Estos productos deben ser desechados o devueltos al punto de venta. El FSIS realiza revisiones sobre la efectividad de retirada de manera rutinaria para verificar que las empresas que realicen una retirada se la notifiquen a sus clientes y que se sigan los pasos necesarios para asegurarse de que el producto ya no esté al alcance de los consumidores. Cuando están disponibles, las listas de distribución al detalle se publican en el sitio web del FSIS www.fsis.usda.gov/avisos . Los consumidores y medios con preguntas acerca de esta retirada pueden contactar a Jeff Golangco, VP de Desarrollo Empresarial en BrucePac, al 503-874-3000. Los consumidores que tengan preguntas sobre inocuidad de alimentos pueden llamar a la línea directa gratuita del USDA sobre Carnes y Aves al 888-MPHotline (888-674-6854) o enviar una pregunta por correo electrónico a MPHotline@usda.gov . Los consumidores que necesiten reportar un problema con productos de carne, aves o de huevos, pueden acceder al Sistema Electrónico de Seguimiento de Quejas de Consumidores las 24 horas del día en https://foodcomplaint.fsis.usda.gov/eCCF/ .",
-      "reason": "Product Contamination",
-      "recallingFirm": "BrucePac",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20241009",
-      "recallInitiationDate": "20241009",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/brucepac-retira-productos-de-carne-y-aves-listos-para-consumir-debido-a-una-posible",
-      "pathogen": "listeria"
-    },
-    {
       "id": "fsis-PHA-10082024-01",
       "recallNumber": "PHA-10082024-01",
       "status": "Completed",
@@ -2327,23 +2103,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/pork-dynasty-inc--recalls-ready-eat-fried-pork-skin-products-due-misbranding-and"
     },
     {
-      "id": "fsis-027-2024",
-      "recallNumber": "027-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Bolsas plásticas de 3.5 oz. que contienen \"TEXARONES BORN IN THE PHILIPPINES – MADE IN TEXAS FRIED OUT PORK FAT WITH ATTACHED SKIN SPICY” (MANTECA DE CERDO EXTRAÍDA FRITANDO CON PIEL ADHERIDA PICANTE HECHA EN TEXAS).,• Bolsas plásticas de 2.5 oz. que contienen \"TEXARONES BORN IN THE PHILIPPINES – MADE IN TEXAS FRIED PORK SKIN SPICY” (PIEL DE CERDO FRITA PICANTE HECHA EN TEXAS).",
-      "reason": "Misbranding",
-      "recallingFirm": "Pork Dynasty, Inc.",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20240927",
-      "recallInitiationDate": "20240927",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/pork-dynasty-inc--retira-productos-de-piel-de-cerdo-frita-listos-para-consumir-debido-a-un"
-    },
-    {
       "id": "fsis-026-2024",
       "recallNumber": "026-2024",
       "status": "Completed",
@@ -2361,25 +2120,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/dearborn-sausage-company-inc--recalls-wiener-products-due-misbranding-and-undeclared"
-    },
-    {
-      "id": "fsis-026-2024",
-      "recallNumber": "026-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques al vacío de 2 lb. de “BROOKSIDE BRAND FULLY COOKED NATURAL CASING BEEF WIENERS” (VIENESAS DE RES EN TRIPA NATURAL TOTALMENTE COCIDAS MARCA BROOKSIDE) que pueden contener el cerdo no declarado con código de lote A0122024 y fecha de \"vender ha,• Empaques al vacío de 2 lb. de “BROOKSIDE BRAND FULLY COOKED NATURAL CASING WIENERS” (VIENESAS EN TRIPA NATURAL TOTALMENTE COCIDAS MARCA BROOKSIDE) que pueden contener la soya no declarada con código de lote A0322024 y fecha de \"vender hasta el día\"",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Dearborn Sausage Company Inc",
-      "distributionPattern": "Ohio",
-      "distributionStates": [
-        "OH"
-      ],
-      "nationwide": false,
-      "reportDate": "20240912",
-      "recallInitiationDate": "20240912",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/dearborn-sausage-company-inc--retira-productos-de-vienesa-debido-a-un-error-de-rotulacion"
     },
     {
       "id": "fsis-025-2024",
@@ -2403,29 +2143,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/hickory-hollow-jerky-recalls-ready-eat-jerky-products-produced-without-benefit"
-    },
-    {
-      "id": "fsis-025-2024",
-      "recallNumber": "025-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "WASHINGTON, 30 de ago. de 2024 – Hickory Hollow Jerky, una compañía en Eufaula, Ala., está retirando aproximadamente 6229 libras de productos de carne seca listos para consumir que fueron producidos sin el beneficio de la inspección federal, anunció hoy el Servicio de Inocuidad e Inspección de Alimentos (FSIS, por sus siglas en inglés) del Departamento de Agricultura de los EE.UU. Los productos de carne seca de res y tocino fueron producidos en múltiples fechas entre el 19 de ene. de 2024 y el 21 de ago. de 2024. Los productos fueron producidos sin el beneficio de la inspección por dos diferentes propietarios del establecimiento. La propiedad cambió de titular el 11 de junio de 2024. El nombre del establecimiento y sus productos siguen siendo los mismos. Los productos objeto de la retirada se listan aquí y las etiquetas de los mismos pueden consultarse aquí . Los productos objeto de la retirada están marcados con el número de establecimiento \"EST. NO. 34550\" dentro del sello de inspección del USDA. Estos artículos fueron enviados a establecimientos comerciales en Alabama, Florida, Georgia, North Carolina, Oklahoma y también por medio de ventas en línea. El problema se descubrió cuando el FSIS realizaba las actividades de vigilancia y determinó que el establecimiento había continuado produciendo estos productos de carne seca y etiquetándolos con el sello de inspección del USDA después de haber solicitado voluntariamente que se hiciera un alto a las actividades de verificación del FSIS. No ha habido reportes confirmados de reacciones adversas debido al consumo de estos productos. Cualquier persona que tenga inquietudes acerca de alguna reacción debe contactar a un proveedor de servicios de salud. El FSIS muestra preocupación debido a que parte del producto puede estar en las dispensas de los consumidores. Estos productos deben ser desechados o devueltos al punto de venta. El FSIS realiza revisiones sobre la efectividad de retirada de manera rutinaria para verificar que las empresas que realicen una retirada se la notifiquen a sus clientes y que se sigan los pasos necesarios para asegurarse de que el producto ya no esté al alcance de los consumidores. Cuando están disponibles, las listas de distribución al detalle se publican en el sitio web del FSIS www.fsis.usda.gov/avisos . Los consumidores y miembros de los medios que tengan preguntas sobre la retirada se pueden contactar con Charles O’Neill, actual copropietario de Hickory Hollow Jerky al 262-745-5103 ó en HickoryHollowBeefJerky@gmail.com . Los consumidores y miembros de los medios también se pueden poner en contacto con Russ Robbins, antiguo propietarios de Hickory Hollow Jerky al 334-695-5238 ó en hhjerky@gmail.com . Los consumidores que tengan preguntas sobre inocuidad de alimentos pueden llamar a la línea directa gratuita del USDA sobre Carnes y Aves al 888-MPHotline (888-674-6854) o enviar una pregunta por correo electrónico a MPHotline@usda.gov . Los consumidores que necesiten reportar un problema con productos de carne, aves o de huevos, pueden acceder al Sistema Electrónico de Seguimiento de Quejas de Consumidores las 24 horas del día en https://foodcomplaint.fsis.usda.gov/eCCF/ .",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Hickory Hollow Jerky",
-      "distributionPattern": "Alabama,Florida,Georgia,North Carolina,Oklahoma",
-      "distributionStates": [
-        "AL",
-        "FL",
-        "GA",
-        "NC",
-        "OK"
-      ],
-      "nationwide": false,
-      "reportDate": "20240830",
-      "recallInitiationDate": "20240830",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/hickory-hollow-jerky-retira-productos-de-carne-seca-listos-para-consumir-producidos-sin-el"
     },
     {
       "id": "fsis-PHA-08162024-01",
@@ -2462,23 +2179,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/perdue-foods-llc-recalls-frozen-ready-eat-chicken-breast-nugget-and-tender-products"
     },
     {
-      "id": "fsis-024-2024",
-      "recallNumber": "024-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• 22-oz. (1.38-lbs.) vacuum-sealed plastic packages containing “PERDUE Simply Smart ORGANICS Breaded CHICKEN BREAST NUGGETS” with Best If Used By date of “03 23 25” represented on the back of the package.,• 29-oz. (1.81-lbs.) vacuum-sealed plastic packages containing “PERDUE CHICKEN BREAST TENDERS with Best If Used By date of “03 23 25” represented on the back of the package.,• 22-oz. (1.38-lbs.) vacuum-sealed packages containing “BUTCHERBOX Organic Chicken Breast Nuggets” with Best If Used By date of “03 23 25” represented on the back of the package.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Perdue Foods LLC",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20240816",
-      "recallInitiationDate": "20240816",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/perdue-foods-llc-retira-productos-congelados-de-nuggets-y-tiras-de-pechuga-de-pollo-listos"
-    },
-    {
       "id": "fsis-023-2024-EXP",
       "recallNumber": "023-2024-EXP",
       "status": "Completed",
@@ -2497,24 +2197,6 @@
       "pathogen": "listeria"
     },
     {
-      "id": "fsis-023-2024-EXP",
-      "recallNumber": "023-2024-EXP",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "WASHINGTON, 30 de julio de 2024 – Boar's Head Provisions Co., Inc., una compañía en Jarratt, Va., está expandiendo su retirada del 26 de julio de 2024 de productos de fiambrería que podrían estar adulterados con Listeria monocytogenes , anunció hoy el Servicio de Inocuidad e Inspección de Alimentos (FSIS, por sus siglas en inglés) del Departamento de Agricultura de los EE.UU. El establecimiento está retirando aproximadamente 7 millones de libras adicionales de productos de carne y aves listos para consumir. Los resultados de la secuenciación del genoma completa indican que una muestra de leberwurst obtenida por el Departamento de Salud de Maryland resultó positiva para la cepa del brote de Listeria monocytogenes . Esta expansión incluye 71 productos producidos entre el 10 de mayo de 2024 y el 29 de julio de 2024, bajo la marca Boar's Head y Old Country. Estos artículos incluyen carne que se rebanaría en fiambrerías minoristas así como algunos productos empacados de carne y aves que se venden en establecimientos comerciales. Estos productos tienen fechas de \"vender hasta el día\" que van desde el 29-JUL-2024 hasta el 17-OCT-24, Consulte el listado completo de productos . Ver etiquetas . Los productos objeto de la retirada fueron distribuidos a establecimientos comerciales a nivel nacional y algunos se exportaron a las Islas Caimán, República Dominicana, México y Panamá. Los productos enviados a establecimientos comerciales están marcados con el número de establecimiento “EST. 12612” ó “P-12612” dentro del sello de inspección del USDA sobre las etiquetas del producto. El problema se descubrió cuando el FSIS fue notificado de que una muestra de leberwurst recogida por el Departamento de Salud de Maryland resultó positiva para L. monocytogenes . El Departamento de Saludo de Maryland, en colaboración con el Departamento de Salud Municipal de Baltimore, tomaron como muestra un producto de leberwurst sin abrir de un establecimiento comercial para realizarle pruebas como parte de la investigación sobre el brote de infecciones con L. monocytogenes . Las pruebas posteriores determinaron que la muestra del producto resultó positiva para la cepa del brote. Cualquier persona que tenga inquietudes acerca de una enfermedad debe contactar a un proveedor de servicios de salud. El FSIS está trabajando con los Centros para el Control y la Prevención de Enfermedades (CDC) y socios estatales de salud pública para investigar un brote multi-estatal de infecciones con L. monocytogenes relacionadas con carnes rebanadas de fiambrerías. A la fecha del 30 de julio de 2024, se han identificado 34 personas infectadas en 13 estados, incluyendo 33 hospitalizaciones y dos muertes. Las muestras se tomaron de personas enfermas del 29 de mayo de 2024 al 12 de julio de 2024. La investigación está en curso, el FSIS continúa trabajando junto con la CDC y sus socios estatales. La Alerta de Inocuidad de alimentos de la CDC, Brote de Listeria Relacionado con Carnes rebanadas en fiambrerías , se seguirá actualizando con los detalles más actuales de la investigación. El consumo de alimentos contaminados con L. monocytogenes puede causar listeriosis, una infección grave que afecta principalmente a las mujeres embarazadas, adultos mayores de 65 años, o a las personas con sistemas inmunes debilitados. Es menos común que las personas que no pertenecen a estos grupos de alto riesgo se vean afectadas. La listeriosis puede causar fiebre, dolores musculares, dolor de cabeza, tortícolis, pérdida del equilibrio y convulsiones, que a menudo los anteceden la diarrea y otros síntomas gastrointestinales. Una infección invasiva se extiende más allá del tracto gastrointestinal. En las mujeres embarazadas, la infección puede causar abortos espontáneos, partos prematuros o infecciones potencialmente letales para el recién nacido. Además puede causar infecciones graves o que pueden causar la muerte de adultos mayores y personas con sistemas inmunes debilitados. La listeriosis se trata con antibióticos. Las personas en las categorías de alto riesgo que sufran de síntomas similares a los de la gripa en los dos meses siguientes al consumo de comida contaminada deben buscar atención médica e informarle al proveedor de servicios de salud del consumo de la comida contaminada. El FSIS muestra preocupación debido a que parte del producto puede estar en los refrigeradores de los consumidores. Se le urge a los consumidores que compraron estos productos que no los consuman y a los establecimientos, que no vendan estos productos con las fechas de \"vender hasta el día\" referenciadas. Estos productos deben ser desechados o devueltos al punto de venta. Se le urge a los consumidores que compraron estos productos que limpien sus refrigeradores a profundidad pare evitar el riesgo de contaminación cruzada. El FSIS le recomienda a los establecimientos de fiambrería que limpien y desinfecten todas las superficies ya sean de contacto con alimentos o no y que descarten todas las carnes y quesos abiertas de la fiambrería. Los establecimientos minoristas también pueden consultar la directriz FSIS Guía de mejores prácticas para controlar la Listeria monocytogenes en Fiambrerías Minoristas , para obtener información sobre cómo evitar que ciertos alimentos listos para consumir, que se preparan o cortan en las fiambrerías minoristas y se consumen en los hogares, tales como los fiambres de carne y ensaladas, se contaminen con L. monocytogenes. El FSIS realiza revisiones sobre la efectividad de retirada de manera rutinaria para verificar que las empresas que realicen una retirada se la notifiquen a sus clientes y que se sigan los pasos necesarios para asegurarse de que el producto ya no esté al alcance de los consumidores. Cuando están disponibles, las listas de distribución al detalle se publican en el sitio web del FSIS www.fsis.usda.gov/avisos . Los consumidores que tengan preguntas acerca de la retirada se pueden contactar al Boar’s Head Provisions Co., Inc., Servicio al Cliente al 1-800-352-6277. Los medios con preguntas acerca de esta retirada pueden contactar a Elizabeth Ward, Vicepresidente de Comunicaciones, Boar’s Head Provisions Co., Inc., al media@boarshead.com . Los consumidores que tengan preguntas sobre inocuidad de alimentos pueden llamar a la línea directa gratuita del USDA sobre Carnes y Aves al 888-MPHotline (888-674-6854) o enviar una pregunta por correo electrónico a MPHotline@usda.gov . Los consumidores que necesiten reportar un problema con productos de carne, aves o de huevos, pueden acceder al Sistema Electrónico de Seguimiento de Quejas de Consumidores las 24 horas del día en https://foodcomplaint.fsis.usda.gov/eCCF/ .",
-      "reason": "Product Contamination,Unfit for Human Consumption",
-      "recallingFirm": "Boar's Head Provisions Co., Inc.",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20240730",
-      "recallInitiationDate": "20240730",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/boars-head-provisions-co--expande-su-retirada-para-incluir-productos-de-carne-y-aves",
-      "pathogen": "listeria"
-    },
-    {
       "id": "fsis-023-2024",
       "recallNumber": "023-2024",
       "status": "Completed",
@@ -2530,24 +2212,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/boars-head-provisions-co--recalls-ready-eat-liverwurst-and-other-deli-meat-products",
-      "pathogen": "listeria"
-    },
-    {
-      "id": "fsis-023-2024",
-      "recallNumber": "023-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Barras de 3.5 lb. en embutido plástico o en empaques de pesos varios rebanadas en cortes minoristas, que contienen “Boar’s Head Strassburger Brand Liverwurst MADE IN VIRGINIA.” (Leberwurst Marca Strassburger Boar's Head HECHO EN VIRGINIA). Los produc,• Producto completo de 9.5 lb y 4.5 lb., o empaques de pesos varios rebanados en fiambres minoristas, que contienen (Boar’s Head VIRGINIA HAM OLD FASHIONED HAM” (JAMÓN DE VIRGINIA AL ESTILO ANTIGUO Boar's Head) con fecha de \"vender hasta el díá' del \"A , • Empaques de 6 lb. o de pesos varios rebanados en fiambres minoristas que contienen \"Boar’s Head EXTRA HOT ITALIAN CAPPY STYLE HAM” (JAMÓN ESTILO CAPPY ITALIANO BIEN PICANTE Boar's Head) con fecha de \"vender hasta el día\" del \"AGO 10\" indicada en el emp, • Empaques de 4 lb. o de pesos varios rebanados en fiambres minoristas que contienen \"Boar’s Head BOLOGNA” (BOLONIA Boar's Head) con fecha de \"vender hasta el día\" del \"AGO 10\" indicada en el empaque del producto., • Empaques de 2.5 lb. o de pesos varios rebanados en fiambres minoristas que contienen \"Boar’s Head BEEF SALAMI” (SALAMI DE RES Boar's Head) con fecha de \"vender hasta el día\" del \"AGO 10\" indicada en el empaque del producto., • Empaques de 5.5 lb. o de pesos varios rebanados en fiambres minoristas que contienen \"Boar’s Head STEAKHOUSE ROASTED BACON HEAT & EAT” (TOCINETA ASADA A LA PARRILLA CALIENTA Y SIRVE Boar's Head) con fecha de \"vender hasta el día\" del \"AGO 15\" indicada , • Empaques de 3 lb. o de pesos varios rebanados en fiambres minoristas que contienen \"Boar’s Head GARLIC BOLOGNA” (BOLONIA DE AJO Boar's Head) con fecha de \"vender hasta el día\" del \"AGO 10\" indicada en el empaque del producto., • Empaques de 3 lb. o de pesos varios rebanados en fiambres minoristas que contienen \"Boar’s Head BEEF BOLOGNA” (BOLONIA DE RES Boar's Head) con fecha de \"vender hasta el día\" del \"AGO 10\" indicada en el empaque del producto.",
-      "reason": "Product Contamination,Unfit for Human Consumption",
-      "recallingFirm": "Boar's Head Provisions Co., Inc.",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20240726",
-      "recallInitiationDate": "20240726",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/boars-head-provisions-co--retira-productos-de-leberwurst-y-otros-fiambres-listos-para",
       "pathogen": "listeria"
     },
     {
@@ -2571,26 +2235,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/aw-farms-recalls-ready-eat-hot-dog-products-produced-without-benefit-inspection"
     },
     {
-      "id": "fsis-022-2024",
-      "recallNumber": "022-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "•Cajas de 10 lb. que contienen dos empaques empacados al vacío de 5 lb. que contienen “FRENCH CITY FOODS 6” 12-1 HOTDOGS” (PERROS CALIENTES 12-1 DE 6\" FRENCH CITY FOODS) y \"EMPACADO EL\" con varias fechas desde aproximadamente el 30 de mayo de 2024, indi, •Cajas de 10 lb. que contienen dos empaques empacados al vacío de 5 lb. que contienen “PORK, BEEF, DEXTROSE, SALT, SUGAR MAPLE GEO BROWN ALL MEAT HOTDOGS” (PERROS CALIENTES DE CERDO, RES, DEXTROSA, SAL, AZÚCAR Y MAPLE GEO BROWN DE TODAS LAS CARNES) y mú, •Cajas de 10 lb. que contienen dos empaques empacados al vacío de 5 lb. que contienen “BEEF, DEXTROSE, SALT, SUGAR MAPLE GEO BROWN ALL BEEF HOTDOGS” (PERROS CALIENTES DE CERDO, RES, DEXTROSA, SAL, AZÚCAR Y MAPLE GEO BROWN DE RES) y múltiples fechas de \"",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "AW Farms, LLC dba AW Meat House",
-      "distributionPattern": "Ohio,West Virginia",
-      "distributionStates": [
-        "OH",
-        "WV"
-      ],
-      "nationwide": false,
-      "reportDate": "20240715",
-      "recallInitiationDate": "20240715",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/aw-farms-retira-productos-de-perro-caliente-listos-para-consumir-producidos-sin-el"
-    },
-    {
       "id": "fsis-021-2024",
       "recallNumber": "021-2024",
       "status": "Completed",
@@ -2609,26 +2253,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/taylors-sausage-inc--recalls-ready-eat-landjaeger-sausage-products-due-misbranding"
-    },
-    {
-      "id": "fsis-021-2024",
-      "recallNumber": "021-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques de 14.4 oz. empacados al vacío que contienen 12 unidades de \"TAYLOR’S Sausage Hot LANDJAEGER\" (Salchicha Picante LANDJAEGER de TAYLOR’S) con código de lote “23342-2” y fecha de \"consumir hasta el día\" del “12 8 25” indicados en la parte posterior",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Taylor's Sausage, Inc.",
-      "distributionPattern": "California,Oregon",
-      "distributionStates": [
-        "CA",
-        "OR"
-      ],
-      "nationwide": false,
-      "reportDate": "20240713",
-      "recallInitiationDate": "20240713",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/taylors-sausage-inc--retira-productos-de-salchicha-landjaeger-listos-para-consumir-debido"
     },
     {
       "id": "fsis-PHA-07102024-01",
@@ -2676,24 +2300,6 @@
       "pathogen": "listeria"
     },
     {
-      "id": "fsis-020-2024",
-      "recallNumber": "020-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques en caja de cartón de 12.1 oz que contienen “Al Safa Halal Charcoal Grilled Chicken Seekh Kebab Grilled, Minced, Chicken Patty Kebab” (Torta de Pollo Kebab, Pollo a la Parrilla de Carbón Seekh Kebab a la Parrilla, Molido, Al Safa Halal) con “NO,• Empaques en caja de cartón de 14.11 oz que contienen “Al Safa Halal Fully Cooked Chicken Chapli Kebab Seasoned Chicken Patty” (Torta de Pollo Condimentado, Pollo Totalmente cocido Chapli Kebab Al Safa Halal) con “NOV 30 25” and “0605416” impresos en un",
-      "reason": "Product Contamination",
-      "recallingFirm": "Company Contact Al-Safa US LLC Marwan Mahaboob Basha, Al-Safa US LLC 800-268-8174",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20240705",
-      "recallInitiationDate": "20240705",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/al-safa-us-llc-retira-productos-de-pollo-congelados-y-listos-para-consumir-debido-a-una",
-      "pathogen": "listeria"
-    },
-    {
       "id": "fsis-019-2024",
       "recallNumber": "019-2024",
       "status": "Completed",
@@ -2709,23 +2315,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/michael-foods-inc--recalls-fair-meadow-foundations-liquid-egg-products-due"
-    },
-    {
-      "id": "fsis-019-2024",
-      "recallNumber": "019-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón de 32 oz. que contienen “FAIR MEADOW Foundations WHOLE EGGS with CITRIC ACID” (HUEVOS ENTEROS con ÁCIDO CÍTRICO FAIR MEADOW Foundations) con fecha de \"mejor si se consume antes del día\" del “16 SEP 24” y código de lote 4162G. Este pro",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "M.G. Waldbaum Company",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20240630",
-      "recallInitiationDate": "20240630",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/michael-foods-inc--retira-productos-de-huevo-liquido-fair-meadow-foundations-debido-a-un"
     },
     {
       "id": "fsis-PHA-06122024-01",
@@ -2765,26 +2354,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/bonneval-foods-llc-recalls-barbecue-pork-skin-product-due-misbranding-and-undeclared"
-    },
-    {
-      "id": "fsis-018-2024",
-      "recallNumber": "018-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Bolsas plásticas de 1.7-oz. que contienen “BONNEVAL’S BBQ Pork Skins” (Piel de cerdo BBQ). Todo el producto que se encuentre disponible en las despensas de minoristas o de los consumidores está incluido en esta retirada.",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Bonneval Foods LLC",
-      "distributionPattern": "Louisiana,Mississippi",
-      "distributionStates": [
-        "LA",
-        "MS"
-      ],
-      "nationwide": false,
-      "reportDate": "20240612",
-      "recallInitiationDate": "20240612",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/bonneval-foods-llc-retira-producto-de-piel-de-cerdo-para-barbacoa-debido-a-un-error-de"
     },
     {
       "id": "fsis-PHA-06102024-01",
@@ -2845,28 +2414,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/south-american-meat-inc--recalls-frozen-raw-beef-products-imported-without-benefit"
     },
     {
-      "id": "fsis-017-2024",
-      "recallNumber": "017-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. AGUJA CHUCK ROLL” con código de caja JP0001 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. ASADO SIN HUESO SHORT RIB” con código de caja JP0002 que contienen productos individualmente sellados al vacío que se presentan como“FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. BIFE ANCHO CUBE ROLL” con código de caja JP0003 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. BIFE ANGOSTO STRIPLOIN” con código de caja JP0004 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. BIFE GRANDE DE VACÍO FLAP MEAT” con código de caja JP0005 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. CARNAZA DE PALETA SHOULDER CLOD” con código de caja JP0006 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. LOMO TENDERLOIN” con código de caja JP0007 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. MARUCHA OYSTER BLADE” con código de caja JP0008 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”., • Cajas de cartón de pesos varios etiquetadas como “Frigorífico Casa Blanca S.A. PECHO BRISKET” con código de caja JP0009 que contienen productos individualmente sellados al vacío que se presentan como “FRICASA”.",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact South American Meat Inc. Tim Yu, Accountant and Logistics Director 310-720-5258 samincusa@gmail.com",
-      "distributionPattern": "Arizona,California,Oregon,Washington",
-      "distributionStates": [
-        "AZ",
-        "CA",
-        "OR",
-        "WA"
-      ],
-      "nationwide": false,
-      "reportDate": "20240604",
-      "recallInitiationDate": "20240604",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/south-american-meat-inc--retira-productos-de-carne-de-res-cruda-y-congelada-que-fue"
-    },
-    {
       "id": "fsis-PHA-05022024-01",
       "recallNumber": "PHA-05022024-01",
       "status": "Completed",
@@ -2904,24 +2451,6 @@
       "pathogen": "ecoli"
     },
     {
-      "id": "fsis-016-2024",
-      "recallNumber": "016-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Bandejas de 2.25 libras envasadas en plástico con “93% LEAN 7% FAT ALL NATURAL LEAN GROUND BEEF” con código de lote 117 y número de establecimiento “EST. 86P” impreso al reverso de la etiqueta. ,Bandejas de 1.33 libras envasadas en plástico con cuatro “PRIME RIB BEEF STEAK BURGERS PATTIES” con código de lote 118 y número de establecimiento “EST. 86P” impreso al reverso de la etiqueta.,Bandejas de 2.25 libras envasadas en plástico con “85% LEAN 15% FAT ALL NATURAL ANGUS PREMIUM GROUND BEEF” con código de lote 117 y número de establecimiento “EST. 86P” impreso al reverso de la etiqueta. ,Bandejas de 2.25 libras envasadas en plástico con “80% LEAN 20% FAT ALL NATURAL GROUND BEEF CHUCK” con código de lote 118 y número de establecimiento “EST. 86P” impreso al reverso de la etiqueta. ,Bandejas de 1.33 libras envasadas en plástico con cuatro “80% LEAN 20% FAT ALL NATURAL GROUND BEEF CHUCK PATTIES” con código de lote 118 y número de establecimiento “EST. 86P” impreso al reverso de la etiqueta.,Bandejas de 1.33 libras envasadas en plástico con cuatro “90% LEAN 10% FAT ALL NATURAL GROUND BEEF SIRLOIN PATTIES” con código de lote 118 y número de establecimiento “EST. 86P” impreso al reverso de la etiqueta.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Cargill Beef",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20240501",
-      "recallInitiationDate": "20240501",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/cargill-meat-solutions-retira-productos-de-carne-molida-debido-a-una-posible-contaminacion",
-      "pathogen": "ecoli"
-    },
-    {
       "id": "fsis-015-2024",
       "recallNumber": "015-2024",
       "status": "Completed",
@@ -2945,31 +2474,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/802-vt-frozen-recalls-frozen-meat-pizza-products-due-misbranding-and-undeclared"
-    },
-    {
-      "id": "fsis-015-2024",
-      "recallNumber": "015-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Caja de cartón de 17.8 onzas que contiene “802 VT Frozen MEAT!!! CRISPY WOOD-FIRED CRUST HAND MADE PIZZA” con aviso de \"consumir antes\" del período del 25 de abril de 2024 al 25 de abril de 2025.",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "VT Pie and Pasta Co.",
-      "distributionPattern": "Connecticut,Maine,Massachusetts,New Hampshire,New York,Rhode Island,Vermont",
-      "distributionStates": [
-        "CT",
-        "ME",
-        "MA",
-        "NH",
-        "NY",
-        "RI",
-        "VT"
-      ],
-      "nationwide": false,
-      "reportDate": "20240426",
-      "recallInitiationDate": "20240426",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/802-vt-frozen-retira-pizzas-de-carne-congelada-debido-errores-de-rotulacion-y-alergenos-no"
     },
     {
       "id": "fsis-014-2024",
@@ -2996,32 +2500,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/consup-north-america-inc--recalls-ready-eat-sliced-prosciutto-product-produced"
-    },
-    {
-      "id": "fsis-014-2024",
-      "recallNumber": "014-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Paquetes de 5.29 onzas de plástico que contienen “Stockmeyer PROSCIUTTO Product of GERMANY” con códigos de lote 09118-3A, 09118-3B, 09120-3A, 09120-3B, 13133-3A, 13133-3B, 13104-3A, 13104-3B, 13105-3A, 13105-3B, 13109-3A and 13109-3B y “CONSUMIR ANTES DE:",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Company Contact conSup North America Inc. Luann Servidio, Director of Imports 973-628-7330 L.Servidio@consup.us , Company Contact conSup North America Inc. Maarten Moog, President 973-628-7330 M.Moog@consup.us",
-      "distributionPattern": "California,Connecticut,Florida,Illinois,Pennsylvania,Texas,Virginia,Washington",
-      "distributionStates": [
-        "CA",
-        "CT",
-        "FL",
-        "IL",
-        "PA",
-        "TX",
-        "VA",
-        "WA"
-      ],
-      "nationwide": false,
-      "reportDate": "20240424",
-      "recallInitiationDate": "20240424",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/consup-north-america-inc--retira-prosciutto-en-rodajas-listos-para-el-consumo-producido"
     },
     {
       "id": "fsis-PHA-04202024-001",
@@ -3089,36 +2567,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/taylor-farms-pacific-recalls-kroger-brand-ready-eat-apple-walnut-chicken-salad-bowl"
     },
     {
-      "id": "fsis-013-2024",
-      "recallNumber": "013-2024",
-      "status": "Completed",
-      "classification": "Class II",
-      "productDescription": "Recipientes de 5.5 onzas de plástico transparente etiquetados “kroger APPLE WALNUT WITH CHICKEN SALAD KIT FOR ONE” usar antes del período entre 03/12/24 a 03/22/24, con códigos de lotes TFPM059B41, TFPM060B41, TFPM061A41, TFPM062A41, TFPM063B41, TFPM064A4",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Taylor Farm - Pacific",
-      "distributionPattern": "Alaska,Arizona,California,Colorado,Idaho,Montana,Nevada,New Mexico,Oregon,Utah,Washington,Wyoming",
-      "distributionStates": [
-        "AK",
-        "AZ",
-        "CA",
-        "CO",
-        "ID",
-        "MT",
-        "NV",
-        "NM",
-        "OR",
-        "UT",
-        "WA",
-        "WY"
-      ],
-      "nationwide": false,
-      "reportDate": "20240313",
-      "recallInitiationDate": "20240313",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/taylor-farms-pacific-retira-los-tazones-de-ensalada-de-pollo-con-nuez-y-manzana-listos"
-    },
-    {
       "id": "fsis-012-2024",
       "recallNumber": "012-2024",
       "status": "Completed",
@@ -3139,26 +2587,6 @@
       "pathogen": "listeria"
     },
     {
-      "id": "fsis-012-2024",
-      "recallNumber": "012-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques individuales de papel encerado de 7 onzas que contienen \"Smoked Bacon Breakfast Burrito\" (Burrito de tocineta ahumada para desayuno) con el código de lote 060-1 en un adhesivo en la parte posterior del empaque., • Empaques individuales de papel encerado de 7 onzas que contienen \"Ham Breakfast Burrito\" (Burrito de jamón para desayuno) con el código de lote 060-2 en un adhesivo en la parte posterior del empaque. ,• Empaques individuales de papel encerado de 7 onzas que contienen \"Seasoned Pork Breakfast Burrito\" (Burrito de cerdo sazonado para desayuno) con el código de lote 060-3 en un adhesivo en la parte posterior del empaque.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Company Contact Co-Owner, Jen’s Breakfast Burritos, LLC Michael Martinez 253-753-3198 michael@picoyourburrito.com",
-      "distributionPattern": "Washington",
-      "distributionStates": [
-        "WA"
-      ],
-      "nationwide": false,
-      "reportDate": "20240310",
-      "recallInitiationDate": "20240310",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/jens-breakfast-burritos-llc-retira-del-mercado-productos-de-burritos-para-desayuno-listos",
-      "pathogen": "listeria"
-    },
-    {
       "id": "fsis-011-2024",
       "recallNumber": "011-2024",
       "status": "Completed",
@@ -3176,23 +2604,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/salm-partners-llc-recalls-johnsonville-polish-kielbasa-turkey-sausage-products-due"
     },
     {
-      "id": "fsis-011-2024",
-      "recallNumber": "011-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques de 12 onzas empacados al vacío que contienen una sola unidad de salchicha \"Johnsonville POLISH KIELBASA TURKEY\" (KIELBASA POLACA DE PAVO de Johnsonville) y con fechas de \"Mejor consumir antes del día 05/17/24\" y \"05/18/24\" impresas en",
-      "reason": "Product Contamination",
-      "recallingFirm": "Salm Partners, LLC",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20240307",
-      "recallInitiationDate": "20240307",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/salm-partners-llc-retira-del-mercado-productos-de-salchicha-de-pavo-kielbasa-polaca-de"
-    },
-    {
       "id": "fsis-010-2024",
       "recallNumber": "010-2024",
       "status": "Completed",
@@ -3208,23 +2619,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/cj-foods-manufacturing-beaumont-corporation-recalls-trader-joes-chicken-soup"
-    },
-    {
-      "id": "fsis-010-2024",
-      "recallNumber": "010-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de 6 onzas con bandejas de plástico que contienen seis piezas de \"TRADER JOE'S Steamed Chicken Soup Dumplings\" (Bollos de sopa de pollo al vapor de TRADER JOE'S) con los códigos de lote \"03.07.25.C1-1\" y \"03.07.25.C1-2\" impresos en el costado d",
-      "reason": "Product Contamination",
-      "recallingFirm": "CJ Foods Manufacturing Beaumont Corporation",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20240302",
-      "recallInitiationDate": "20240302",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/cj-foods-manufacturing-beaumont-corporation-retira-del-mercado-los-bollos-de-sopa-de-pollo"
     },
     {
       "id": "fsis-009-2024",
@@ -3248,27 +2642,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/mf-meats-recalls-raw-meat-products-due-contamination-a-non-food-grade-substance"
     },
     {
-      "id": "fsis-009-2024",
-      "recallNumber": "009-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Varios pesos de cortes de carne y carne picada. Los productos muestran las fechas julianas 330-365 (26 de noviembre - 31 de diciembre) y 1-47 (1 de enero - 16 de febrero). Vea la lista de productos aquí.",
-      "reason": "Product Contamination",
-      "recallingFirm": "MF Meats",
-      "distributionPattern": "New York,Ohio,Pennsylvania",
-      "distributionStates": [
-        "NY",
-        "OH",
-        "PA"
-      ],
-      "nationwide": false,
-      "reportDate": "20240229",
-      "recallInitiationDate": "20240229",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/mf-meats-retira-del-mercado-productos-carnicos-crudos-debido-a-contaminacion-causada-por"
-    },
-    {
       "id": "fsis-008-2024",
       "recallNumber": "008-2024",
       "status": "Completed",
@@ -3289,28 +2662,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/mp-production-ltd-recalls-raw-lamb-and-beef-samsa-products-due-misbranding-and"
-    },
-    {
-      "id": "fsis-008-2024",
-      "recallNumber": "008-2024",
-      "status": "Completed",
-      "classification": "Class II",
-      "productDescription": "• Empaques en bandeja de 16 onzas envueltos en plástico que contienen \"SAMSA HALAL\" con fechas de \"CONSUMIR ANTES DE\" del 01/02/25 al 02/22/25.,• Empaques en bandeja envueltos en plástico de 12 onzas que contienen \"M&P DELICACIES Lamb Dumplings Lamb Samsa\" (MANJARES M&P Bollos de cordero Samsa de cordero) con fechas de \"CONSUMIR ANTES DE\" del 01/02/25 hasta el 02/22/25.",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "M&P Production LTD",
-      "distributionPattern": "Massachusetts,New Jersey,New York,Pennsylvania",
-      "distributionStates": [
-        "MA",
-        "NJ",
-        "NY",
-        "PA"
-      ],
-      "nationwide": false,
-      "reportDate": "20240228",
-      "recallInitiationDate": "20240228",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/mp-production-ltd-retira-del-mercado-productos-de-samsa-de-cordero-y-res-crudos-debido-a"
     },
     {
       "id": "fsis-PHA-02272024-01",
@@ -3519,23 +2870,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/salm-partners-llc-recalls-ready-eat-turkey-kielbasa-products-due-possible-extraneous"
     },
     {
-      "id": "fsis-002-2024",
-      "recallNumber": "002-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques de plástico de 13 onzas sellados al vacío que contienen \"PARKVIEW TURKEY POLSKA KIELBASA\" (KIELBASA DE PAVO POLACA DE PARKVIEW), con P-32009 y fecha de \"CONSUMIR ANTES DEL 24 DE ABRIL DE 2024\" o \" CONSUMIR ANTES DEL 27 DE ABRIL DE 2024\" impre",
-      "reason": "Product Contamination",
-      "recallingFirm": "Salm Partners, LLC",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20240105",
-      "recallInitiationDate": "20240105",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/salm-partners-llc-retira-del-mercado-productos-de-kielbasa-de-pavo-listos-para-consumir"
-    },
-    {
       "id": "fsis-PHA-01042024-01",
       "recallNumber": "PHA-01042024-01",
       "status": "Completed",
@@ -3583,24 +2917,6 @@
       "pathogen": "salmonella"
     },
     {
-      "id": "fsis-001-2024",
-      "recallNumber": "001-2024",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques en bandeja de plástico de 18 onzas que contienen \"BUSSETO FOODS CHARCUTERIE SAMPLER Prosciutto, Sweet Sopressata, and Dry Coppa\" (MUESTRARIO DE CHARCUTERÍA de BUSSETO FOODS - Prosciutto, Sopressata dulce y Coppa seca.) con el código de lote L0753",
-      "reason": "Product Contamination",
-      "recallingFirm": "Fratelli Beretta USA, Inc.",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20240103",
-      "recallInitiationDate": "20240103",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/fratelli-beretta-usa-inc--retira-del-mercado-productos-de-carne-de-charcuteria-listos-para",
-      "pathogen": "salmonella"
-    },
-    {
       "id": "fsis-065-2023",
       "recallNumber": "065-2023",
       "status": "Completed",
@@ -3616,24 +2932,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/valley-meats-llc-recalls-ground-beef-products-due-possible-e--coli-o157h7",
-      "pathogen": "ecoli"
-    },
-    {
-      "id": "fsis-065-2023",
-      "recallNumber": "065-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques en caja de 12 libras que contienen \"ANGUS GROUND BEEF PATTIES\" (HAMBURGUESAS DE CARNE DE RES ANGUS MOLIDA) con código de producto 1208PL, No. de serie 3356GRDB, código de fecha 231222, con fecha de \"Consumir antes del 15 de enero de 2024\", y ,• Empaques en caja de 16 libras que contienen \"ANGUS GROUND BEEF PATTIES\" (HAMBURGUESAS DE CARNE DE RES ANGUS MOLIDA) con código de producto 1253PL, No. de serie 3356GRDB, código de fecha 231222, con fecha de \"Consumir antes del 15 de enero de 2024\", y ,• Empaques en caja de 28 libras que contienen \"Ground Beef Patties\" (Hamburguesas de carne de res molida) con código de producto 72287, No. de serie 3356GRDB, código de fecha 231222, con fecha de \"Consumir antes del 15 de enero de 2024\", y marcas de tie,• Empaques en caja de 28 libras que contienen \"Ground Beef Patties\" (Hamburguesas de carne de res molida) con código de producto 72287, No. de serie 3356GRDB, código de fecha 231222, con fecha de \"Consumir antes del 15 de enero de 2024\", y marca de tiem,• Empaques en caja de 24 libras que contienen \"Ground Beef Patties\" (Hamburguesas de carne de res molida) con código de producto 72284, No. de serie 3356GRDB, código de fecha 231222, con fecha de \"Consumir antes del 15 de enero de 2024\", y marcas de tie,• Empaques en caja de 13,5 libras que contienen \"GROUND BEEF PATTIES\" (HAMBURGUESAS DE CARNE DE RES MOLIDA) con código de producto 1103, No. de serie 3356GRDB, código de fecha 231222, con fecha de \"Consumir antes del 15 de enero de 2024\", y marcas de ti,• Empaques en caja de 20 libras que contienen \"GROUND BEEF\" (CARNE DE RES MOLIDA) con código de producto 8515, No. de serie 3356GRDB, código de fecha 231222, y marcas de tiempo entre las 1:16:24 PM y las 1:31:15 PM.,• Empaques en caja de 40 libras que contienen \"GROUND BEEF\" (CARNE DE RES MOLIDA) con código de producto 8020VP, No. de serie 3356GRDB, código de fecha 231222, y marcas de tiempo entre las 1:34:54 PM y las 2:00:49 PM.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Valley Meats LLC",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231231",
-      "recallInitiationDate": "20231231",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/valley-meats-llc-retira-productos-de-carne-de-res-molida-debido-a-una-posible",
       "pathogen": "ecoli"
     },
     {
@@ -3674,23 +2972,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/simmons-prepared-foods-inc--recalls-boneless-chicken-bites-products-due-possible"
     },
     {
-      "id": "fsis-063-2023",
-      "recallNumber": "063-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Caja de cartón de 15 oz. que contiene “TGI FRIDAYS BONELESS CHICKEN BITES HONEY BBQ CHICKEN” (BOCADITOS DE POLLO DESHUESADOS TGI FRIDAYS POLLO BBQ CON MIEL) con el código de lote KL3K03 y fecha de “mejor si se consume antes del día” del 12/26/2",
-      "reason": "Product Contamination",
-      "recallingFirm": "Simmons Prepared Foods, Inc.",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20231215",
-      "recallInitiationDate": "20231215",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/simmons-prepared-foods-inc--retira-productos-de-bocaditos-de-pollo-debido-a-una-posible"
-    },
-    {
       "id": "fsis-PHA-12072023-01",
       "recallNumber": "PHA-12072023-01",
       "status": "Completed",
@@ -3725,23 +3006,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/wayne-farms-llc-recalls-ready-eat-chicken-breast-products-may-be-undercooked-0"
     },
     {
-      "id": "fsis-062-2023",
-      "recallNumber": "062-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón de 9 lb. que contienen 12 paquetes de 3 “CHEF'S LINE FIRE GRILLED CHICKEN BREAST” (PECHUGA DE POLLO A LA PARRILLA CHEF'S LINE) con códigos de lote de 3723289239002 y 3723289239003, con “consumir hasta el día: 01/14/24” en la etiqueta",
-      "reason": "Processing Defect",
-      "recallingFirm": "Wayne Farms LLC",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231207",
-      "recallInitiationDate": "20231207",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/wayne-farms-llc-retira-productos-de-pechuga-de-pollo-listos-para-consumir-que-pueden-estar"
-    },
-    {
       "id": "fsis-061-2023",
       "recallNumber": "061-2023",
       "status": "Completed",
@@ -3757,24 +3021,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/garland-ventures-recalls-ready-eat-chicken-fried-rice-products-due-possible-listeria",
-      "pathogen": "listeria"
-    },
-    {
-      "id": "fsis-061-2023",
-      "recallNumber": "061-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "· Bandejas de 12 onzas que contienen \"ARROZ FRITO CORTADO EN DADOS CARNE DE POLLO CON VERDURAS Y ARROZ EN SALSA DE SOYA SALADA\" con Garantía de frescura, con código de lote 595874884 y fecha de usar antes de 11/10/2024 en la etiqueta.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Garland Ventures LTD",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231206",
-      "recallInitiationDate": "20231206",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/garland-ventures-retira-productos-de-arros-con-pollo-frito-listos-para-el-consumo-debido-a",
       "pathogen": "listeria"
     },
     {
@@ -3797,28 +3043,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/pelleh-poultry-corp--recalls-ready-eat-beef-and-poultry-products-due-possible",
-      "pathogen": "listeria"
-    },
-    {
-      "id": "fsis-060-2023",
-      "recallNumber": "060-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "See list of products on press release",
-      "reason": "Product Contamination",
-      "recallingFirm": "Pelleh Poultry Corp.",
-      "distributionPattern": "New Jersey,New York,Pennsylvania",
-      "distributionStates": [
-        "NJ",
-        "NY",
-        "PA"
-      ],
-      "nationwide": false,
-      "reportDate": "20231201",
-      "recallInitiationDate": "20231201",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/pelleh-poultry-corp--retira-productos-de-carne-y-aves-de-corral-listos-para-el-consumo",
       "pathogen": "listeria"
     },
     {
@@ -3846,32 +3070,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/skyline-provisions-inc--recalls-raw-ground-beef-products-due-possible-foreign-matter"
-    },
-    {
-      "id": "fsis-059-2023",
-      "recallNumber": "059-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón de 20 libras que contienen cuatro empaques de \"CARNE MOLIDA 81/19 DE SKYLINE PROVISIONS, INC.\" con el número “ITEM # 000248” impreso en la etiqueta. ,• Cajas de cartón de 20 libras que contienen cuatro empaques de \"CARNE MOLIDA 75/25 DE SKYLINE PROVISIONS, INC.\" con el número “ITEM # 000293” impreso en la etiqueta.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Skyline Provisions",
-      "distributionPattern": "Connecticut,Maine,Massachusetts,New Hampshire,New York,Rhode Island,Vermont,Wisconsin",
-      "distributionStates": [
-        "CT",
-        "ME",
-        "MA",
-        "NH",
-        "NY",
-        "RI",
-        "VT",
-        "WI"
-      ],
-      "nationwide": false,
-      "reportDate": "20231119",
-      "recallInitiationDate": "20231119",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/skyline-provisions-inc--retira-productos-de-carne-molida-cruda-debido-a-una-posible"
     },
     {
       "id": "fsis-PHA-11172023-01",
@@ -3912,25 +3110,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/jx-restaurant-inc--recalls-chicken-products-due-misbranding-and-undeclared-allergens"
     },
     {
-      "id": "fsis-058-2023",
-      "recallNumber": "058-2023",
-      "status": "Completed",
-      "classification": "Class II",
-      "productDescription": "• Bandejas plásticas de 16-oz. que contienen “SISTER SISTER GENERAL TSO’S CHICKEN with FRIED RICE” (POLLO DE TSO con ARROZ FRITO) y códigos de lote 11/07/23, 11/11/23, 11/17/23, 11/18/23, ó 11/19/23 indicados en el etiqueta.",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Company Contact Lulu Restaurant Group Jenny Li jenny@lulurestaurantgroup.com",
-      "distributionPattern": "Wisconsin",
-      "distributionStates": [
-        "WI"
-      ],
-      "nationwide": false,
-      "reportDate": "20231110",
-      "recallInitiationDate": "20231110",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/lulu-restaurant-group-retira-productos-de-pollo-debido-a-un-error-de-rotulacion-y"
-    },
-    {
       "id": "fsis-057-2023",
       "recallNumber": "057-2023",
       "status": "Completed",
@@ -3958,33 +3137,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/tyson-foods-inc--recalls-chicken-patty-product-due-possible-foreign-matter"
     },
     {
-      "id": "fsis-057-2023",
-      "recallNumber": "057-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques en bolsa plástica de 29-oz. que contienen “Tyson FULLY COOKED FUN NUGGETS BREADED SHAPED CHICKEN PATTIES” (TORTAS DE POLLO CON FORMA APANADAS NUGGETS FUN TOTALMENTE COCIDOS Tyson) con fecha de \"mejor si se consume hasta el día\" del SEP 04, 2024,",
-      "reason": "Product Contamination",
-      "recallingFirm": "Tyson Foods, Inc.",
-      "distributionPattern": "Alabama,California,Illinois,Kentucky,Michigan,Ohio,Tennessee,Virginia,Wisconsin",
-      "distributionStates": [
-        "AL",
-        "CA",
-        "IL",
-        "KY",
-        "MI",
-        "OH",
-        "TN",
-        "VA",
-        "WI"
-      ],
-      "nationwide": false,
-      "reportDate": "20231104",
-      "recallInitiationDate": "20231104",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/tyson-foods-inc--retira-producto-de-torta-de-pollo-debido-a-una-posible-contaminacion-con"
-    },
-    {
       "id": "fsis-056-2023",
       "recallNumber": "056-2023",
       "status": "Completed",
@@ -4006,27 +3158,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/fairmont-foods-inc--recalls-frozen-spaghetti-loops-meat-sauce-entree-products-due"
     },
     {
-      "id": "fsis-056-2023",
-      "recallNumber": "056-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques de bandeja en caja de 7.25-oz. que contienen “kidfresh Spaghetti Loops Meat Sauce” (Aros de spaghetti con Salsa de Carne kidfresh) con códigos de lote FF120722, FF011823, FF021623, FF032323, FF042623, FF071923, ó FF081023 y fecha de “mejor si",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Fairmont Foods, Inc.",
-      "distributionPattern": "Georgia,Indiana,Texas",
-      "distributionStates": [
-        "GA",
-        "IN",
-        "TX"
-      ],
-      "nationwide": false,
-      "reportDate": "20231102",
-      "recallInitiationDate": "20231102",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/fairmont-foods-inc--retira-productos-congelados-de-platos-preparados-de-aros-de-spaghetti"
-    },
-    {
       "id": "fsis-055-2023",
       "recallNumber": "055-2023",
       "status": "Completed",
@@ -4046,25 +3177,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/qdelicia-recalls-ready-eat-empanada-products-produced-without-benefit-inspection"
     },
     {
-      "id": "fsis-055-2023",
-      "recallNumber": "055-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Bolsas plásticas de 1.25 y 6.25 libras que contienen “Q’Delicia DE EMPANADA BEEF” (EMPANADA DE CARNE DE RES) y “Q’Delicia DE EMPANADA MEAT GLUTEN FREE” (EMPANADA DE CARNE LIBRE DE GLUTEN Q'Delicia). ,• Bolsas plásticas de 1.25 y 6.25 libras que contienen “Q’Delicia DE EMPANADA CHICKEN” (EMPANADA DE POLLO Q'Delicia) y “Q’Delicia DE EMPANADA CHICKEN GLUTEN FREE” (EMPANADA DE POLLO LIBRE DE GLUTEN Q'Delicia).",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Company Contact Q’Delicia Alejandro Gallego, Manager deliciascolombianasjax@outlook.com",
-      "distributionPattern": "Florida",
-      "distributionStates": [
-        "FL"
-      ],
-      "nationwide": false,
-      "reportDate": "20231031",
-      "recallInitiationDate": "20231031",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/qdelicia-retira-productos-de-empanada-listos-para-consumir-producidos-sin-el-beneficio-de"
-    },
-    {
       "id": "fsis-054-2023",
       "recallNumber": "054-2023",
       "status": "Completed",
@@ -4082,25 +3194,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/olymel-recalls-ready-eat-ham-products-imported-without-benefit-import-reinspection"
-    },
-    {
-      "id": "fsis-054-2023",
-      "recallNumber": "054-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques al vacío visibles de la cruz roja de 12 lb. que contienen “EXTRA LEAN Celebrity 96% FAT FREE IMPORTED HAM WATER ADDED” (JAMÓN IMPORTADO 96% LIBRE DE GRASA EXTRA MAGRO Celebrity CON AGUA AÑADIDA) con códigos de lote 23208, 23212 ó 23221 impresos",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact Olymel Customer Service 1-800-361-7990 ext.3123 SC@olymel.com , Company Contact Olymel Audrey Giboulet, Acting Director of Corporate Communications 514-754-9509 audreygiboulet@olymel.com",
-      "distributionPattern": "California",
-      "distributionStates": [
-        "CA"
-      ],
-      "nationwide": false,
-      "reportDate": "20231030",
-      "recallInitiationDate": "20231030",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/olymel-retira-productos-de-jamon-listos-para-consumir-que-fueron-importados-sin-el"
     },
     {
       "id": "fsis-053-2023",
@@ -4126,29 +3219,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/capitology-llc-recalls-ineligible-pork-chicharrones-products-imported-honduras"
     },
     {
-      "id": "fsis-053-2023",
-      "recallNumber": "053-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques en estuche de papel aluminio de 5.3-oz. que contiene “Rica Sula TAJADITAS con CHICHARRON Platanos Con Chicharron.”",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact Manager, Capitology, LLC Alexander Ferrera 980-246-9870",
-      "distributionPattern": "Arkansas,Louisiana,North Carolina,South Carolina,Texas",
-      "distributionStates": [
-        "AR",
-        "LA",
-        "NC",
-        "SC",
-        "TX"
-      ],
-      "nationwide": false,
-      "reportDate": "20231023",
-      "recallInitiationDate": "20231023",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/capitology-llc-retira-productos-no-autorizados-de-chicharrones-de-cerdo-que-fueron"
-    },
-    {
       "id": "fsis-052-2023",
       "recallNumber": "052-2023",
       "status": "Completed",
@@ -4164,23 +3234,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/del-valle-import-and-export-llc-recalls-pork-chorizo-products-produced-without"
-    },
-    {
-      "id": "fsis-052-2023",
-      "recallNumber": "052-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Contenedores de tubos de plástico de 14 onzas que contienen “Chorizo Olanchano Mezcla de chorizo Centroamericano Centroamerican Brand Chorizo Mix.”",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Company Contact Del Valle Import and Export LLC Wendy Arevalo, Head of Communications (504) 468-2167 delvalleimportnola@delvallenola.com",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231020",
-      "recallInitiationDate": "20231020",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/del-valle-import-and-export-llc-retira-chorizo-de-cerdo-chorizo-producido-sin-el-beneficio"
     },
     {
       "id": "fsis-051-2023",
@@ -4200,23 +3253,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/east-coast-food-distributors-inc--recalls-ineligible-pork-chicharrones-products"
     },
     {
-      "id": "fsis-051-2023",
-      "recallNumber": "051-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Paquetes en bolsa de aluminio de 165 g que contienen “De Todito BBQ PARA COMPARTIR” y el código de UPC 7702189057624.,• Paquetes en bolsa de aluminio de 45 g que contienen “De Todito BBQ” y el código de UPC 7702189019646.,• Paquetes en bolsa de aluminio de 165 g que contienen “De Todito NATURAL PARA COMPARTIR” y el código de UPC 7702189057617.,• Paquetes en bolsa de aluminio de 45 g que contienen “De Todito NATURAL” y el código de UPC 7702189019707.,• Paquetes en bolsa de aluminio de 165 g que contienen “De Todito LIMÓN PARA COMPARTIR”.,• Paquetes en bolsa de aluminio de 45 g que contienen “De Todito LIMÓN”.",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact East Coast Food Distributors, Inc. Felipe Duque, Owner (603) 438-6051 felipe.duque@eastcoast-food.com",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231019",
-      "recallInitiationDate": "20231019",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/east-coast-food-distributors-inc--retira-chicharrones-de-cerdo-descalificados-importados"
-    },
-    {
       "id": "fsis-050-2023",
       "recallNumber": "050-2023",
       "status": "Completed",
@@ -4232,23 +3268,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/aunt-kittys-foods-inc--recalls-canned-ready-eat-chicken-pot-pie-soup-products-due"
-    },
-    {
-      "id": "fsis-050-2023",
-      "recallNumber": "050-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Lata de metal de 15 onzas que contienen “HANOVER SOUP CLASSICS Chicken Pot Pie” con códigos de lote P864 4893 23241950 y “USAR ANTES DE SEPT. 2026” ambos impresos en la lata.",
-      "reason": "Misbranding",
-      "recallingFirm": "Aunt Kitty's Foods Inc",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231019",
-      "recallInitiationDate": "20231019",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/aunt-kittys-foods-inc--retira-sopa-pot-pie-de-pollo-lista-para-el-consumo-enlatada-debido"
     },
     {
       "id": "fsis-049-2023",
@@ -4269,24 +3288,6 @@
       "pathogen": "listeria"
     },
     {
-      "id": "fsis-049-2023",
-      "recallNumber": "049-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques al vacío total de 11 onzas que contienen “ALBÓNDIGAS DE CARNE BÒ VIÊN PHÙ-HƯƠNG GÂN (CON TENDONES DE VACUNO) (agregadod e pollo / Cô Gá)” con códigos de lote del 200101 al 200124 en la parte posterior del paquete.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Phu Huong Food Company, Inc.",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231016",
-      "recallInitiationDate": "20231016",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/phu-huong-food-company-retira-albondigas-de-carne-de-res-y-aves-de-corral-por-la-posible",
-      "pathogen": "listeria"
-    },
-    {
       "id": "fsis-048-2023",
       "recallNumber": "048-2023",
       "status": "Completed",
@@ -4304,23 +3305,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/mrs--pasta-recalls-frozen-meat-pasta-products-produced-without-benefit-inspection"
     },
     {
-      "id": "fsis-048-2023",
-      "recallNumber": "048-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón de 12 libras que contienen bolsas de plástico de “Mrs Pasta Short Ribs Ravioli” con etiqueta con fechas del 1/8/2023 al 11/10/2023 impresa en la etiqueta. ,• Cajas de cartón de 12 libras que contienen bolsas de plástico de “Mrs Pasta Veal Ossobuco Ravioli squared” con fechas del 1/8/2023 al 11/10/2023 impresas en la etiqueta. ,• Cajas de cartón de 12 libras que contienen bolsas de plástico de “Mrs Pasta Veal Ossobuco Ravioli squared” con fechas del 1/8/2023 al 11/10/2023 impresas en la etiqueta. ,• Cajas de cartón de 12 libras que contienen bolsas de plástico de “Mrs Pasta Tortellini Bolognese” con fechas el 1/8/2023 al 11/10/2023 impresas en la etiqueta.",
-      "reason": "Produced Without Benefit of Inspection",
-      "recallingFirm": "Company Contact Mrs. Pasta Umberto Costa, Owner (954) 993-0842",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20231016",
-      "recallInitiationDate": "20231016",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/mrs--pasta-retira-productos-de-pasta-de-carne-congelada-producidos-sin-el-beneficio-de-la"
-    },
-    {
       "id": "fsis-047-2023",
       "recallNumber": "047-2023",
       "status": "Completed",
@@ -4336,24 +3320,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/don-miguel-foods-recalls-frozen-ready-eat-carne-asada-burrito-products-due-possible",
-      "pathogen": "listeria"
-    },
-    {
-      "id": "fsis-047-2023",
-      "recallNumber": "047-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques individuales de 7 onzas embalados en papel encerado que contienen \"BURRITOS DE CARNE ASADA DON MIGUEL hechos a mano\" con código de fecha D23270 impreso en el empaque.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Don Miguel Mexican Foods, Inc.",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20231013",
-      "recallInitiationDate": "20231013",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/don-miguel-foods-retira-burritos-de-carne-asada-congelados-listos-para-el-consumo-por-la",
       "pathogen": "listeria"
     },
     {
@@ -4418,27 +3384,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/del-valle-import-and-export-llc-recalls-ineligible-pork-chicharrones-product"
     },
     {
-      "id": "fsis-046-2023",
-      "recallNumber": "046-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaques en estuche de papel aluminio de 100g que contienen “DEL RANCHO CHICHARRONES AUTENTICOS 100% PRODUCTO DE CERDO\".",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact Del Valle Import and Export, LLC Wendy Arevalo, Receptionist 504-468-2167 wendyarevalo@delvallenola.com",
-      "distributionPattern": "Texas,Alabama,Florida",
-      "distributionStates": [
-        "TX",
-        "AL",
-        "FL"
-      ],
-      "nationwide": false,
-      "reportDate": "20230925",
-      "recallInitiationDate": "20230925",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/del-valle-import-and-export-llc-retira-producto-no-autorizado-de-chicharrones-de-cerdo"
-    },
-    {
       "id": "fsis-045-2023",
       "recallNumber": "045-2023",
       "status": "Completed",
@@ -4458,27 +3403,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/green-valley-foods-recalls-frozen-meat-pizza-products-due-misbranding-and-undeclared"
-    },
-    {
-      "id": "fsis-045-2023",
-      "recallNumber": "045-2023",
-      "status": "Completed",
-      "classification": "Class II",
-      "productDescription": "Empaques sellados al vacío de 22.75 oz. que contienen unidades de “ TACO PREMIUM PIZZA Made with Taco Sauce, Refried Beans, Beef, Taco Filling, Cheddar Cheese, Taco Tortilla Chips” (PIZZA PREMIUM TACO GRUBBERPUTZ’S Hecha con Salsa de Taco, Frijoles refrit,Empaques sellados al vacío de 24.25-oz. que contienen “GRUBBERPUTZ’S 3-MEATER PREMIUM PIZZA Made with Pepperoni, Canadian Style Bacon, Pork Sausage” (PIZZA PREMIUM MEATER Hecha con Pepperoni, Tocino al estilo canadiense, salchicha de cerdo).,Empaques sellados al vacío de 23.1-oz. que contienen “GRUBBERPUTZ’S HOG UNIT PREMIUM PIZZA Made with Canadian Style Bacon, Bacon, Jalapeno Peppers, BBQ Sauce” (PIZZA PREMIUM DE CERDO GRUBBERPUTZ’S Hecha con Tocino al estilo canadiense, tocino, jalapeños, ,Empaques sellados al vacío de 24.5-oz. que contienen “GRUBBERPUTZ’S HOUSE SPECIAL PREMIUM PIZZA Made with Pepperoni, Pork Sausage, Green Pepper, Red Pepper, Onions, Mushrooms” (PIZZA PREMIUM ESPECIAL DE LA CASA Hecha con Pepperoni, Salchicha de cerdo, pim,Empaques sellados al vacío de 21.75-oz. que contienen “GRUBBERPUTZ’S PEPPERONI PREMIUM PIZZA Pepperoni made with Pork, Beef” (PIZZA PREMIUM DE PEPPERONI GRUBBERPUTZ’S hecha con carne de cerdo y res).",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Green Valley Foods",
-      "distributionPattern": "Minnesota,Montana,North Dakota",
-      "distributionStates": [
-        "MN",
-        "MT",
-        "ND"
-      ],
-      "nationwide": false,
-      "reportDate": "20230923",
-      "recallInitiationDate": "20230923",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/green-valley-foods-retira-productos-congelados-de-pizza-de-carne-debido-a-un-error-de"
     },
     {
       "id": "fsis-PHA-09162023-01",
@@ -4519,28 +3443,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/american-foods-group-llc-recalls-ground-beef-products-due-possible-e--coli-o103",
-      "pathogen": "ecoli"
-    },
-    {
-      "id": "fsis-044-2023",
-      "recallNumber": "044-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Cajas de aproximadamente 80-lb. que contienen empaques en forma de tubo (chubs) de 10-lb de “90050 BEEF FINE GROUND 81/19” (CARNE DE RES MOLIDA FINA 90050 81/19) con código de lote D123226026.,Cajas de aproximadamente 80-lb. que contienen empaques en forma de tubo (chubs) de 10-lb de “20473 BEEF HALAL FINE GROUND 73/27” (RES HALAL MOLIDA FINA) con código de lote D123226027.,Cajas de aproximadamente 80-lb. que contienen empaques en forma de tubo (chubs) de 10-lb de “20105 BEEF FINE GROUND 73/27” (CARNE DE RES MOLIDA FINA) con código de lote D123226027.",
-      "reason": "Product Contamination",
-      "recallingFirm": "Green Bay Dressed Beef, LLC",
-      "distributionPattern": "Georgia,Michigan,Ohio",
-      "distributionStates": [
-        "GA",
-        "MI",
-        "OH"
-      ],
-      "nationwide": false,
-      "reportDate": "20230915",
-      "recallInitiationDate": "20230915",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/american-foods-group-llc-retira-productos-de-carne-de-res-molida-debido-a-una-posible",
       "pathogen": "ecoli"
     },
     {
@@ -4587,23 +3489,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/custom-made-meals-llc-recalls-bacon-wrapped-chicken-products-due-misbranding-and"
     },
     {
-      "id": "fsis-043-2023",
-      "recallNumber": "043-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Bandejas plásticos negras de pesos varios con film transparente encima que contienen “Bacon-Wrapped BBQ Seasoned Chicken Grillers”(Porciones de pollo condimentado para asar envueltas en tocino BBQ) y código de fecha de \"USAR ANTES DEL 21-SEPT-23” indicado",
-      "reason": "Misbranding",
-      "recallingFirm": "Custom Made Meals, LLC",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20230909",
-      "recallInitiationDate": "20230909",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/custom-made-meals-llc-retira-producto-envuelto-en-tocino-con-jalapeno-debido-a-un-error-de"
-    },
-    {
       "id": "fsis-042-2023",
       "recallNumber": "042-2023",
       "status": "Completed",
@@ -4619,23 +3504,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/empacadora-frape-usa-llc-recalls-pork-products-imported-without-benefit-import"
-    },
-    {
-      "id": "fsis-042-2023",
-      "recallNumber": "042-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Cajas de19- to 24-lb. que contienen “Chicharrón con carne/Pork Skin with Meat” con códigos de lote 2193CON0281, 2203CON0283, 2213CON0285, 2223CON0287, 2233CON0289 y fecha de \"usar hasta el día\" del 7-11, de agosto de 2024, y marca de envío 176.,Cajas de 24- to 30-lb. que contienen “Carnitas de Cerdo/Seasoned Pieces of Pork Meat” con códigos de lote 2123CON0272, 2133CON0273, 2193CON0282, 2203CON0284, 2213CON0286, 2223CON0288, 2233CON0290 y fecha de \"usar hasta el día\" del 31 de julio de 2024 - al",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact Company Contact",
-      "distributionPattern": "",
-      "distributionStates": [],
-      "nationwide": false,
-      "reportDate": "20230907",
-      "recallInitiationDate": "20230907",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/empacadora-frape-usa-llc-retira-productos-de-cerdo-importados-sin-el-beneficio-de-la"
     },
     {
       "id": "fsis-041-2023",
@@ -4657,25 +3525,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/ajc-international-inc--recalls-frozen-raw-pork-products-imported-without-benefit"
     },
     {
-      "id": "fsis-041-2023",
-      "recallNumber": "041-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Cajas de 15-kg/33.07-lb. que contienen “Frozen Pork Front Hock” (Cerdo Congelado Front Hock) con código de caja 18019 y No. de Cert. 251497 y fechas de \"mejor consumir antes del día\" del 14-27 de julio de 2025.",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact Marketing Development Manager, AJC International, Inc. Fernanda Sousa fsousa@ajcgroup.com",
-      "distributionPattern": "Hawaii,American Samoa",
-      "distributionStates": [
-        "HI"
-      ],
-      "nationwide": false,
-      "reportDate": "20230905",
-      "recallInitiationDate": "20230905",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/ajc-international-inc--retira-productos-congelados-de-cerdo-importados-sin-el-beneficio-de"
-    },
-    {
       "id": "fsis-040-2023",
       "recallNumber": "040-2023",
       "status": "Completed",
@@ -4691,23 +3540,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/conagra-brands-inc--recalls-banquet-brand-frozen-chicken-strips-entree-due-possible"
-    },
-    {
-      "id": "fsis-040-2023",
-      "recallNumber": "040-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Caja de 8.9-oz. que contiene un plato preparado de “BANQUET CHICKEN STRIPS MEAL” (PLATO BANQUETE DE TIRAS DE POLLO) con fechas de \"mejor usar antes del día\" del “DIC 11 2024”, “ENE 01 2025”, ó el “ENE 07 2025” y números de lote 5009317120, 5009319220, ó 5",
-      "reason": "Product Contamination",
-      "recallingFirm": "Conagra Brands (Conagra Foods Packaged Foods, LLC)",
-      "distributionPattern": "Nationwide",
-      "distributionStates": [],
-      "nationwide": true,
-      "reportDate": "20230902",
-      "recallInitiationDate": "20230902",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/conagra-brands-inc--retira-plato-preparado-congelado-de-tiras-de-pollo-debido-a-una"
     },
     {
       "id": "fsis-039-2023",
@@ -4735,31 +3567,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/hillshire-brands-company-recalls-smoked-sausage-products-due-possible-foreign-matter"
     },
     {
-      "id": "fsis-039-2023",
-      "recallNumber": "039-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Empaque cryovac de 14 oz. que contiene una tira de salchichas “HILLSHIRE FARM SMOKED SAUSAGE MADE WITH PORK, TURKEY, BEEF” (SALCHICHA AHUMADA DE CERDO, PAVO Y RES HILLSHIRE FARM) con códigos de lote en el formato de número de establecimiento, número de lí",
-      "reason": "Product Contamination",
-      "recallingFirm": "The Hillshire Brands Company",
-      "distributionPattern": "California,Maryland,New Mexico,New York,North Carolina,Pennsylvania,Virginia",
-      "distributionStates": [
-        "CA",
-        "MD",
-        "NM",
-        "NY",
-        "NC",
-        "PA",
-        "VA"
-      ],
-      "nationwide": false,
-      "reportDate": "20230902",
-      "recallInitiationDate": "20230902",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/hillshire-brands-company-retira-productos-de-salchicha-ahumada-debido-a-una-posible"
-    },
-    {
       "id": "fsis-038-2023",
       "recallNumber": "038-2023",
       "status": "Completed",
@@ -4777,26 +3584,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/dean-peeler-meatworks-llc-recalls-fresh-ground-beef-products-due-possible-e--coli",
-      "pathogen": "ecoli"
-    },
-    {
-      "id": "fsis-038-2023",
-      "recallNumber": "038-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "Bolsas plásticas selladas al vacío de 1 lb., 5 lb., y 10 lb. que contienen “Peeler Farms WAGYU BEEF GROUND BEEF” (CARNE DE RES MOLIDA WAGYU Peeler Farms) con código de lote 17836 indicado en la etiqueta. ,Bolsas de 5 lb. selladas al vacío que contienen “R-C RANCH TEXAS CRAFT MEATS WAGYU RC13610 STEAKHOUSE BLEND – GROUND BEEF 5 lb” (CARNE DE RES MOLIDA - MEZCLA DE ASADERO RC 13610) con código de lote 17816 indicado en la etiqueta. ,Bolsas de 8 lb. selladas al vacío que contienen “R-C RANCH TEXAS CRAFT MEATS WAGYU RC13603 – GROUND BEEF PATTIES 8 oz” (CARNE MOLIDA - MEZCLA DE ASADERO RC 13603 - HAMBURGUESAS DE CARNE DE RES MOLIDA 8 oz.) con código de lote 17816 indicado en la etiqueta",
-      "reason": "Product Contamination",
-      "recallingFirm": "Dean & Peeler Meatworks",
-      "distributionPattern": "Texas",
-      "distributionStates": [
-        "TX"
-      ],
-      "nationwide": false,
-      "reportDate": "20230829",
-      "recallInitiationDate": "20230829",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/dean-peeler-meatworks-llc-retira-productos-frescos-de-carne-de-res-molida-debido-a-una",
       "pathogen": "ecoli"
     },
     {
@@ -4860,25 +3647,6 @@
       "url": "https://www.fsis.usda.gov/recalls-alerts/bellboy-import-corporation-recalls-frozen-raw-pork-products-produced-without-benefit"
     },
     {
-      "id": "fsis-037-2023",
-      "recallNumber": "037-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Cajas de cartón de 25 kg./55.12 libras con paquetes embalados al vacío total que contienen “FROZEN PORK BELLY, SHEET RIBBED, SKIN ON” de la marca Aurora con fecha de producción entre el 19/06/2023-26/06/2023 y con marca de envío 308161 en la ca",
-      "reason": "Import Violation",
-      "recallingFirm": "Company Contact Bellboy Import Corporation Brian Bladine, Chief Financial Officer 866-585-6787 brian@skytinted.com",
-      "distributionPattern": "Minnesota",
-      "distributionStates": [
-        "MN"
-      ],
-      "nationwide": false,
-      "reportDate": "20230815",
-      "recallInitiationDate": "20230815",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/bellboy-import-corporation-retira-productos-congelados-productos-de-cerdo-crudo-producidos"
-    },
-    {
       "id": "fsis-036-2023",
       "recallNumber": "036-2023",
       "status": "Completed",
@@ -4933,25 +3701,6 @@
       "country": "US",
       "agency": "FSIS",
       "url": "https://www.fsis.usda.gov/recalls-alerts/day-lee-foods-inc--recalls-frozen-ready-eat-poultry-products-due-misbranding-and"
-    },
-    {
-      "id": "fsis-035-2023",
-      "recallNumber": "035-2023",
-      "status": "Completed",
-      "classification": "Class I",
-      "productDescription": "• Empaques en caja de 20 oz. que dicen contener “RESTAURANT QUALITY AT HOME Crazy Cuizine Chicken POTSTICKERS ASIAN STYLE GYOZA DUMPLINGS WITH DIPPING SAUCE” (EMPANADAS de Pollo AL ESTILO ASIÁTICO BOLLOS GYOZA CON SALSA) con fecha de \" consumir hasta e",
-      "reason": "Misbranding,Unreported Allergens",
-      "recallingFirm": "Day-Lee Foods Inc.",
-      "distributionPattern": "California",
-      "distributionStates": [
-        "CA"
-      ],
-      "nationwide": false,
-      "reportDate": "20230805",
-      "recallInitiationDate": "20230805",
-      "country": "US",
-      "agency": "FSIS",
-      "url": "https://www.fsis.usda.gov/es/retirada/day-lee-foods-inc--retira-productos-de-aves-listos-para-consumir-debido-a-un-error-de"
     },
     {
       "id": "fsis-PHA-08042023-01",

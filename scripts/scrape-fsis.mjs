@@ -179,6 +179,30 @@ function floorYmd(years) {
   ).padStart(2, "0")}`;
 }
 
+// FSIS returns each recall in English AND Spanish (separate records, same recall
+// number). Keep the English one. Scored from the normalized product/reason text
+// so it doesn't depend on the API's language field name.
+const SPANISH =
+  /\b(onzas|libras|gramos|contienen?|envases?|cajas?|paquetes?|estuches?|etiqueta|frescura|pollo|carne\s+de|congelad\w*|listo\s+para|bolsas?|unidades|fecha\s+de|c[oó]digo\s+de\s+lote|transparentes?|vac[ií]o)\b/gi;
+const ENGLISH =
+  /\b(containing|packages?|cases?|trays?|pouches?|labels?|use\s+by|best\s+by|lb\.|oz\.|ready-to-eat|frozen|chicken|beef|pork|net\s+weight|lot\s+code|bags?)\b/gi;
+const count = (re, s) => (s.match(re) ?? []).length;
+
+/** Keep the English record of each recall number; drop Spanish duplicates/stragglers. */
+function englishOnly(recalls) {
+  const best = new Map();
+  const langScore = (r) => count(ENGLISH, `${r.productDescription} ${r.reason}`) - count(SPANISH, `${r.productDescription} ${r.reason}`);
+  for (const r of recalls) {
+    const key = r.recallNumber || r.id;
+    const cur = best.get(key);
+    if (!cur || langScore(r) > langScore(cur)) best.set(key, r);
+  }
+  return [...best.values()].filter((r) => {
+    const s = `${r.productDescription} ${r.reason}`;
+    return !(count(ENGLISH, s) === 0 && count(SPANISH, s) >= 2);
+  });
+}
+
 async function main() {
   const res = await fetch(API, { headers: HEADERS });
   if (!res.ok) throw new Error(`FSIS API ${res.status} (WAF may be blocking this host)`);
@@ -190,8 +214,7 @@ async function main() {
   console.log("FSIS sample fields:", Object.keys(rows[0]).join(", "));
 
   const floor = floorYmd(WINDOW_YEARS);
-  const recalls = rows
-    .map(normalize)
+  const recalls = englishOnly(rows.map(normalize))
     .filter((r) => r.reportDate && r.reportDate >= floor)
     .sort((a, b) => (b.reportDate ?? "").localeCompare(a.reportDate ?? ""))
     .slice(0, MAX_RECORDS);

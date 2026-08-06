@@ -1,6 +1,34 @@
 import type { Recall } from "./types";
 import { extractUpcs } from "./avoidance";
 
+// FSIS publishes each recall in English AND Spanish as separate records that
+// share a recall number. We keep the English one. These markers score a record's
+// language from its product/reason text (the normalized feed has no langcode).
+const SPANISH =
+  /\b(onzas|libras|gramos|contienen?|envases?|cajas?|paquetes?|estuches?|etiqueta|frescura|pollo|carne\s+de|congelad\w*|listo\s+para|bolsas?|unidades|fecha\s+de|c[oó]digo\s+de\s+lote|transparentes?|vac[ií]o)\b/gi;
+const ENGLISH =
+  /\b(containing|packages?|cases?|trays?|pouches?|labels?|use\s+by|best\s+by|lb\.|oz\.|ready-to-eat|frozen|chicken|beef|pork|net\s+weight|lot\s+code|bags?)\b/gi;
+
+const count = (re: RegExp, s: string) => (s.match(re) ?? []).length;
+
+/** Keep the English record of each recall number; drop Spanish duplicates/stragglers. */
+function englishOnly(recalls: Recall[]): Recall[] {
+  const best = new Map<string, Recall>();
+  const langScore = (r: Recall) => {
+    const s = `${r.productDescription} ${r.reason}`;
+    return count(ENGLISH, s) - count(SPANISH, s);
+  };
+  for (const r of recalls) {
+    const key = r.recallNumber || r.id;
+    const cur = best.get(key);
+    if (!cur || langScore(r) > langScore(cur)) best.set(key, r);
+  }
+  return [...best.values()].filter((r) => {
+    const s = `${r.productDescription} ${r.reason}`;
+    return !(count(ENGLISH, s) === 0 && count(SPANISH, s) >= 2);
+  });
+}
+
 export interface FsisFeed {
   generatedAt: string | null;
   recalls: Recall[];
@@ -22,7 +50,7 @@ export async function loadFsisRecalls(signal?: AbortSignal): Promise<FsisFeed> {
     // Best-effort UPCs: FSIS leans on establishment (EST) numbers and lot codes,
     // so barcodes are usually absent — extract from the product text when the
     // notice does print them, and leave upcs undefined otherwise.
-    const recalls = (feed.recalls as Recall[]).map((r) => {
+    const recalls = englishOnly(feed.recalls as Recall[]).map((r) => {
       const upcs = extractUpcs(r.codeInfo, r.productDescription);
       return upcs.length > 0 ? { ...r, upcs } : r;
     });
