@@ -10,8 +10,14 @@ etc.) about recalls, active outbreaks, and local food resources.
 |---|---|
 | `list_active_outbreaks` | All active outbreaks from the live FDA CORE table (pathogen, product, case count, status, ref #). |
 | `get_outbreak_detail` | Detail for one outbreak by FDA reference number, incl. hand-verified named companies + citations where available. |
-| `search_recalls` | Search openFDA recalls by keyword, severity class, status, and state. |
+| `search_recalls` | Search recalls across **openFDA (FDA-regulated food) and USDA FSIS (meat/poultry/egg)** by keyword, severity class, status, and state. Limited to the **last 3 years** by default (override with `since`); each result notes its `agency`. Use `agency` to scope to one feed. |
+| `list_affected_foods` | Group active outbreaks + recent FDA & FSIS recalls into food commodities (leafy greens, beef, eggs, …) with outbreak/recall counts and implicated pathogens. |
+| `get_food` | Detail for one food commodity by id: its outbreaks, FDA + FSIS recalls, pathogens, and named suppliers (from the curated record). |
 | `find_food_resources` | Farmers markets + FDA/CDC-named store locations near a ZIP. Needs `MAPBOX_TOKEN`. |
+
+Food categories are a **display grouping** of what the official feeds actually name — never a
+risk judgment and never a supply-chain inference. The 3-year recency floor keeps stale,
+long-terminated recalls from surfacing under current concerns.
 
 ## Run it
 
@@ -63,7 +69,8 @@ To run from a local checkout instead of npx:
 
 ## Data sources
 
-openFDA food enforcement API · FDA CORE Outbreak Investigation Table · CDC
-cyclosporiasis pages · api.zippopotam.us · Mapbox Search Box. Same integrity
-rule as the dashboard: only companies FDA/CDC actually named appear, each with a
-source — never inferred from supply chains. Not medical advice.
+openFDA food enforcement API · USDA FSIS Recalls & Public Health Alerts API ·
+FDA CORE Outbreak Investigation Table · CDC cyclosporiasis pages ·
+api.zippopotam.us · Mapbox Search Box. Same integrity rule as the dashboard:
+only companies FDA/CDC actually named appear, each with a source — never inferred
+from supply chains or from a food category. Not medical advice.

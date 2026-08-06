@@ -6,7 +6,7 @@
   "bin": {
     "opencore-mcp": "index.mjs"
   },
-  "files": ["index.mjs", "data.mjs", "README.md"],
+  "files": ["index.mjs", "data.mjs", "foods.mjs", "README.md"],
   "engines": {
     "node": ">=18"
   },

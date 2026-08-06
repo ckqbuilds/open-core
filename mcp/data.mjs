@@ -4,6 +4,46 @@
  * fda.gov and openFDA directly.
  */
 
+// ─── Recency floor ──────────────────────────────────────────────────────────
+
+// An active tracker shouldn't surface a decade of closed notices. Both the
+// openFDA query and the FSIS feed are floored to the last N years (mirrors the
+// web app's recency floor in src/data/openfda.ts and scripts/scrape-fsis.mjs).
+const WINDOW_YEARS = 3;
+
+/** N years ago as an openFDA-style YYYYMMDD string. */
+export function floorYmd(years) {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - years);
+  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+}
+
+// ─── Pathogen attribution ───────────────────────────────────────────────────
+
+// Canonical pathogen ids mirror Pathogen.id in src/data/symptoms.ts so a
+// detected recall/outbreak pathogen can be correlated across feeds. The MCP has
+// no symptoms catalog, so detection is a plain substring match on free text.
+export const PATHOGEN_TERMS = [
+  ["salmonella", ["salmonella"]],
+  ["listeria", ["listeria"]],
+  ["ecoli", ["e. coli", "e.coli", "escherichia", "stec", "shiga toxin"]],
+  ["campylobacter", ["campylobacter"]],
+  ["cyclospora", ["cyclospora"]],
+  ["norovirus", ["norovirus"]],
+  ["hepatitis-a", ["hepatitis a", "hepatitis-a"]],
+  ["vibrio", ["vibrio"]],
+  ["shigella", ["shigella"]],
+];
+
+/** Detect a canonical pathogen id from free text, or undefined if none named. */
+export function detectPathogen(text) {
+  const hay = String(text ?? "").toLowerCase();
+  for (const [id, terms] of PATHOGEN_TERMS) if (terms.some((t) => hay.includes(t))) return id;
+  return undefined;
+}
+
 // ─── openFDA recalls ────────────────────────────────────────────────────────
 
 const OPENFDA = "https://api.fda.gov/food/enforcement.json";
@@ -23,7 +63,7 @@ function parseStates(pattern = "") {
   return { states: [...states], nationwide };
 }
 
-export async function searchRecalls({ term, classification, status, state, limit = 20 } = {}) {
+async function fdaRecalls({ term, classification, status, state, limit, since }) {
   const clauses = [];
   if (term) {
     const q = term.replace(/"/g, "");
@@ -35,6 +75,8 @@ export async function searchRecalls({ term, classification, status, state, limit
   }
   if (classification) clauses.push(`(classification:"${classification}")`);
   if (status) clauses.push(`(status:${status})`);
+  // Floor report_date so stale terminated recalls don't surface (mirrors web).
+  clauses.push(`(report_date:[${since ?? floorYmd(WINDOW_YEARS)} TO 99991231])`);
 
   const params = new URLSearchParams({
     search: clauses.join(" AND "),
@@ -58,13 +100,235 @@ export async function searchRecalls({ term, classification, status, state, limit
       nationwide,
       states,
       reportDate: r.report_date,
+      agency: "FDA",
+      pathogen: detectPathogen(`${r.reason_for_recall ?? ""} ${r.product_description ?? ""}`),
     };
   });
   if (state) {
     const st = state.toUpperCase();
     out = out.filter((r) => r.nationwide || r.states.includes(st));
   }
-  return out.slice(0, limit);
+  return out;
+}
+
+/** One normalized FSIS recall reshaped into the flat shape searchRecalls emits. */
+function fsisAsRecall(r) {
+  return {
+    recallNumber: r.recallNumber,
+    classification: r.classification,
+    status: r.status,
+    product: r.productDescription,
+    reason: r.reason,
+    recallingFirm: r.recallingFirm,
+    distribution: r.nationwide ? "nationwide" : r.distributionStates.join(", ") || r.distributionPattern,
+    nationwide: r.nationwide,
+    states: r.distributionStates,
+    reportDate: r.reportDate,
+    agency: "FSIS",
+    url: r.url,
+    pathogen: r.pathogen,
+  };
+}
+
+/** Client-side filter of FSIS recalls by the same params openFDA is queried with. */
+function filterFsis(rows, { term, classification, status, state }) {
+  let out = rows;
+  if (term) {
+    const q = term.toLowerCase();
+    out = out.filter(
+      (r) =>
+        (r.productDescription ?? "").toLowerCase().includes(q) ||
+        (r.reason ?? "").toLowerCase().includes(q)
+    );
+  }
+  if (classification) out = out.filter((r) => r.classification === classification);
+  if (status) out = out.filter((r) => r.status === status);
+  if (state) {
+    const st = state.toUpperCase();
+    out = out.filter((r) => r.nationwide || r.distributionStates.includes(st));
+  }
+  return out;
+}
+
+/**
+ * Search recalls across openFDA (FDA-regulated food) and USDA FSIS
+ * (meat/poultry/egg). Both feeds are floored to the last 3 years by default
+ * (override with `since`, YYYYMMDD). `agency` ("FDA" | "FSIS") scopes to one
+ * feed; default is both. Results are merged and sorted by report date desc.
+ */
+export async function searchRecalls({
+  term,
+  classification,
+  status,
+  state,
+  limit = 20,
+  agency,
+  since,
+} = {}) {
+  const wantFda = agency !== "FSIS";
+  const wantFsis = agency !== "FDA";
+
+  const [fda, fsisRaw] = await Promise.all([
+    wantFda ? fdaRecalls({ term, classification, status, state, limit, since }) : [],
+    // A WAF block (403) on the FSIS host degrades to FDA-only rather than failing.
+    wantFsis ? fetchFsisRecalls({ since }).catch(() => []) : [],
+  ]);
+  const fsis = wantFsis
+    ? filterFsis(fsisRaw, { term, classification, status, state }).map(fsisAsRecall)
+    : [];
+
+  return [...fda, ...fsis]
+    .sort((a, b) => String(b.reportDate ?? "").localeCompare(String(a.reportDate ?? "")))
+    .slice(0, limit);
+}
+
+// ─── USDA FSIS recalls (meat / poultry / egg) ───────────────────────────────
+
+// openFDA covers only FDA-regulated food; meat, poultry, and egg recalls live in
+// the USDA FSIS recall API. The endpoint sits behind an Akamai WAF that 403s
+// bare/bot requests, so we send browser-like headers (same trick as
+// server/markets.mjs). Ported from scripts/scrape-fsis.mjs.
+const FSIS_API = "https://www.fsis.usda.gov/fsis/api/recall/v/1";
+const FSIS_RECALL_BASE = "https://www.fsis.usda.gov";
+const MAX_FSIS = 300;
+
+const FSIS_HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+  Accept: "application/json, text/plain, */*",
+  Referer: "https://www.fsis.usda.gov/recalls",
+  "Accept-Language": "en-US,en;q=0.9",
+};
+
+const STATE_ABBR = {
+  alabama: "AL", alaska: "AK", arizona: "AZ", arkansas: "AR", california: "CA",
+  colorado: "CO", connecticut: "CT", delaware: "DE", "district of columbia": "DC",
+  florida: "FL", georgia: "GA", hawaii: "HI", idaho: "ID", illinois: "IL",
+  indiana: "IN", iowa: "IA", kansas: "KS", kentucky: "KY", louisiana: "LA",
+  maine: "ME", maryland: "MD", massachusetts: "MA", michigan: "MI", minnesota: "MN",
+  mississippi: "MS", missouri: "MO", montana: "MT", nebraska: "NE", nevada: "NV",
+  "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
+  "north carolina": "NC", "north dakota": "ND", ohio: "OH", oklahoma: "OK",
+  oregon: "OR", pennsylvania: "PA", "rhode island": "RI", "south carolina": "SC",
+  "south dakota": "SD", tennessee: "TN", texas: "TX", utah: "UT", vermont: "VT",
+  virginia: "VA", washington: "WA", "west virginia": "WV", wisconsin: "WI",
+  wyoming: "WY",
+};
+
+const stripTags = (s) => String(s ?? "").replace(/<[^>]+>/g, " ");
+const fsisClean = (s) =>
+  stripTags(s)
+    .replace(/&amp;/g, "&")
+    .replace(/&#039;|&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim() || null;
+
+/** First present, non-empty value among candidate keys — tolerant of API drift. */
+function pick(obj, ...keys) {
+  for (const k of keys) {
+    const v = obj[k];
+    if (v != null && String(v).trim() !== "") return v;
+  }
+  return null;
+}
+
+/** "Jun 21, 2024" | "2024-06-21" | ISO → YYYYMMDD. */
+function toYmd(raw) {
+  if (!raw) return undefined;
+  const s = String(raw).trim();
+  const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return `${iso[1]}${iso[2]}${iso[3]}`;
+  const t = Date.parse(s);
+  if (Number.isNaN(t)) return undefined;
+  const d = new Date(t);
+  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+}
+
+/** FSIS lists full state names, "Nationwide", or abbreviations — normalize to abbrevs. */
+function parseFsisStates(raw) {
+  const text = fsisClean(raw) ?? "";
+  if (!text) return { states: [], nationwide: false };
+  if (/nationwide/i.test(text)) return { states: [], nationwide: true };
+  const states = [];
+  for (const part of text.split(/[,;/]| and /i)) {
+    const name = part.trim();
+    if (!name) continue;
+    if (/^[A-Z]{2}$/.test(name)) states.push(name);
+    else if (STATE_ABBR[name.toLowerCase()]) states.push(STATE_ABBR[name.toLowerCase()]);
+  }
+  return { states: [...new Set(states)], nationwide: false };
+}
+
+/**
+ * Official notice URL. FSIS exposes a dedicated field_recall_url (a bare URL or
+ * site-relative path); fall back to an anchor href embedded in an HTML field.
+ */
+function recallUrl(r) {
+  const toHttps = (u) => u.replace(/^http:\/\//i, "https://");
+  const direct = fsisClean(pick(r, "field_recall_url"));
+  if (direct) return toHttps(/^https?:\/\//i.test(direct) ? direct : `${FSIS_RECALL_BASE}${direct}`);
+  for (const f of [pick(r, "field_title"), pick(r, "field_en_press_release")]) {
+    const href = (String(f ?? "").match(/href="([^"]+)"/) ?? [])[1];
+    if (href) return toHttps(href.startsWith("http") ? href : `${FSIS_RECALL_BASE}${href}`);
+  }
+  return null;
+}
+
+function normalizeFsis(r) {
+  const { states, nationwide } = parseFsisStates(pick(r, "field_states", "field_state"));
+  const reportDate = toYmd(pick(r, "field_recall_date", "field_year_recall_date"));
+  const recallNumber = fsisClean(pick(r, "field_recall_number")) ?? "—";
+  const active = /true|active|open/i.test(String(pick(r, "field_active_notice") ?? ""));
+  return {
+    id: `fsis-${recallNumber}`,
+    recallNumber,
+    status: active ? "Ongoing" : "Completed",
+    classification: fsisClean(pick(r, "field_recall_classification")) ?? "—",
+    productDescription:
+      fsisClean(pick(r, "field_product_items", "field_prod_items", "field_summary", "field_title")) ??
+      "",
+    reason: fsisClean(pick(r, "field_recall_reason", "field_recall_type")) ?? "",
+    recallingFirm: fsisClean(pick(r, "field_establishment", "field_company_media_contact")) ?? "—",
+    distributionPattern: fsisClean(pick(r, "field_states", "field_state")) ?? "",
+    distributionStates: states,
+    nationwide,
+    reportDate,
+    recallInitiationDate: reportDate,
+    country: "US",
+    agency: "FSIS",
+    url: recallUrl(r),
+    pathogen: detectPathogen(
+      [
+        fsisClean(pick(r, "field_summary")),
+        fsisClean(pick(r, "field_title")),
+        fsisClean(pick(r, "field_product_items")),
+        fsisClean(pick(r, "field_recall_reason")),
+        recallUrl(r),
+      ].join(" ")
+    ),
+  };
+}
+
+/**
+ * Fetch and normalize the USDA FSIS recall feed, floored to the last 3 years
+ * (override with `since`, YYYYMMDD) and capped. Each row carries agency "FSIS"
+ * and a detected `pathogen` id. Throws if the WAF blocks the request.
+ */
+export async function fetchFsisRecalls({ since } = {}) {
+  const res = await fetch(FSIS_API, { headers: FSIS_HEADERS });
+  if (!res.ok) throw new Error(`FSIS API ${res.status} (WAF may be blocking this host)`);
+  const raw = await res.json();
+  const rows = Array.isArray(raw) ? raw : Array.isArray(raw?.data) ? raw.data : [];
+  const floor = since ?? floorYmd(WINDOW_YEARS);
+  return rows
+    .map(normalizeFsis)
+    .filter((r) => r.reportDate && r.reportDate >= floor)
+    .sort((a, b) => (b.reportDate ?? "").localeCompare(a.reportDate ?? ""))
+    .slice(0, MAX_FSIS);
 }
 
 // ─── FDA CORE outbreak table (scraped) ──────────────────────────────────────
@@ -115,6 +379,9 @@ export async function listActiveOutbreaks() {
 }
 
 // Hand-verified detail (mirrors the app's cited layer), keyed by FDA ref #.
+// This mirrors src/data/outbreaks.ts and must be kept in sync by hand — there is
+// no shared build step yet, so a new curated outbreak has to be added in both
+// places. Consumed by the outbreak and food tools alike.
 export const CURATED = {
   "1390": {
     caseCount: 1644,
