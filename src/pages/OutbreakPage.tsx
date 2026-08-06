@@ -115,9 +115,9 @@ export function OutbreakPage() {
     <div className="space-y-8">
       {backLink}
 
-      <OutbreakDetail outbreak={ob} />
-
       <OutbreakGrounding outbreak={ob} pathogen={matchedPathogen} />
+
+      <OutbreakDetail outbreak={ob} />
 
       {/* What to avoid on the shelf — the shelf-recognition digest */}
       {avoidance.length > 0 && (
