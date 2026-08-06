@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Loader2, Sprout, Globe, Phone, ChevronLeft, ChevronRight } from "lucide-react";
-import { findMarketsNear, DIRECTORIES, DEFAULT_DIRECTORY } from "@/data/markets";
+import { findAllMarketsNear, DIRECTORIES, type MergedMarket } from "@/data/markets";
 import { isMapsEnabled } from "@/data/mapbox";
-import type { GeoZip, Market, UsdaDirectory } from "@/data/types";
+import type { GeoZip, UsdaDirectory } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { MapViewLazy as MapView, type MapMarker } from "@/components/MapViewLazy";
 import { EmptyState, InfoNote, MapsDisabledNote } from "@/components/common";
 
@@ -17,20 +18,24 @@ function formatPhone(digits: string): string {
 
 const PAGE_SIZES = [10, 20, 40, 50];
 
+/** "all" shows the full merged list; a directory id narrows to that type. */
+type Filter = UsdaDirectory | "all";
+
 export function MarketsSection({ geo }: { geo: GeoZip | null }) {
   const mapsOn = isMapsEnabled();
-  const [directory, setDirectory] = useState<UsdaDirectory>(DEFAULT_DIRECTORY);
+  const [filter, setFilter] = useState<Filter>("all");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
-  const info = DIRECTORIES.find((d) => d.id === directory) ?? DIRECTORIES[0];
-  const markets = useAsync<Market[]>(
-    (signal) => findMarketsNear(geo!, 25, signal, directory),
-    [geo?.zip, directory],
+
+  // One fetch pulls every directory at once, then merges same-place listings.
+  const markets = useAsync<MergedMarket[]>(
+    (signal) => findAllMarketsNear(geo!, 25, signal),
+    [geo?.zip],
     !!geo && mapsOn
   );
 
-  // Back to page 1 whenever the result set or page size changes.
-  useEffect(() => setPage(1), [directory, geo?.zip, pageSize]);
+  // Back to page 1 whenever the filter, ZIP, or page size changes.
+  useEffect(() => setPage(1), [filter, geo?.zip, pageSize]);
 
   if (!mapsOn) return <MapsDisabledNote />;
   if (!geo) {
@@ -39,11 +44,14 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
     );
   }
 
-  const list = markets.data ?? [];
+  const all = markets.data ?? [];
+  const list =
+    filter === "all" ? all : all.filter((m) => m.directories.includes(filter));
+
   const pageCount = Math.max(1, Math.ceil(list.length / pageSize));
   const clampedPage = Math.min(page, pageCount);
   const pageItems = list.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
-  // Map shows every result; only the tiles below paginate.
+  // Map shows every filtered result; only the tiles below paginate.
   const mapMarkers: MapMarker[] = list.map((m) => ({
     id: m.id,
     lat: m.lat ?? 0,
@@ -57,32 +65,46 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
     website: m.website,
   }));
 
+  const activeInfo = filter === "all" ? null : DIRECTORIES.find((d) => d.id === filter);
+  const noun = activeInfo ? activeInfo.label.toLowerCase() : "local food sources";
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label="Directory type">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by directory type">
+        <button
+          aria-pressed={filter === "all"}
+          onClick={() => setFilter("all")}
+          className={cn(
+            "rounded-full border px-3 py-1 text-sm transition-colors",
+            filter === "all"
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border text-muted-foreground hover:text-foreground"
+          )}
+        >
+          All
+        </button>
         {DIRECTORIES.map((d) => (
           <button
             key={d.id}
-            role="tab"
-            aria-selected={d.id === directory}
-            onClick={() => setDirectory(d.id)}
+            aria-pressed={d.id === filter}
+            onClick={() => setFilter(d.id)}
             className={cn(
               "rounded-full border px-3 py-1 text-sm transition-colors",
-              d.id === directory
+              d.id === filter
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border text-muted-foreground hover:text-foreground"
             )}
           >
-            {d.label}
+            {d.emoji} {d.label}
           </button>
         ))}
       </div>
 
       <InfoNote>
         Buying whole, local produce and washing it yourself lets you control handling and reduce
-        exposure to recalled pre-packaged products. Listings below come from the USDA Local Food
-        Directories ({info.label.toLowerCase()}) within 25 miles of {geo.place}. Always confirm hours
-        before visiting — call ahead.
+        exposure to recalled pre-packaged products. Listings below combine all five USDA Local Food
+        Directories within 25 miles of {geo.place} — a farm that appears in several shows one tile
+        with a badge for each kind it offers. Always confirm hours before visiting — call ahead.
       </InfoNote>
 
       {markets.error && (
@@ -100,30 +122,40 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
 
       {markets.loading && (
         <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Finding {info.label.toLowerCase()} near{" "}
-          {geo.place}…
+          <Loader2 className="mr-2 size-4 animate-spin" /> Finding local food sources near {geo.place}…
         </div>
       )}
 
       {!markets.loading && !markets.error &&
         (list.length === 0 ? (
           <EmptyState>
-            No {info.label.toLowerCase()} found within 25 miles. Try the{" "}
-            <a
-              className="text-primary hover:underline"
-              href={`https://www.usdalocalfoodportal.com/fe/fdirectory_${directory}/`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              USDA Local Food Directory
-            </a>
-            .
+            {filter === "all" ? (
+              <>
+                No local food sources found within 25 miles. Try the{" "}
+                <a
+                  className="text-primary hover:underline"
+                  href="https://www.usdalocalfoodportal.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  USDA Local Food Directory
+                </a>
+                .
+              </>
+            ) : (
+              <>
+                No {noun} within 25 miles.{" "}
+                <button className="text-primary hover:underline" onClick={() => setFilter("all")}>
+                  Show all local food sources
+                </button>
+              </>
+            )}
           </EmptyState>
         ) : (
           <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span className="tabular-nums">
-              {list.length} {info.label.toLowerCase()} found
+              {list.length} {noun} found
             </span>
             <label className="flex items-center gap-2">
               Per page
@@ -151,6 +183,17 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                       {m.address && (
                         <div className="text-xs text-muted-foreground">{m.address}</div>
                       )}
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {m.directories.map((id) => {
+                          const d = DIRECTORIES.find((x) => x.id === id);
+                          if (!d) return null;
+                          return (
+                            <Badge key={id} variant="secondary">
+                              {d.emoji} {d.label}
+                            </Badge>
+                          );
+                        })}
+                      </div>
                       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                         <span className="tabular-nums text-muted-foreground">
                           {(m.distanceMi ?? 0).toFixed(1)} mi

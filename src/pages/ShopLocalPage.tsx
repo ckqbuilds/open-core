@@ -13,7 +13,7 @@ export function ShopLocalPage() {
       <PageHeader
         icon={<ShoppingBasket className="size-6 text-primary" />}
         title="Shop local"
-        description="Local food sources near you, from the USDA Local Food Directories. Buying whole, local produce and washing it yourself lets you control handling and sidestep recalled pre-packaged products."
+        description="Every local food source near you, with what each one offers — merged from all five USDA Local Food Directories. Buying whole, local produce and washing it yourself lets you control handling and sidestep recalled pre-packaged products."
       />
 
       <MarketsSection geo={geo} />
@@ -22,7 +22,8 @@ export function ShopLocalPage() {
       <section>
         <h2 className="text-lg font-semibold">What are these?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          The USDA tracks five kinds of local food sources. Use the filters above to browse each.
+          The USDA tracks five kinds of local food sources. Every one near you is listed together
+          above; use the filter pills to narrow to a single kind.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {DIRECTORIES.map((d) => (
