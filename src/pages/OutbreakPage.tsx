@@ -10,6 +10,7 @@ import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { useZipContext } from "@/hooks/ZipContext";
 import { OutbreakDetail } from "@/components/OutbreakDetail";
+import { OutbreakGrounding } from "@/components/OutbreakGrounding";
 import { RecallRow } from "@/components/RecallRow";
 import { AvoidanceCard } from "@/components/AvoidanceCard";
 import {
@@ -115,6 +116,8 @@ export function OutbreakPage() {
       {backLink}
 
       <OutbreakDetail outbreak={ob} />
+
+      <OutbreakGrounding outbreak={ob} pathogen={matchedPathogen} />
 
       {/* What to avoid on the shelf — the shelf-recognition digest */}
       {avoidance.length > 0 && (
