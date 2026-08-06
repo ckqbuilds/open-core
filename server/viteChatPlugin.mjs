@@ -26,6 +26,7 @@ export function chatDevPlugin() {
         const x = url.searchParams.get("x");
         const y = url.searchParams.get("y");
         const radius = url.searchParams.get("radius");
+        const directory = url.searchParams.get("directory");
         res.setHeader("Content-Type", "application/json");
         if (!isMarketsConfigured()) {
           res.statusCode = 503;
@@ -38,7 +39,7 @@ export function chatDevPlugin() {
           return;
         }
         try {
-          const markets = await fetchUsdaMarkets({ x, y, radius: radius ? Number(radius) : 25 });
+          const markets = await fetchUsdaMarkets({ x, y, radius: radius ? Number(radius) : 25, directory });
           res.end(JSON.stringify({ markets }));
         } catch (err) {
           res.statusCode = 502;
