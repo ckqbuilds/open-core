@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2 } from "lucide-react";
 import { fetchRelevantRecalls } from "@/data/openfda";
-import { loadFsisRecalls } from "@/data/fsis";
+import { loadFsisRecalls, type FsisFeed } from "@/data/fsis";
 import { classifyRecall } from "@/data/contaminants";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
@@ -14,6 +15,7 @@ import { RecallRow } from "@/components/RecallRow";
 import { ProductCheck } from "@/components/ProductCheck";
 import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
+import { FreshnessBadge } from "@/components/FreshnessBadge";
 import { StatCard } from "@/components/StatCard";
 import { EmptyState } from "@/components/common";
 
@@ -40,8 +42,11 @@ const TYPE_OPTIONS = [
   { value: "chemical", label: "⚗️ Chemical" },
   { value: "physical", label: "🔩 Physical" },
   { value: "allergenic", label: "🥜 Allergenic" },
-  { value: "other", label: "🏷️ Quality / labeling" },
+  { value: "other", label: "Unclassified" },
 ];
+
+/** Default view: Ongoing recalls reported within this many days. */
+const CURRENT_DAYS = 90;
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
@@ -53,27 +58,37 @@ export function RecallsPage() {
   const [typeFilter, setTypeFilter] = useState("all");
 
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
-  const fsis = useAsync<Recall[]>(
-    async (signal) => (await loadFsisRecalls(signal)).recalls,
-    []
-  );
+  const fsis = useAsync<FsisFeed>((signal) => loadFsisRecalls(signal), []);
+  const [archive, setArchive] = useState(false);
 
   // The two regulatory feeds, newest first. FSIS covers meat/poultry openFDA can't.
   const combined = useMemo(() => {
     const key = (r: Recall) => r.reportDate ?? r.recallInitiationDate ?? "";
-    return [...(recalls.data ?? []), ...(fsis.data ?? [])].sort((a, b) =>
+    return [...(recalls.data ?? []), ...(fsis.data?.recalls ?? [])].sort((a, b) =>
       key(b).localeCompare(key(a))
     );
   }, [recalls.data, fsis.data]);
 
+  // Default scope is Ongoing + last 90 days; Archive or an explicit status lifts it.
+  const defaultScope = !archive && statusFilter === "all";
+  const scoped = useMemo(() => {
+    if (!defaultScope) return combined;
+    const d = new Date();
+    d.setDate(d.getDate() - CURRENT_DAYS);
+    const cutoff = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+    return combined.filter(
+      (r) => r.status === "Ongoing" && (r.reportDate ?? r.recallInitiationDate ?? "") >= cutoff
+    );
+  }, [combined, defaultScope]);
+
   const stats = useMemo(
     () => ({
-      total: combined.length,
-      classI: combined.filter((r) => r.classification === "Class I").length,
-      fsis: combined.filter((r) => r.agency === "FSIS").length,
-      nationwide: combined.filter((r) => r.nationwide).length,
+      total: scoped.length,
+      classI: scoped.filter((r) => r.classification === "Class I").length,
+      fsis: scoped.filter((r) => r.agency === "FSIS").length,
+      nationwide: scoped.filter((r) => r.nationwide).length,
     }),
-    [combined]
+    [scoped]
   );
 
   const scopeOptions = [
@@ -83,7 +98,7 @@ export function RecallsPage() {
   ];
 
   const filtered = useMemo(() => {
-    let list = combined;
+    let list = scoped;
     if (agencyFilter !== "all") list = list.filter((r) => (r.agency ?? "FDA") === agencyFilter);
     if (classFilter !== "all") list = list.filter((r) => r.classification === classFilter);
     if (statusFilter !== "all") list = list.filter((r) => r.status === statusFilter);
@@ -92,16 +107,26 @@ export function RecallsPage() {
       list = list.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr));
     if (typeFilter !== "all") list = list.filter((r) => classifyRecall(r).type === typeFilter);
     return list;
-  }, [combined, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, geo]);
+  }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, geo]);
 
-  const total = combined.length;
+  const total = scoped.length;
+  const autoScoped = scopeFilter === "mystate" && !!geo;
   const filtersActive =
     classFilter !== "all" ||
     statusFilter !== "all" ||
     scopeFilter !== "mystate" ||
     agencyFilter !== "all" ||
-    typeFilter !== "all";
+    typeFilter !== "all" ||
+    archive;
+  const onlyArchive =
+    archive &&
+    classFilter === "all" &&
+    statusFilter === "all" &&
+    scopeFilter === "mystate" &&
+    agencyFilter === "all" &&
+    typeFilter === "all";
   const resetFilters = () => {
+    setArchive(false);
     setClassFilter("all");
     setStatusFilter("all");
     setScopeFilter("mystate");
@@ -114,8 +139,13 @@ export function RecallsPage() {
       <PageHeader
         icon={<Package className="size-6 text-primary" />}
         title="Active recalls"
-        description="Two regulatory feeds together: produce and pathogen recalls from the openFDA food enforcement database (FDA), plus meat, poultry, and egg recalls from USDA FSIS."
-        actions={<KeyButton />}
+        description="Ongoing recalls reported in the last 90 days, from two regulatory feeds: the openFDA food enforcement database (FDA) and USDA FSIS for meat, poultry, and egg. Completed, terminated, and older recalls are in the archive."
+        actions={
+          <div className="flex flex-col items-end gap-2">
+            <KeyButton />
+            <FreshnessBadge kind="fsis" live={fsis.data} loading={fsis.loading} failed={!!fsis.error} />
+          </div>
+        }
       />
 
       <ProductCheck recalls={combined} />
@@ -181,6 +211,31 @@ export function RecallsPage() {
             options={TYPE_OPTIONS}
             className="w-full min-w-[10rem] sm:w-auto"
           />
+          <div
+            role="group"
+            aria-label="Recall scope"
+            className="inline-flex h-10 items-center rounded-md border border-input p-0.5"
+          >
+            {[
+              { v: false, label: "Current" },
+              { v: true, label: "Archive" },
+            ].map((o) => (
+              <button
+                key={o.label}
+                type="button"
+                aria-pressed={archive === o.v}
+                onClick={() => setArchive(o.v)}
+                className={cn(
+                  "h-8 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  archive === o.v
+                    ? "bg-secondary text-secondary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
           {filtersActive && (
             <Button variant="ghost" size="sm" onClick={resetFilters}>
               <RotateCcw className="size-4" /> Reset
@@ -205,12 +260,25 @@ export function RecallsPage() {
 
       {!recalls.loading && !recalls.error && (
         <>
+          {autoScoped && geo && (
+            <p className="text-sm text-muted-foreground">
+              Showing recalls that reach {geo.stateAbbr} ·{" "}
+              <button
+                type="button"
+                className="font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={() => setScopeFilter("all")}
+              >
+                Show all
+              </button>
+            </p>
+          )}
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Recalls per month</CardTitle>
               <CardDescription>
-                Showing {filtered.length} of {total} matching records
-                {filtersActive ? " (filtered)" : ""}, last 18 months
+                Showing {filtered.length} of {total}{" "}
+                {defaultScope ? "ongoing recalls from the last 90 days" : "records in the archive"}
+                {filtersActive && !onlyArchive ? " (filtered)" : ""}
               </CardDescription>
             </CardHeader>
             <CardContent>

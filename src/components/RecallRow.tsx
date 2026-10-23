@@ -2,6 +2,7 @@ import { Card, Chip } from "@heroui/react";
 import type { Recall } from "@/data/types";
 import { classifyRecall } from "@/data/contaminants";
 import { ContaminantBadge } from "@/components/ContaminantBadge";
+import { cleanFirmName, repairEncoding } from "@/data/avoidance";
 import { formatFdaDate } from "@/lib/utils";
 
 type ChipColor = "danger" | "warning" | "default" | "success" | "accent";
@@ -43,10 +44,10 @@ export function RecallRow({ recall }: { recall: Recall }) {
           ))}
         {date && <span className="ml-auto text-xs text-muted-foreground">{date}</span>}
       </div>
-      <p className="mt-2 text-sm font-medium">{recall.productDescription}</p>
-      <p className="mt-1 text-sm text-muted-foreground">{recall.reason}</p>
+      <p className="mt-2 text-sm font-medium">{repairEncoding(recall.productDescription)}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{repairEncoding(recall.reason)}</p>
       <p className="mt-1.5 text-xs text-muted-foreground">
-        Recalling firm: {recall.recallingFirm} ·{" "}
+        Recalling firm: {cleanFirmName(recall.recallingFirm)} ·{" "}
         {recall.url ? (
           <a
             href={recall.url}

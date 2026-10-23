@@ -77,7 +77,7 @@ export function OutbreakPage() {
 
   const backLink = (
     <Link
-      to="/"
+      to="/outbreaks"
       className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
     >
       <ArrowLeft className="size-4" /> All outbreaks

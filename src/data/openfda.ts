@@ -123,6 +123,13 @@ export function fetchRecallsByFood(
 
 /** Recent produce/leafy-green and pathogen recalls relevant to this tracker. */
 export function fetchRelevantRecalls(limit = 60, signal?: AbortSignal) {
+  // Floor to the last 3 years. Without a date range openFDA does not honor
+  // `sort=report_date:desc` on this OR query and hands back a 2012–2026 grab
+  // bag whose newest record is months old, so "newest first" was a lie and a
+  // "last 90 days" default found nothing.
+  const since = new Date();
+  since.setFullYear(since.getFullYear() - 3);
+  const sinceDate = since.toISOString().slice(0, 10).replace(/-/g, "");
   const clauses = [
     "reason_for_recall:cyclospora",
     "reason_for_recall:listeria",
@@ -132,5 +139,6 @@ export function fetchRelevantRecalls(limit = 60, signal?: AbortSignal) {
     'product_description:"leafy greens"',
     "product_description:spinach",
   ];
-  return fetchRecalls({ search: orClauses(clauses), limit, signal });
+  const search = `(${orClauses(clauses)}) AND report_date:[${sinceDate} TO 99991231]`;
+  return fetchRecalls({ search, limit, signal });
 }

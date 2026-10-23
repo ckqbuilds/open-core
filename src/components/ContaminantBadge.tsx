@@ -17,8 +17,8 @@ const TONE_CLASSES: Record<ContaminantType, string> = {
 
 /**
  * A small badge for a recall's heuristically-derived hazard type. It shows the
- * type emoji + label (e.g. "🦠 Biological · bacteria"). "Other" is styled quiet
- * on purpose, since it is a quality/labeling bucket rather than a contaminant.
+ * type emoji + label (e.g. "🦠 Biological · bacteria"). "Other" (shown as
+ * "Unclassified") is styled quiet on purpose: the reason text named no hazard.
  */
 export function ContaminantBadge({
   classification,
@@ -37,8 +37,11 @@ export function ContaminantBadge({
       )}
       title="Hazard type — categorized from the recall's reason text, not an official FDA field"
     >
-      <span aria-hidden>{info.emoji}</span>
-      {classification.label}
+      {info.emoji && <span aria-hidden>{info.emoji}</span>}
+      <span aria-hidden>{classification.label}</span>
+      <span className="sr-only">
+        {classification.label} (from reason text, not an official field)
+      </span>
     </span>
   );
 }
