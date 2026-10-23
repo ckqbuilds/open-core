@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { MapPin, Loader2, Moon, Sun, Menu, X } from "lucide-react";
 import { useZipContext } from "@/hooks/ZipContext";
 import { useTheme } from "@/hooks/useTheme";
@@ -16,6 +16,8 @@ const LINKS = [
 
 export function TopNav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  // The home front door carries its own ZIP field.
+  const onHome = useLocation().pathname === "/";
 
   // Close on Escape.
   useEffect(() => {
@@ -51,7 +53,7 @@ export function TopNav() {
         {/* Mobile: spacer pushes the right cluster over */}
         <div className="flex-1 md:hidden" />
 
-        <NavZip />
+        {!onHome && <NavZip />}
         <ThemeToggle />
 
         {/* Mobile: hamburger */}
@@ -149,7 +151,7 @@ function NavZip() {
       )}
       <div role="status" aria-live="polite" className="contents">
         {geoError && (
-          <span className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-destructive/40 bg-card px-2 py-1 text-xs text-destructive shadow-md">
+          <span className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-destructive/40 bg-card px-2 py-1 text-xs text-[color:var(--status-critical)] shadow-md">
             {geoError}
           </span>
         )}

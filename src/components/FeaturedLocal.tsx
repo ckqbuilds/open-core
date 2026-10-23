@@ -74,20 +74,8 @@ export function FeaturedLocal({ geo }: { geo: GeoZip | null }) {
     );
   }
 
-  // Errors and true emptiness both resolve to a quiet, honest fallback.
-  if (markets.error || list.length === 0) {
-    return (
-      <Frame>
-        <Eyebrow />
-        <p className="mt-2 text-sm text-muted-foreground">
-          No local food sources to feature near {geo.place} right now.{" "}
-          <Link className="font-medium text-primary hover:underline" to="/shop-local">
-            Browse Shop local →
-          </Link>
-        </p>
-      </Frame>
-    );
-  }
+  // Errors and true emptiness: nothing to feature. Shop local explains on its own page.
+  if (markets.error || list.length === 0) return null;
 
   const m = list[Math.min(index, list.length - 1)];
 

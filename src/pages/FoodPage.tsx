@@ -12,7 +12,7 @@ import {
   NOT_YET_IDENTIFIED,
   type FoodEntry,
 } from "@/data/foods";
-import { matchesOutbreakPathogen } from "@/data/symptoms";
+import { matchesOutbreakPathogen, PATHOGENS } from "@/data/symptoms";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
@@ -85,7 +85,10 @@ export function FoodPage() {
     () =>
       buildAvoidanceDigest(
         entry ? [...entry.fdaRecalls, ...entry.fsisRecalls] : [],
-        entry?.namedEntities ?? []
+        entry?.namedEntities ?? [],
+        PATHOGENS.filter((p) => entry?.outbreaks.some((o) => matchesOutbreakPathogen(p, o.pathogen))).map(
+          (p) => p.id
+        )
       ),
     [entry]
   );
@@ -146,7 +149,7 @@ export function FoodPage() {
             </section>
           )}
           {/* What to avoid on the shelf — the shelf-recognition digest */}
-          <AvoidanceDigest digest={digest} geo={geo} />
+          <AvoidanceDigest digest={digest} geo={geo} foodLabel={category.label.toLowerCase()} />
 
           {/* Coordinated recalls across FDA + USDA FSIS */}
           {recalls.length > 0 && (

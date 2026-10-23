@@ -6,6 +6,7 @@ import type { AvoidanceDigest as Digest, AvoidanceEvent, AvoidanceLine, NamedRet
 import type { GeoZip } from "@/data/types";
 import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { SourceLink } from "./common";
+import { PATHOGENS } from "@/data/symptoms";
 import { formatFdaDate, formatIso, cn } from "@/lib/utils";
 
 const RETAIL_PREVIEW = 6;
@@ -17,8 +18,19 @@ const STATES_PREVIEW = 8;
  * restaurants folded away, lot codes on request, and the reader's own state
  * called out. Curated retailers an FDA/CDC record names follow the events.
  */
-export function AvoidanceDigest({ digest, geo }: { digest: Digest; geo: GeoZip | null }) {
+export function AvoidanceDigest({
+  digest,
+  geo,
+  foodLabel,
+}: {
+  digest: Digest;
+  geo: GeoZip | null;
+  /** Lowercase food name for the "Other recalls naming …" sub-heading. */
+  foodLabel?: string;
+}) {
   if (digest.events.length === 0 && digest.retailers.length === 0) return null;
+  const tied = digest.events.filter((e) => e.tiedPathogen);
+  const other = digest.events.filter((e) => !e.tiedPathogen);
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
@@ -30,7 +42,15 @@ export function AvoidanceDigest({ digest, geo }: { digest: Digest; geo: GeoZip |
         listed means the product is under recall, not that a store is unsafe.
       </p>
       <div className="space-y-3">
-        {digest.events.map((ev) => (
+        {tied.map((ev) => (
+          <EventCard key={ev.id} ev={ev} geo={geo} />
+        ))}
+        {tied.length > 0 && other.length > 0 && (
+          <h3 className="pt-2 text-sm font-semibold text-muted-foreground">
+            Other recalls naming {foodLabel ?? "this food"}
+          </h3>
+        )}
+        {other.map((ev) => (
           <EventCard key={ev.id} ev={ev} geo={geo} />
         ))}
         {digest.retailers.map((r) => (
@@ -70,6 +90,12 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
       </div>
 
       <h3 className="mt-2.5 text-base font-semibold leading-snug">{ev.firm}</h3>
+      {ev.tiedPathogen && (
+        <p className="mt-0.5 text-xs font-medium text-muted-foreground">
+          Tied to the active {PATHOGENS.find((p) => p.id === ev.tiedPathogen)?.name ?? ev.tiedPathogen}{" "}
+          outbreak by pathogen, not a confirmed link
+        </p>
+      )}
       {ev.reasons[0] && <p className="mt-0.5 text-sm text-muted-foreground">{ev.reasons[0]}</p>}
 
       <Reach ev={ev} geo={geo} />

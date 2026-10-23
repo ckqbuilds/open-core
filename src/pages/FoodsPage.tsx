@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Utensils, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Spinner } from "@heroui/react";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRelevantRecalls } from "@/data/openfda";
@@ -85,14 +86,24 @@ export function FoodsPage() {
           <Spinner size="lg" /> Loading FDA, CDC &amp; FSIS activity…
         </div>
       ) : foods.length === 0 && unidentified.length === 0 ? (
-        <EmptyState>No foods are named in current outbreak or recall activity right now.</EmptyState>
+        searching ? (
+          <EmptyState>
+            No food or recall record mentions &ldquo;{query}&rdquo;. That is not a sign the food is
+            unaffected: records name products and firms, not every food.{" "}
+            <Link className="text-primary hover:underline" to="/recalls#check">
+              Check a product barcode
+            </Link>
+          </EmptyState>
+        ) : (
+          <EmptyState>No foods are named in current outbreak or recall activity right now.</EmptyState>
+        )
       ) : (
         <>
           <FeaturedLocal geo={geo} />
 
           <p className="text-sm text-muted-foreground tabular-nums">
             {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
-            {stats.recalls} open recalls (3 years)
+            {stats.recalls} recalls on record (3 years)
           </p>
 
           <InfoNote>

@@ -52,7 +52,9 @@ const CURRENT_DAYS = 90;
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
-  useDocumentTitle("Active recalls · OpenCORE");
+  const [archive, setArchive] = useState(false);
+  useDocumentTitle(archive ? "Recall archive · OpenCORE" : "Active recalls · OpenCORE");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const { geo } = useZipContext();
   const { hash } = useLocation();
   useEffect(() => {
@@ -66,7 +68,6 @@ export function RecallsPage() {
 
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
   const fsis = useAsync<FsisFeed>((signal) => loadFsisRecalls(signal), []);
-  const [archive, setArchive] = useState(false);
   const [trendOpen, setTrendOpen] = useState(false);
 
   // The two regulatory feeds, newest first. FSIS covers meat/poultry openFDA can't.
@@ -136,6 +137,13 @@ export function RecallsPage() {
     scopeFilter === "mystate" &&
     agencyFilter === "all" &&
     typeFilter === "all";
+  const activeCount = [
+    classFilter !== "all",
+    statusFilter !== "all",
+    scopeFilter !== "mystate",
+    agencyFilter !== "all",
+    typeFilter !== "all",
+  ].filter(Boolean).length;
   const resetFilters = () => {
     setArchive(false);
     setClassFilter("all");
@@ -149,8 +157,12 @@ export function RecallsPage() {
     <div className="space-y-8">
       <PageHeader
         icon={<Package className="size-6 text-primary" />}
-        title="Active recalls"
-        description="Ongoing recalls reported in the last 90 days, from two regulatory feeds: the openFDA food enforcement database (FDA) and USDA FSIS for meat, poultry, and egg. Completed, terminated, and older recalls are in the archive."
+        title={archive ? "Recall archive" : "Active recalls"}
+        description={
+          archive
+            ? "Every recall on record from the last 3 years, including completed and terminated ones, from two regulatory feeds: the openFDA food enforcement database (FDA) and USDA FSIS for meat, poultry, and egg."
+            : "Ongoing recalls reported in the last 90 days, from two regulatory feeds: the openFDA food enforcement database (FDA) and USDA FSIS for meat, poultry, and egg. Completed, terminated, and older recalls are in the archive."
+        }
         actions={
           <div className="flex flex-col items-end gap-2">
             <KeyButton />
@@ -197,7 +209,17 @@ export function RecallsPage() {
 
       <Card className="gap-4 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold">Filter recalls</h2>
+          <h2 className="hidden text-sm font-semibold md:block">Filter recalls</h2>
+          <button
+            type="button"
+            aria-expanded={filtersOpen}
+            aria-controls="recall-filters"
+            onClick={() => setFiltersOpen((o) => !o)}
+            className="inline-flex h-10 items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+          >
+            Filters{activeCount > 0 ? ` · ${activeCount} active` : ""}
+            <ChevronDown className={cn("size-4 transition-transform", filtersOpen && "rotate-180")} />
+          </button>
           <div className="flex items-center gap-2">
             {filtersActive && (
               <Button variant="ghost" size="sm" onClick={resetFilters}>
@@ -231,7 +253,13 @@ export function RecallsPage() {
             </div>
           </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[2fr_2fr_1fr]">
+        <div
+          id="recall-filters"
+          className={cn(
+            "gap-4 sm:grid-cols-2 md:grid lg:grid-cols-[2fr_2fr_1fr]",
+            filtersOpen ? "grid" : "hidden"
+          )}
+        >
           <fieldset className="min-w-0 space-y-1.5">
             <legend className="mb-1.5 text-xs font-medium text-muted-foreground">What</legend>
             <div className="grid gap-2 sm:grid-cols-2">

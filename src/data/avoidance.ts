@@ -11,6 +11,7 @@
  */
 import type { NamedEntity, Recall, SourceCitation } from "./types";
 import { STATE_ABBR } from "./geo";
+import { PATHOGENS, matchesOutbreakPathogen } from "./symptoms";
 
 /**
  * Pull UPC/EAN/GTIN barcodes out of free recall text (openFDA `code_info` and
@@ -261,6 +262,10 @@ export interface AvoidanceEvent {
   codes: string[];
   /** Retailers the notice names, if any. */
   retailers: string[];
+  /** Canonical ids of the pathogens these records name (Recall.pathogen). */
+  pathogens: string[];
+  /** Pathogen id shared with an active outbreak the caller passed in, if any. */
+  tiedPathogen?: string;
 }
 
 /** A curated retailer an FDA/CDC record names as selling a recalled product. */
@@ -327,7 +332,9 @@ const CLASS_RANK: Record<string, number> = { "Class I": 3, "Public Health Alert"
  */
 export function buildAvoidanceDigest(
   recalls: Recall[],
-  entities: NamedEntity[] = []
+  entities: NamedEntity[] = [],
+  /** Pathogen ids of the active outbreaks in scope; matching events sort first. */
+  pathogenIds: string[] = []
 ): AvoidanceDigest {
   const byKey = new Map<string, AvoidanceEvent & { lineKeys: Set<string> }>();
 
@@ -358,11 +365,17 @@ export function buildAvoidanceDigest(
         distribution: [],
         codes: [],
         retailers: [],
+        pathogens: [],
         lineKeys: new Set(),
       };
       byKey.set(key, ev);
     }
     ev.recordCount += 1;
+    // Recall.pathogen is set for some feeds; otherwise read the pathogen the reason itself names.
+    const named = r.pathogen
+      ? [r.pathogen]
+      : PATHOGENS.filter((p) => matchesOutbreakPathogen(p, r.reason)).map((p) => p.id);
+    ev.pathogens = uniq([...ev.pathogens, ...named]);
     ev.url ??= r.url;
     ev.retailListUrl ??= r.retailListUrl;
     ev.nationwide ||= r.nationwide;
@@ -385,9 +398,14 @@ export function buildAvoidanceDigest(
     .map(({ lineKeys: _drop, ...ev }) => {
       void _drop;
       ev.states.sort();
+      ev.tiedPathogen = ev.pathogens.find((id) => pathogenIds.includes(id));
       return ev;
     })
     .sort((a, b) => {
+      // Records naming an active outbreak's pathogen lead; everything else keeps its order.
+      const ta = a.tiedPathogen ? 1 : 0;
+      const tb = b.tiedPathogen ? 1 : 0;
+      if (ta !== tb) return tb - ta;
       const ca = CLASS_RANK[a.classification ?? ""] ?? 0;
       const cb = CLASS_RANK[b.classification ?? ""] ?? 0;
       if (ca !== cb) return cb - ca;

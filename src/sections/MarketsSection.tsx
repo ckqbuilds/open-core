@@ -22,7 +22,14 @@ const PAGE_SIZES = [10, 20, 40, 50];
 /** "all" shows the full merged list; a directory id narrows to that type. */
 type Filter = UsdaDirectory | "all";
 
-export function MarketsSection({ geo }: { geo: GeoZip | null }) {
+export function MarketsSection({
+  geo,
+  onCount,
+}: {
+  geo: GeoZip | null;
+  /** Reports how many sources are listed (0 when nothing is). */
+  onCount?: (n: number) => void;
+}) {
   const mapsOn = isMapsEnabled();
   const [filter, setFilter] = useState<Filter>("all");
   const [page, setPage] = useState(1);
@@ -34,6 +41,9 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
     [geo?.zip],
     !!geo && mapsOn
   );
+
+  const listed = markets.data?.length ?? 0;
+  useEffect(() => onCount?.(geo && mapsOn ? listed : 0), [onCount, listed, geo, mapsOn]);
 
   // Back to page 1 whenever the filter, ZIP, or page size changes.
   useEffect(() => setPage(1), [filter, geo?.zip, pageSize]);

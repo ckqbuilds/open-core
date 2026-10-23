@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card } from "@heroui/react";
 import { ShoppingBasket } from "lucide-react";
 import { MarketsSection } from "@/sections/MarketsSection";
@@ -10,6 +11,7 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 export function ShopLocalPage() {
   useDocumentTitle("Shop local · OpenCORE");
   const { geo } = useZipContext();
+  const [listed, setListed] = useState(0);
   return (
     <div className="space-y-8">
       <PageHeader
@@ -18,14 +20,16 @@ export function ShopLocalPage() {
         description="Every local food source near you, with what each one offers — merged from all five USDA Local Food Directories. Buying whole, local produce and washing it yourself lets you control handling and sidestep recalled pre-packaged products."
       />
 
-      <MarketsSection geo={geo} />
+      <MarketsSection geo={geo} onCount={setListed} />
 
       {/* What each directory type means, so people can pick the right one. */}
       <section>
         <h2 className="text-lg font-semibold">What are these?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          The USDA tracks five kinds of local food sources. Every one near you is listed together
-          above; use the filter pills to narrow to a single kind.
+          The USDA tracks five kinds of local food sources.{" "}
+          {listed > 0
+            ? "Every one near you is listed together above; use the filter pills to narrow to a single kind."
+            : "Enter your ZIP to list the ones near you."}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {DIRECTORIES.map((d) => (

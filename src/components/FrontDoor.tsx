@@ -42,10 +42,10 @@ export function FrontDoor({
             className="pl-9 text-base sm:text-sm"
           />
         </div>
-        <p role="status" aria-live="polite" className="min-h-5 text-sm text-muted-foreground">
-          {result &&
-            (result.foods === 0 && result.recalls === 0 ? (
-              <>No food or recall record mentions '{result.query}'. Try a plainer word, or check a barcode.</>
+        {result && (
+        <p role="status" aria-live="polite" className="text-sm text-muted-foreground">
+          {(result.foods === 0 && result.recalls === 0 ? (
+              <>No matches for '{result.query}'.</>
             ) : (
               <>
                 <span className="tabular-nums">{result.foods}</span> food{result.foods === 1 ? "" : "s"} ·{" "}
@@ -59,6 +59,7 @@ export function FrontDoor({
               </>
             ))}
         </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -87,7 +88,7 @@ export function FrontDoor({
         </div>
         <p id="home-zip-note" className="min-w-0 flex-1 text-sm text-muted-foreground sm:max-w-md">
           {geoError ? (
-            <span role="status" className="text-destructive">{geoError}</span>
+            <span role="status" className="text-[color:var(--status-critical)]">{geoError}</span>
           ) : geo ? (
             <>Showing {geo.place}, {geo.stateAbbr}. Your ZIP stays in this browser.</>
           ) : (

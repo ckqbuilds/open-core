@@ -14,11 +14,13 @@ interface ChipStyle {
 /** Map an FDA/FSIS classification to a chip color by severity. */
 export function classificationColor(c?: string): ChipColor {
   if (c === "Class I") return "danger";
-  if (c === "Class III") return "default";
+  if (c === "Class III" || c === "Not Yet Classified") return "default";
   return "warning"; // Class II and FSIS Public Health Alert
 }
 
 export function classificationChip(c?: string): ChipStyle {
+  // No class assigned yet: neutral and quiet, neither reassuring nor alarming.
+  if (c === "Not Yet Classified") return { color: "default", variant: "tertiary" };
   return { color: classificationColor(c), variant: "soft" };
 }
 

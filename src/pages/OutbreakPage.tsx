@@ -73,8 +73,8 @@ export function OutbreakPage() {
   // Shelf-recognition digest for this outbreak: curated named-entity brands +
   // the related recall records. Named sources only — no supply-chain inference.
   const digest = useMemo(
-    () => buildAvoidanceDigest([...(relatedRecalls.data ?? []), ...fsisRelated], ob?.namedEntities ?? []),
-    [ob?.namedEntities, relatedRecalls.data, fsisRelated]
+    () => buildAvoidanceDigest([...(relatedRecalls.data ?? []), ...fsisRelated], ob?.namedEntities ?? [], matchedPathogen ? [matchedPathogen.id] : []),
+    [ob?.namedEntities, matchedPathogen, relatedRecalls.data, fsisRelated]
   );
 
   const backLink = (
