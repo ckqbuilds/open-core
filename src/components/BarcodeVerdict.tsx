@@ -16,9 +16,17 @@ import { classificationChip, agencyChip, agencyLabel } from "@/lib/classificatio
  * recall", the honest claim we can make.
  */
 export function BarcodeVerdict({ matches }: { matches: RecallMatches }) {
-  if (matches.exact.length > 0) return <Recalled recalls={matches.exact} tier="exact" />;
-  if (matches.possible.length > 0) return <Recalled recalls={matches.possible} tier="possible" />;
-  return <NotFound />;
+  return (
+    <div role="status">
+      {matches.exact.length > 0 ? (
+        <Recalled recalls={matches.exact} tier="exact" />
+      ) : matches.possible.length > 0 ? (
+        <Recalled recalls={matches.possible} tier="possible" />
+      ) : (
+        <NotFound />
+      )}
+    </div>
+  );
 }
 
 function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possible" }) {

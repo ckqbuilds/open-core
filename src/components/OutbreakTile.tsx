@@ -17,7 +17,7 @@ export function OutbreakTile({ outbreak: ob }: { outbreak: Outbreak }) {
       // provided domProps are typed for a div, so cast when handing them to Link.
       render={(domProps) => (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <Link {...(domProps as any)} to={to} aria-label={`View details: ${ob.pathogen} outbreak`} />
+        <Link {...(domProps as any)} to={to} />
       )}
       className="group flex h-full flex-col gap-3 p-5 transition-colors hover:bg-secondary/40"
     >
@@ -57,6 +57,9 @@ export function OutbreakTile({ outbreak: ob }: { outbreak: Outbreak }) {
             ? `Onset ${formatIso(ob.firstIllnessDate)}–${formatIso(ob.lastIllnessDate)}`
             : `FDA #${ob.refId} · posted ${formatIso(ob.datePosted)}`}
         </div>
+        {ob.detailed && ob.datePosted && (
+          <div className="text-xs text-muted-foreground">Posted {formatIso(ob.datePosted)}</div>
+        )}
       </div>
     </Card>
   );

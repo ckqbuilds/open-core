@@ -1,6 +1,7 @@
 import { Card } from "@heroui/react";
 import { ExternalLink } from "lucide-react";
 import type { SourceCitation } from "@/data/types";
+import { formatIso } from "@/lib/utils";
 
 /** A citation link — every claim about a named entity must carry one. */
 export function SourceLink({ source }: { source: SourceCitation }) {
@@ -12,7 +13,7 @@ export function SourceLink({ source }: { source: SourceCitation }) {
       className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
     >
       <ExternalLink className="size-3" />
-      {source.agency} source ({source.date})
+      {source.agency} source ({formatIso(source.date)})
     </a>
   );
 }

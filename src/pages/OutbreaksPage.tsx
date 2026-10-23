@@ -6,11 +6,13 @@ import { useAsync } from "@/hooks/useAsync";
 import { OutbreakTile } from "@/components/OutbreakTile";
 import { FreshnessBadge } from "@/components/FreshnessBadge";
 import { PageHeader } from "@/components/PageHeader";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { StatCard } from "@/components/StatCard";
 import { EmptyState } from "@/components/common";
 
 /** Home: KPI row over every active FDA CORE outbreak, each tile linking out. */
 export function OutbreaksPage() {
+  useDocumentTitle("Active outbreaks · OpenCORE");
   const outbreaks = useAsync<LiveOutbreaks>((signal) => loadOutbreaks(signal), []);
 
   const active = useMemo(() => {
@@ -43,7 +45,7 @@ export function OutbreaksPage() {
       />
 
       {outbreaks.loading ? (
-        <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
+        <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
           <Spinner size="lg" /> Loading FDA outbreak table…
         </div>
       ) : active.length === 0 ? (

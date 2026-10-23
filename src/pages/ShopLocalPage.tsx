@@ -4,9 +4,11 @@ import { MarketsSection } from "@/sections/MarketsSection";
 import { DIRECTORIES } from "@/data/markets";
 import { useZipContext } from "@/hooks/ZipContext";
 import { PageHeader } from "@/components/PageHeader";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 /** Shop-safer alternative: USDA local food directories near your ZIP. */
 export function ShopLocalPage() {
+  useDocumentTitle("Shop local · OpenCORE");
   const { geo } = useZipContext();
   return (
     <div className="space-y-8">

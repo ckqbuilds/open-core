@@ -24,6 +24,7 @@ import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
 import { PageHeader } from "@/components/PageHeader";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { EmptyState, InfoNote } from "@/components/common";
 
 const RECALL_WINDOW_YEARS = 3;
@@ -37,6 +38,7 @@ export function FoodPage() {
   const { geo } = useZipContext();
   const { selected } = useRiskGroups();
   const category = foodId ? foodById(foodId) : undefined;
+  useDocumentTitle(category ? `${category.label} · OpenCORE` : "Food · OpenCORE");
 
   const recallSince = useMemo(() => {
     const d = new Date();
@@ -113,13 +115,12 @@ export function FoodPage() {
 
       <PageHeader
         icon={<span aria-hidden className="text-3xl leading-none">{category.emoji}</span>}
-        eyebrow="Food safety"
         title={category.label}
         description="Everything the app is tracking for this food, across FDA, CDC, and USDA FSIS."
       />
 
       {data.loading ? (
-        <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
+        <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" /> Loading {category.label.toLowerCase()} activity…
         </div>
       ) : entry && entry.outbreaks.length === 0 && recalls.length === 0 ? (

@@ -8,6 +8,7 @@ import { PATHOGENS, matchesOutbreakPathogen } from "@/data/symptoms";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useZipContext } from "@/hooks/ZipContext";
 import { OutbreakDetail } from "@/components/OutbreakDetail";
 import { OutbreakGrounding } from "@/components/OutbreakGrounding";
@@ -40,6 +41,7 @@ export function OutbreakPage() {
   const recallTerm = ob
     ? matchedPathogen?.matchTerms[0] ?? ob.pathogen.split(/[\s,]/)[0]
     : "";
+  useDocumentTitle(ob ? `${ob.pathogen} outbreak · OpenCORE` : "Outbreak · OpenCORE");
 
   // Only surface recalls from the last few years — an ongoing outbreak's
   // "related recalls" shouldn't dredge up terminated recalls from a decade ago.
@@ -88,7 +90,7 @@ export function OutbreakPage() {
     return (
       <div className="space-y-4">
         {backLink}
-        <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">
+        <div role="status" className="flex h-40 items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="mr-2 size-4 animate-spin" /> Loading outbreak…
         </div>
       </div>
@@ -111,9 +113,10 @@ export function OutbreakPage() {
     <div className="space-y-8">
       {backLink}
 
+      <OutbreakDetail outbreak={ob} />
+
       <OutbreakGrounding outbreak={ob} pathogen={matchedPathogen} />
 
-      <OutbreakDetail outbreak={ob} />
       {/* What to avoid on the shelf — the shelf-recognition digest */}
       <AvoidanceDigest digest={digest} geo={geo} />
 
@@ -125,7 +128,7 @@ export function OutbreakPage() {
           <h2 className="text-lg font-semibold">Related recalls</h2>
         </div>
         {relatedRecalls.loading ? (
-          <div className="flex h-24 items-center justify-center text-sm text-muted-foreground">
+          <div role="status" className="flex h-24 items-center justify-center text-sm text-muted-foreground">
             <Loader2 className="mr-2 size-4 animate-spin" /> Searching openFDA for "{recallTerm}"…
           </div>
         ) : relatedRecalls.error ? (

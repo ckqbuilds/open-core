@@ -15,7 +15,7 @@ export function FoodTile({ entry }: { entry: FoodEntry }) {
       // provided domProps are typed for a div, so cast when handing them to Link.
       render={(domProps) => (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <Link {...(domProps as any)} to={to} aria-label={`View food safety details: ${c.label}`} />
+        <Link {...(domProps as any)} to={to} />
       )}
       className="group flex h-full flex-col gap-3 p-5 transition-colors hover:bg-secondary/40"
     >

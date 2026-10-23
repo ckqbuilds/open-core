@@ -120,7 +120,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
       </Card>
 
       {lookup.loading && (
-        <div className="flex h-24 items-center justify-center text-sm text-muted-foreground">
+        <div role="status" className="flex h-24 items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="mr-2 size-4 animate-spin" /> Looking up the product…
         </div>
       )}

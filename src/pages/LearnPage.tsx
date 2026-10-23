@@ -4,9 +4,11 @@ import { SymptomsSection } from "@/sections/SymptomsSection";
 import { GrowSection } from "@/sections/GrowSection";
 import { ContaminationSection } from "@/sections/ContaminationSection";
 import { PageHeader } from "@/components/PageHeader";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 /** Educational section: how to recognize the illnesses + how to grow your own. */
 export function LearnPage() {
+  useDocumentTitle("Learn · OpenCORE");
   return (
     <div className="space-y-8">
       <PageHeader

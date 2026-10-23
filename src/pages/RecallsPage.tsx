@@ -15,6 +15,7 @@ import { RecallRow } from "@/components/RecallRow";
 import { ProductCheck } from "@/components/ProductCheck";
 import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { FreshnessBadge } from "@/components/FreshnessBadge";
 import { StatCard } from "@/components/StatCard";
 import { EmptyState } from "@/components/common";
@@ -38,10 +39,10 @@ const AGENCY_OPTIONS = [
 ];
 const TYPE_OPTIONS = [
   { value: "all", label: "Any hazard type" },
-  { value: "biological", label: "🦠 Biological" },
-  { value: "chemical", label: "⚗️ Chemical" },
-  { value: "physical", label: "🔩 Physical" },
-  { value: "allergenic", label: "🥜 Allergenic" },
+  { value: "biological", label: "Biological" },
+  { value: "chemical", label: "Chemical" },
+  { value: "physical", label: "Physical" },
+  { value: "allergenic", label: "Allergenic" },
   { value: "other", label: "Unclassified" },
 ];
 
@@ -50,6 +51,7 @@ const CURRENT_DAYS = 90;
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
+  useDocumentTitle("Active recalls · OpenCORE");
   const { geo } = useZipContext();
   const [classFilter, setClassFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -239,7 +241,7 @@ export function RecallsPage() {
       </Card>
 
       {recalls.loading && (
-        <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">
+        <div role="status" className="flex h-40 items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="mr-2 size-4 animate-spin" /> Loading recalls from openFDA…
         </div>
       )}
@@ -267,7 +269,7 @@ export function RecallsPage() {
             </p>
           )}
           <div className="space-y-2">
-            <h2 className="text-base font-semibold">
+            <h2 aria-live="polite" className="text-base font-semibold">
               Showing {filtered.length} of {total}{" "}
               {defaultScope ? "ongoing recalls from the last 90 days" : "records in the archive"}
               {filtersActive && !onlyArchive ? " (filtered)" : ""}

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { ZipProvider } from "@/hooks/ZipContext";
 import { TopNav } from "@/components/TopNav";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -15,9 +15,15 @@ export default function App() {
     <BrowserRouter>
       <ZipProvider>
         <div className="min-h-screen bg-background">
+          <a
+            href="#main"
+            className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-3 focus-visible:top-3 focus-visible:z-50 focus-visible:rounded-md focus-visible:bg-background focus-visible:px-3 focus-visible:py-2 focus-visible:text-sm focus-visible:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            Skip to content
+          </a>
           <TopNav />
 
-          <main className="container py-6">
+          <main id="main" className="container py-6">
             <Routes>
               <Route path="/" element={<FoodsPage />} />
               <Route path="/food/:foodId" element={<FoodPage />} />
@@ -34,6 +40,14 @@ export default function App() {
 
           <footer className="mt-8 border-t bg-card/30">
             <div className="container space-y-2 py-6 text-xs text-muted-foreground">
+              <p className="text-sm text-foreground">
+                Not sure what to do next?{" "}
+                <Link to="/recalls" className="font-medium text-primary hover:underline">Check a product barcode</Link>
+                {" · "}
+                <Link to="/learn" className="font-medium text-primary hover:underline">Learn the signs of illness</Link>
+                {" · "}
+                <Link to="/shop-local" className="font-medium text-primary hover:underline">Find local food sources</Link>
+              </p>
               <p className="max-w-3xl">
                 <strong className="text-foreground">Not medical or official guidance.</strong> This
                 tool aggregates public FDA and CDC data for convenience. It does not determine that

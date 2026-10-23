@@ -10,6 +10,7 @@ import { useAsync } from "@/hooks/useAsync";
 import { FoodTile } from "@/components/FoodTile";
 import { OutbreakTile } from "@/components/OutbreakTile";
 import { PageHeader } from "@/components/PageHeader";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { StatCard } from "@/components/StatCard";
 import { FeaturedLocal } from "@/components/FeaturedLocal";
 import { useZipContext } from "@/hooks/ZipContext";
@@ -22,6 +23,7 @@ interface FoodsData {
 
 /** Home: affected foods, grouped into commodity categories, each tile linking out. */
 export function FoodsPage() {
+  useDocumentTitle("OpenCORE — What's affected right now");
   const { geo } = useZipContext();
   const data = useAsync<FoodsData>(async (signal) => {
     const [live, fda, fsis] = await Promise.all([
@@ -60,7 +62,7 @@ export function FoodsPage() {
       />
 
       {data.loading ? (
-        <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
+        <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
           <Spinner size="lg" /> Loading FDA, CDC &amp; FSIS activity…
         </div>
       ) : foods.length === 0 && unidentified.length === 0 ? (
