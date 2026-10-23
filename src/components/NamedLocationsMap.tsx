@@ -1,10 +1,10 @@
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { Loader2, Store, Utensils } from "lucide-react";
 import { findNamedStoresNear } from "@/data/stores";
 import { isMapsEnabled } from "@/data/mapbox";
 import type { GeoZip, NamedEntity, StoreLocation } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { MapViewLazy as MapView, type MapMarker } from "@/components/MapViewLazy";
 import { EmptyState, SourceLink, MapsDisabledNote } from "@/components/common";
 
@@ -90,7 +90,7 @@ export function NamedLocationsMap({ entities, geo }: { entities: NamedEntity[]; 
                   <Store className="size-4 text-muted-foreground" />
                 )}
                 <span className="font-medium">{e.name}</span>
-                {e.product && <Badge variant="secondary">{e.product}</Badge>}
+                {e.product && <Chip color="default" variant="soft" size="sm">{e.product}</Chip>}
                 <SourceLink source={e.source} />
               </div>
               <p className="mb-2 text-sm text-muted-foreground">{e.note}</p>
@@ -101,8 +101,8 @@ export function NamedLocationsMap({ entities, geo }: { entities: NamedEntity[]; 
               ) : (
                 <div className="grid gap-2 sm:grid-cols-2">
                   {list.map((loc) => (
-                    <Card key={loc.id}>
-                      <CardContent className="flex items-center justify-between gap-3 p-3">
+                    <Card key={loc.id} className="p-3">
+                      <Card.Content className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <div className="truncate text-sm font-medium">{loc.name}</div>
                           {loc.address && (
@@ -122,7 +122,7 @@ export function NamedLocationsMap({ entities, geo }: { entities: NamedEntity[]; 
                             Map
                           </a>
                         </div>
-                      </CardContent>
+                      </Card.Content>
                     </Card>
                   ))}
                 </div>

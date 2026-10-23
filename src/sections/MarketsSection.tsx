@@ -1,3 +1,5 @@
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { useEffect, useState } from "react";
 import { Loader2, Sprout, Globe, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { findAllMarketsNear, DIRECTORIES, type MergedMarket } from "@/data/markets";
@@ -5,8 +7,6 @@ import { isMapsEnabled } from "@/data/mapbox";
 import type { GeoZip, UsdaDirectory } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { cn } from "@/lib/utils";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { MapViewLazy as MapView, type MapMarker } from "@/components/MapViewLazy";
 import { EmptyState, InfoNote, MapsDisabledNote } from "@/components/common";
 
@@ -175,7 +175,7 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
           <div className="grid gap-3 sm:grid-cols-2">
             {pageItems.map((m) => (
               <Card key={m.id}>
-                <CardContent className="p-4">
+                <Card.Content>
                   <div className="flex items-start gap-2">
                     <Sprout className="mt-0.5 size-4 shrink-0 text-accent" />
                     <div className="min-w-0 flex-1">
@@ -188,9 +188,9 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                           const d = DIRECTORIES.find((x) => x.id === id);
                           if (!d) return null;
                           return (
-                            <Badge key={id} variant="secondary">
+                            <Chip key={id} color="default" variant="soft" size="sm">
                               {d.emoji} {d.label}
-                            </Badge>
+                            </Chip>
                           );
                         })}
                       </div>
@@ -233,7 +233,7 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                       )}
                     </div>
                   </div>
-                </CardContent>
+                </Card.Content>
               </Card>
             ))}
           </div>

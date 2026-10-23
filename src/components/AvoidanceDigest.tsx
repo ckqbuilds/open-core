@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Card, Chip } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { ChevronDown, ExternalLink, MapPin, ShoppingCart } from "lucide-react";
 import type { AvoidanceDigest as Digest, AvoidanceEvent, AvoidanceLine, NamedRetailerItem } from "@/data/avoidance";
 import type { GeoZip } from "@/data/types";
-import { classificationColor } from "./RecallRow";
+import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { SourceLink } from "./common";
 import { formatFdaDate, formatIso, cn } from "@/lib/utils";
 
@@ -53,15 +54,15 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
     <Card className="p-4">
       <div className="flex flex-wrap items-center gap-1.5">
         {ev.classification && (
-          <Chip color={classificationColor(ev.classification)} variant="soft" size="sm">
+          <Chip {...classificationChip(ev.classification)} size="sm">
             {ev.classification}
           </Chip>
         )}
-        <Chip color={ev.agency === "FSIS" ? "accent" : "default"} variant="soft" size="sm">
-          {ev.agency === "FSIS" ? "USDA FSIS" : "FDA"}
+        <Chip {...agencyChip(ev.agency)} size="sm">
+          {agencyLabel(ev.agency)}
         </Chip>
         {ev.status && (
-          <Chip color="default" variant="tertiary" size="sm">
+          <Chip {...statusChip(ev.status)} size="sm">
             {ev.status}
           </Chip>
         )}

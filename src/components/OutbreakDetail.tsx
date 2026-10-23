@@ -1,11 +1,13 @@
+import { Chip } from "@/components/ui/chip";
 import { useState } from "react";
 import { Check, Copy, Share2, Loader2, ExternalLink } from "lucide-react";
 import type { Outbreak } from "@/data/types";
 import { shareOrCopy } from "@/lib/share";
+import { outbreakStatusChip } from "@/lib/classification";
 import { formatIso } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { StatTile, SourceLink } from "@/components/common";
+import { StatCard } from "@/components/StatCard";
+import { SourceLink } from "@/components/common";
 
 function caseLabel(ob: Outbreak): string {
   return ob.caseCount != null ? ob.caseCount.toLocaleString() : ob.caseCountText ?? "See advisory";
@@ -44,11 +46,17 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
     <div className="space-y-6">
       <div>
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant={ob.status === "active" ? "critical" : "good"}>
+          <Chip key="status" {...outbreakStatusChip(ob.status === "active")} size="sm">
             {ob.status === "active" ? "Active" : "Resolved"}
-          </Badge>
-          <Badge variant="outline">{ob.pathogen}</Badge>
-          {ob.refId && <Badge variant="secondary">FDA #{ob.refId}</Badge>}
+          </Chip>
+          <Chip key="pathogen" color="default" variant="tertiary" size="sm">
+            {ob.pathogen}
+          </Chip>
+          {ob.refId && (
+            <Chip key="ref" color="default" variant="soft" size="sm">
+              FDA #{ob.refId}
+            </Chip>
+          )}
         </div>
         <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight">
           {ob.pathogen} outbreak
@@ -63,15 +71,15 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
 
       {ob.detailed ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatTile value={caseLabel(ob)} label="Reported cases" tone="critical" />
-          <StatTile value={ob.hospitalizations ?? "—"} label="Hospitalizations" />
-          <StatTile value={ob.deaths ?? "—"} label="Deaths" />
-          <StatTile value={ob.statesAffectedCount ?? "—"} label="States affected" />
+          <StatCard label="Reported cases" value={caseLabel(ob)} tone="critical" />
+          <StatCard label="Hospitalizations" value={ob.hospitalizations ?? "—"} />
+          <StatCard label="Deaths" value={ob.deaths ?? "—"} />
+          <StatCard label="States affected" value={ob.statesAffectedCount ?? "—"} />
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-3">
-          <StatTile value={caseLabel(ob)} label="Reported cases" tone="critical" />
-          <StatTile value={ob.vehicle} label="Suspected food" />
+          <StatCard label="Reported cases" value={caseLabel(ob)} tone="critical" />
+          <StatCard label="Suspected food" value={<span className="text-xl">{ob.vehicle}</span>} />
         </div>
       )}
 
@@ -101,10 +109,10 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
               <div key={e.id} className="rounded-md border p-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-medium">{e.name}</span>
-                  <Badge variant="outline">
+                  <Chip color="default" variant="tertiary" size="sm">
                     {e.kind === "restaurant" ? "Restaurant" : "Retailer / supplier"}
-                  </Badge>
-                  {e.product && <Badge variant="secondary">{e.product}</Badge>}
+                  </Chip>
+                  {e.product && <Chip color="default" variant="soft" size="sm">{e.product}</Chip>}
                 </div>
                 <p className="mt-1.5 text-sm text-muted-foreground">{e.note}</p>
                 <div className="mt-1.5">

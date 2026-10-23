@@ -1,8 +1,8 @@
+import { Card } from "@heroui/react";
 import { ShoppingBasket } from "lucide-react";
 import { MarketsSection } from "@/sections/MarketsSection";
 import { DIRECTORIES } from "@/data/markets";
 import { useZipContext } from "@/hooks/ZipContext";
-import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 
 /** Shop-safer alternative: USDA local food directories near your ZIP. */
@@ -28,10 +28,10 @@ export function ShopLocalPage() {
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {DIRECTORIES.map((d) => (
             <Card key={d.id}>
-              <CardContent className="p-4">
+              <Card.Content>
                 <div className="font-medium">{d.label}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{d.blurb}</p>
-              </CardContent>
+              </Card.Content>
             </Card>
           ))}
         </div>

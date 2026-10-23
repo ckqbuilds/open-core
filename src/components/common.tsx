@@ -1,6 +1,6 @@
+import { Card } from "@heroui/react";
 import { ExternalLink } from "lucide-react";
 import type { SourceCitation } from "@/data/types";
-import { Card, CardContent } from "@/components/ui/card";
 
 /** A citation link — every claim about a named entity must carry one. */
 export function SourceLink({ source }: { source: SourceCitation }) {
@@ -17,35 +17,6 @@ export function SourceLink({ source }: { source: SourceCitation }) {
   );
 }
 
-/** A KPI stat tile — hero number, label, optional caption. */
-export function StatTile({
-  value,
-  label,
-  caption,
-  tone = "default",
-}: {
-  value: string | number;
-  label: string;
-  caption?: string;
-  tone?: "default" | "critical" | "warning";
-}) {
-  const color =
-    tone === "critical"
-      ? "text-[var(--status-critical)]"
-      : tone === "warning"
-        ? "text-[color:var(--viz-ink)]"
-        : "text-foreground";
-  return (
-    <Card>
-      <CardContent className="p-4">
-        <div className={`text-2xl font-semibold tracking-tight ${color}`}>{value}</div>
-        <div className="mt-0.5 text-sm font-medium">{label}</div>
-        {caption && <div className="mt-1 text-xs text-muted-foreground">{caption}</div>}
-      </CardContent>
-    </Card>
-  );
-}
-
 export function EmptyState({ children }: { children: React.ReactNode }) {
   return (
     <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
@@ -56,8 +27,8 @@ export function EmptyState({ children }: { children: React.ReactNode }) {
 
 export function InfoNote({ children }: { children: React.ReactNode }) {
   return (
-    <Card className="border-accent/30 bg-accent/5">
-      <CardContent className="p-4 text-sm text-muted-foreground">{children}</CardContent>
+    <Card className="border border-accent/30 bg-accent/5">
+      <Card.Content className="text-sm text-muted-foreground">{children}</Card.Content>
     </Card>
   );
 }
@@ -73,8 +44,8 @@ export function InfoNote({ children }: { children: React.ReactNode }) {
  */
 export function MapsDisabledNote() {
   return (
-    <Card className="border-dashed">
-      <CardContent className="space-y-2 p-6 text-sm">
+    <Card className="border border-dashed p-6">
+      <Card.Content className="space-y-2 text-sm">
         <div className="font-medium text-foreground">Maps and location search aren't available right now</div>
         <p className="text-muted-foreground">
           The companies and recalls named in the official record still show above. To find local food
@@ -89,7 +60,7 @@ export function MapsDisabledNote() {
           </a>
           .
         </p>
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }

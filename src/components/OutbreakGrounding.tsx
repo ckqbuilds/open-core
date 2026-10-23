@@ -1,4 +1,5 @@
-import { Card, Chip } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { Link } from "react-router-dom";
 import { ExternalLink, Lightbulb } from "lucide-react";
 import type { Outbreak, SourceCitation } from "@/data/types";

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ChevronRight, Users, MapPin } from "lucide-react";
-import { Card, Chip } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import type { Outbreak } from "@/data/types";
 import { formatIso } from "@/lib/utils";
 

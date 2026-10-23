@@ -1,3 +1,5 @@
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Sprout, Globe, Phone, RefreshCw, MapPin } from "lucide-react";
@@ -5,9 +7,7 @@ import { findAllMarketsNear, DIRECTORIES, type MergedMarket } from "@/data/marke
 import type { GeoZip } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 
 function formatPhone(digits: string): string {
   return digits.length === 10
@@ -18,8 +18,8 @@ function formatPhone(digits: string): string {
 /** Small shared shell so every state keeps the same "spotlight" footprint. */
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <Card className="border-accent/40 bg-accent/5 shadow-md ring-1 ring-accent/10">
-      <CardContent className="p-5">{children}</CardContent>
+    <Card className="border border-accent/40 p-5 bg-accent/5 shadow-md ring-1 ring-accent/10">
+      <Card.Content>{children}</Card.Content>
     </Card>
   );
 }
@@ -166,9 +166,9 @@ export function FeaturedLocal({ geo }: { geo: GeoZip | null }) {
           const d = DIRECTORIES.find((x) => x.id === id);
           if (!d) return null;
           return (
-            <Badge key={id} variant="secondary">
+            <Chip key={id} color="default" variant="soft" size="sm">
               {d.emoji} {d.label}
-            </Badge>
+            </Chip>
           );
         })}
       </div>

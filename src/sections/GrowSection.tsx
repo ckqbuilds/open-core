@@ -1,8 +1,8 @@
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { useState } from "react";
 import { ChevronDown, Sprout } from "lucide-react";
 import { GROW_GUIDES, type GrowGuide } from "@/data/grow";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export function GrowSection() {
@@ -25,18 +25,18 @@ function GuideCard({ guide }: { guide: GrowGuide }) {
   const [open, setOpen] = useState(false);
   return (
     <Card>
-      <CardHeader className="pb-3">
+      <Card.Header>
         <div className="flex items-center gap-2">
           <Sprout className="size-5 text-accent" />
-          <CardTitle className="text-base">{guide.title}</CardTitle>
+          <Card.Title className="font-semibold text-base">{guide.title}</Card.Title>
         </div>
         <div className="flex flex-wrap gap-2 pt-1">
-          <Badge variant="secondary">{guide.difficulty}</Badge>
-          <Badge variant="outline">{guide.timeToHarvest}</Badge>
+          <Chip color="default" variant="soft" size="sm">{guide.difficulty}</Chip>
+          <Chip color="default" variant="tertiary" size="sm">{guide.timeToHarvest}</Chip>
         </div>
         <p className="pt-2 text-sm text-muted-foreground">{guide.blurb}</p>
-      </CardHeader>
-      <CardContent>
+      </Card.Header>
+      <Card.Content>
         <button
           className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm font-medium hover:bg-secondary"
           onClick={() => setOpen((v) => !v)}
@@ -72,7 +72,7 @@ function GuideCard({ guide }: { guide: GrowGuide }) {
             </div>
           </div>
         )}
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }

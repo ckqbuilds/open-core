@@ -1,3 +1,4 @@
+import { Card } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ScanBarcode, Loader2, Search } from "lucide-react";
@@ -6,7 +7,6 @@ import { matchRecalls } from "@/data/barcodeMatch";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { InfoNote } from "@/components/common";
 import { BarcodeVerdict } from "@/components/BarcodeVerdict";
 
@@ -80,7 +80,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
       </p>
 
       <Card>
-        <CardContent className="p-4">
+        <Card.Content>
           <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-2">
             <div className="min-w-0 flex-1">
               <label htmlFor="barcode" className="mb-1 block text-sm font-medium">
@@ -116,7 +116,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
               {inputError}
             </p>
           )}
-        </CardContent>
+        </Card.Content>
       </Card>
 
       {lookup.loading && (
@@ -131,7 +131,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
 
           {/* Resolved product identity (or the raw code, if OFF had no record). */}
           <Card>
-            <CardContent className="flex items-center gap-4 p-4">
+            <Card.Content className="flex items-center gap-4">
               {off?.imageUrl && (
                 <img
                   src={off.imageUrl}
@@ -162,13 +162,13 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
                   </>
                 )}
               </div>
-            </CardContent>
+            </Card.Content>
           </Card>
 
           {/* Never dead-end: point back to the recall feed below to search by name. */}
           {(offMissed || (matches.exact.length === 0 && matches.possible.length === 0)) && (
-            <Card className="border-dashed">
-              <CardContent className="p-4 text-sm">
+            <Card className="border border-dashed">
+              <Card.Content className="text-sm">
                 <p className="font-medium">Want to double-check by name?</p>
                 <p className="mt-1 text-muted-foreground">
                   Barcode coverage is uneven. Scroll down to the full recall feed and filter by
@@ -187,7 +187,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
                   </Link>
                   .
                 </p>
-              </CardContent>
+              </Card.Content>
             </Card>
           )}
         </div>

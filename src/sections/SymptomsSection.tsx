@@ -1,3 +1,5 @@
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { useMemo, useState } from "react";
 import {
   Activity,
@@ -27,8 +29,6 @@ import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import type { Outbreak } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SourceLink } from "@/components/common";
 import { cn } from "@/lib/utils";
@@ -114,14 +114,14 @@ export function SymptomsSection() {
 
 function RedFlagCard() {
   return (
-    <Card className="border-[color:var(--status-critical)]/40 bg-[color:var(--status-critical)]/5">
-      <CardHeader className="pb-3">
+    <Card className="border border-[color:var(--status-critical)]/40 bg-[color:var(--status-critical)]/5">
+      <Card.Header>
         <div className="flex items-center gap-2">
           <AlertTriangle className="size-5 text-[color:var(--status-critical)]" />
-          <CardTitle className="text-base">Get medical care now if any of these apply</CardTitle>
+          <Card.Title className="font-semibold text-base">Get medical care now if any of these apply</Card.Title>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
+      </Card.Header>
+      <Card.Content className="space-y-3">
         <ul className="grid gap-2 sm:grid-cols-2">
           {RED_FLAGS.map((f) => (
             <li key={f} className="flex gap-2 text-sm">
@@ -137,7 +137,7 @@ function RedFlagCard() {
           These apply to any of the illnesses below, whatever you think you have.
         </p>
         <SourceLink source={RED_FLAG_SOURCE} />
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }
@@ -155,7 +155,7 @@ function RiskGroupPicker({
 }) {
   return (
     <Card>
-      <CardContent className="space-y-3 p-4">
+      <Card.Content className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <div className="text-sm font-medium">Does any of this describe you or your household?</div>
@@ -203,7 +203,7 @@ function RiskGroupPicker({
             </span>
           </div>
         )}
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }
@@ -222,17 +222,17 @@ export function PathogenCard({
   const urgent = notes.some((n) => n.severity === "urgent");
 
   return (
-    <Card className={cn(urgent && "border-[color:var(--status-critical)]/40")}>
-      <CardHeader className="pb-3">
+    <Card className={cn(urgent && "border border-[color:var(--status-critical)]/40")}>
+      <Card.Header>
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
             <Stethoscope className="size-5 text-accent" />
             <div>
-              <CardTitle className="text-base">{p.name}</CardTitle>
+              <Card.Title className="font-semibold text-base">{p.name}</Card.Title>
               {p.aka && <div className="text-xs text-muted-foreground">{p.aka}</div>}
             </div>
           </div>
-          <Badge variant="secondary">{p.category}</Badge>
+          <Chip color="default" variant="soft" size="sm">{p.category}</Chip>
         </div>
 
         {activeOutbreaks.length > 0 && (
@@ -245,9 +245,9 @@ export function PathogenCard({
         )}
 
         <p className="pt-2 text-sm text-muted-foreground">{p.summary}</p>
-      </CardHeader>
+      </Card.Header>
 
-      <CardContent className="space-y-3">
+      <Card.Content className="space-y-3">
         <div className="grid gap-2 sm:grid-cols-2">
           <Fact icon={<Clock className="size-3.5" />} label="Starts" value={p.onset} />
           <Fact icon={<Timer className="size-3.5" />} label="Lasts" value={p.duration} />
@@ -305,7 +305,7 @@ export function PathogenCard({
         )}
 
         <SourceLink source={p.source} />
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }

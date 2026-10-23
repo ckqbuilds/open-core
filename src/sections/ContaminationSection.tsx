@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@heroui/react";
 import { SourceLink } from "@/components/common";
 import { CONTAMINANTS, type ContaminantInfo } from "@/data/contaminants";
 import { cn } from "@/lib/utils";
@@ -33,15 +33,15 @@ export function ContaminationSection() {
         ))}
       </div>
 
-      <Card className="border-accent/30 bg-accent/5">
-        <CardContent className="p-4 text-sm text-muted-foreground">
+      <Card className="border border-accent/30 bg-accent/5">
+        <Card.Content className="text-sm text-muted-foreground">
           On the Recalls page, each recall is tagged with a hazard type{" "}
           <span className="font-medium text-foreground">
             categorized from its reason text — a guide, not an official FDA field
           </span>
           . The reason text is written for people, not machines, so the tag is a best-effort read of
           what the recall says. It never claims a product is safe.
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );
@@ -58,16 +58,16 @@ const TONE_HEADER: Record<ContaminantInfo["tone"], string> = {
 function TypeCard({ info }: { info: ContaminantInfo }) {
   return (
     <Card>
-      <CardHeader className="pb-3">
+      <Card.Header>
         <div className="flex items-center gap-2">
           <span aria-hidden className="text-xl">
             {info.emoji}
           </span>
-          <CardTitle className={cn("text-base", TONE_HEADER[info.tone])}>{info.label}</CardTitle>
+          <Card.Title className={cn("text-base font-semibold", TONE_HEADER[info.tone])}>{info.label}</Card.Title>
         </div>
         <p className="pt-2 text-sm text-muted-foreground">{info.blurb}</p>
-      </CardHeader>
-      <CardContent className="space-y-3">
+      </Card.Header>
+      <Card.Content className="space-y-3">
         {info.subcategories.length > 0 && (
           <ul className="space-y-2">
             {info.subcategories.map((s) => (
@@ -79,7 +79,7 @@ function TypeCard({ info }: { info: ContaminantInfo }) {
           </ul>
         )}
         {info.source && <SourceLink source={info.source} />}
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }

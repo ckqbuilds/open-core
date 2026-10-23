@@ -34,7 +34,7 @@
   --default: oklch(0.94 0.01 155);
   --default-foreground: var(--foreground);
 
-  --accent: oklch(0.56 0.13 158);
+  --accent: oklch(0.5 0.13 158); /* white-on-accent 5.4:1, accent-on-background 5.2:1 */
   --accent-foreground: oklch(0.99 0.01 155);
 
   --success: oklch(0.66 0.16 150);
@@ -99,7 +99,7 @@
     --status-good: #0ca30c;
     --status-warning: #fab219;
     --status-serious: #ec835a;
-    --status-critical: #d03b3b;
+    --status-critical: #c13030;
   }
 
   .dark {
@@ -113,6 +113,8 @@
     --viz-s2: #d95926;
     --viz-s3: #199e70;
     --viz-s4: #c98500;
+    /* Lightened for text: #f07070 is 5.9:1 on --surface (the light red was 3.5:1). */
+    --status-critical: #f07070;
   }
 
   * {

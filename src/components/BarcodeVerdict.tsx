@@ -1,9 +1,10 @@
-import { Card, Chip } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { AlertTriangle, ShieldCheck, ExternalLink } from "lucide-react";
 import type { Recall } from "@/data/types";
 import type { RecallMatches } from "@/data/barcodeMatch";
 // Read-only reuse of the shared classification → chip-color mapping.
-import { classificationColor } from "@/components/RecallRow";
+import { classificationChip, agencyChip, agencyLabel } from "@/lib/classification";
 
 /**
  * The verdict for an in-store barcode check.
@@ -49,11 +50,11 @@ function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possi
             {recalls.map((r) => (
               <li key={r.id} className="rounded-md border bg-card p-3">
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <Chip color={classificationColor(r.classification)} variant="soft" size="sm">
+                  <Chip {...classificationChip(r.classification)} size="sm">
                     {r.classification}
                   </Chip>
-                  <Chip color={r.agency === "FSIS" ? "accent" : "default"} variant="soft" size="sm">
-                    {r.agency === "FSIS" ? "USDA FSIS" : "FDA"}
+                  <Chip {...agencyChip(r.agency)} size="sm">
+                    {agencyLabel(r.agency)}
                   </Chip>
                 </div>
                 <p className="mt-2 text-sm font-medium">{r.productDescription}</p>

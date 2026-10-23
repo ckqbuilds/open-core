@@ -10,7 +10,7 @@ const TONE_CLASSES: Record<ContaminantType, string> = {
   biological: "border-red-500/30 bg-red-500/12 text-red-700 dark:text-red-300",
   chemical: "border-violet-500/30 bg-violet-500/12 text-violet-700 dark:text-violet-300",
   physical: "border-slate-400/40 bg-slate-400/15 text-slate-700 dark:text-slate-300",
-  allergenic: "border-amber-500/40 bg-amber-500/15 text-amber-700 dark:text-amber-300",
+  allergenic: "border-amber-500/40 bg-amber-500/15 text-amber-800 dark:text-amber-300",
   // "other" stays quiet — it is not a hazard.
   other: "border-transparent bg-secondary text-muted-foreground",
 };

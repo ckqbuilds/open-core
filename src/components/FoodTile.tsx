@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ChevronRight, Activity, FileWarning } from "lucide-react";
-import { Card, Chip } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import type { FoodEntry } from "@/data/foods";
 
 /** Compact food-category summary — the whole HeroUI card links to its food page. */

@@ -1,34 +1,31 @@
-import { Card, Chip } from "@heroui/react";
+import { useState } from "react";
+import { Card } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import type { Recall } from "@/data/types";
 import { classifyRecall } from "@/data/contaminants";
 import { ContaminantBadge } from "@/components/ContaminantBadge";
 import { cleanFirmName, repairEncoding } from "@/data/avoidance";
-import { formatFdaDate } from "@/lib/utils";
-
-type ChipColor = "danger" | "warning" | "default" | "success" | "accent";
-
-/** Map an FDA/FSIS classification to a chip color by severity. */
-export function classificationColor(c: string): ChipColor {
-  if (c === "Class I") return "danger";
-  if (c === "Class III") return "default";
-  if (/public health alert/i.test(c)) return "warning";
-  return "warning"; // Class II
-}
+import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
+import { cn, formatFdaDate } from "@/lib/utils";
 
 /** One recall record card — used by the recall feed and the outbreak detail page. */
 export function RecallRow({ recall }: { recall: Recall }) {
+  const [expanded, setExpanded] = useState(false);
+  const description = repairEncoding(recall.productDescription);
+  // Some FSIS descriptions run 90+ words of ALL CAPS; clamp to 3 lines unless short.
+  const isLong = description.length > 220 || description.split(/\s+/).length > 35;
   const date = formatFdaDate(recall.reportDate ?? recall.recallInitiationDate);
   return (
     <Card className="p-4">
       <div className="flex flex-wrap items-center gap-1.5">
-        <Chip color={classificationColor(recall.classification)} variant="soft" size="sm">
+        <Chip {...classificationChip(recall.classification)} size="sm">
           {recall.classification}
         </Chip>
-        <Chip color="default" variant="tertiary" size="sm">
+        <Chip {...statusChip(recall.status)} size="sm">
           {recall.status}
         </Chip>
-        <Chip color={recall.agency === "FSIS" ? "accent" : "default"} variant="soft" size="sm">
-          {recall.agency === "FSIS" ? "USDA FSIS" : "FDA"}
+        <Chip {...agencyChip(recall.agency)} size="sm">
+          {agencyLabel(recall.agency)}
         </Chip>
         <ContaminantBadge classification={classifyRecall(recall)} />
         {recall.nationwide && (
@@ -44,7 +41,19 @@ export function RecallRow({ recall }: { recall: Recall }) {
           ))}
         {date && <span className="ml-auto text-xs text-muted-foreground">{date}</span>}
       </div>
-      <p className="mt-2 text-sm font-medium">{repairEncoding(recall.productDescription)}</p>
+      <p className={cn("mt-2 text-sm font-medium", isLong && !expanded && "line-clamp-3")}>
+        {description}
+      </p>
+      {isLong && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="mt-1 self-start rounded-sm text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      )}
       <p className="mt-1 text-sm text-muted-foreground">{repairEncoding(recall.reason)}</p>
       <p className="mt-1.5 text-xs text-muted-foreground">
         Recalling firm: {cleanFirmName(recall.recallingFirm)} ·{" "}
