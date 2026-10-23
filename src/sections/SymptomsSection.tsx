@@ -69,14 +69,14 @@ export function SymptomsSection() {
 
   return (
     <div className="space-y-6">
-      <div className="max-w-3xl space-y-2">
+      <div className="max-w-prose space-y-2">
         <p className="text-sm text-muted-foreground">
           What the signs of each foodborne illness look like, how long after eating they show up,
           and what CDC says to do. Every line is transcribed from the linked CDC page.
         </p>
         <p className="text-sm font-medium text-foreground">
           This page cannot tell you what you have. Many of these illnesses share the same symptoms,
-          and only a test can tell them apart — if you are ill, contact a healthcare provider.
+          and only a test can tell them apart. If you are ill, contact a healthcare provider.
         </p>
       </div>
 
@@ -101,7 +101,7 @@ export function SymptomsSection() {
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Reference information only — not a diagnosis and not a prescription. Where CDC states a
+        Reference information only: not a diagnosis and not a prescription. Where CDC states a
         treatment fact, it is quoted with a citation; the decision to test or treat belongs to a
         healthcare provider. Your selected conditions stay in this browser and are never sent
         anywhere.
@@ -118,7 +118,7 @@ function RedFlagCard() {
       <Card.Header>
         <div className="flex items-center gap-2">
           <AlertTriangle className="size-5 text-[color:var(--status-critical)]" />
-          <Card.Title className="font-semibold text-base">Get medical care now if any of these apply</Card.Title>
+          <h2 className="card__title font-semibold text-base">Get medical care now if any of these apply</h2>
         </div>
       </Card.Header>
       <Card.Content className="space-y-3">
@@ -161,7 +161,7 @@ function RiskGroupPicker({
             <div className="text-sm font-medium">Does any of this describe you or your household?</div>
             <div className="text-xs text-muted-foreground">
               CDC publishes different guidance for these groups. Selecting one adds that guidance to
-              the cards below — nothing is hidden either way.
+              the cards below; nothing is hidden either way.
             </div>
           </div>
           {groups.length > 0 && (
@@ -198,8 +198,8 @@ function RiskGroupPicker({
             <ShieldAlert className="mt-0.5 size-4 shrink-0 text-[color:var(--status-critical)]" />
             <span>
               {urgentCount === 1
-                ? "1 illness below has guidance specific to what you selected — it is shown first."
-                : `${urgentCount} illnesses below have guidance specific to what you selected — they are shown first.`}
+                ? "1 illness below has guidance specific to what you selected, and it is shown first."
+                : `${urgentCount} illnesses below have guidance specific to what you selected, and they are shown first.`}
             </span>
           </div>
         )}
@@ -239,7 +239,7 @@ export function PathogenCard({
           <div className="flex items-center gap-1.5 pt-2 text-xs font-medium text-[color:var(--status-critical)]">
             <RadioTower className="size-3.5" />
             {activeOutbreaks.length === 1
-              ? `Active outbreak in the current FDA data — ${activeOutbreaks[0].vehicle}`
+              ? `Active outbreak in the current FDA data: ${activeOutbreaks[0].vehicle}`
               : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
           </div>
         )}

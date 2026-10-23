@@ -73,7 +73,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
         <ScanBarcode className="size-5 text-primary" />
         <h2 className="text-lg font-semibold">Check a product</h2>
       </div>
-      <p className="max-w-2xl text-sm text-muted-foreground">
+      <p className="max-w-prose text-sm text-muted-foreground">
         In the store? Type or paste a product's barcode number to see whether it's named in a
         current FDA or USDA FSIS recall. Open Food Facts identifies the product; the FDA/FSIS record
         is the source of truth.

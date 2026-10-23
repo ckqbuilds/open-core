@@ -11,14 +11,14 @@ import { cn } from "@/lib/utils";
 export function ContaminationSection() {
   return (
     <div className="space-y-6">
-      <div className="max-w-3xl space-y-2">
+      <div className="max-w-prose space-y-2">
         <p className="text-sm text-muted-foreground">
-          Food-safety investigators sort contamination into four hazard types —{" "}
+          Food-safety investigators sort contamination into four hazard types:{" "}
           <span className="font-medium text-foreground">biological</span>,{" "}
           <span className="font-medium text-foreground">chemical</span>,{" "}
           <span className="font-medium text-foreground">physical</span>, and{" "}
           <span className="font-medium text-foreground">allergenic</span>. Knowing the type tells
-          you what kind of hazard a recall describes at a glance — "Listeria", "elevated lead",
+          you what kind of hazard a recall describes at a glance. "Listeria", "elevated lead",
           "metal fragments", and "undeclared milk" are four very different problems.
         </p>
         <p className="text-sm text-muted-foreground">
@@ -37,7 +37,7 @@ export function ContaminationSection() {
         <Card.Content className="text-sm text-muted-foreground">
           On the Recalls page, each recall is tagged with a hazard type{" "}
           <span className="font-medium text-foreground">
-            categorized from its reason text — a guide, not an official FDA field
+            categorized from its reason text; a guide, not an official FDA field
           </span>
           . The reason text is written for people, not machines, so the tag is a best-effort read of
           what the recall says. It never claims a product is safe.

@@ -10,7 +10,7 @@ export function GrowSection() {
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
         The surest way to know how your food was handled is to grow it. These guides go from a
-        windowsill tray to a backyard bed — pick where you have room and time.
+        windowsill tray to a backyard bed. Pick where you have room and time.
       </p>
       <div className="grid gap-4 lg:grid-cols-2">
         {GROW_GUIDES.map((g) => (

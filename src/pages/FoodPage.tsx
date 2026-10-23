@@ -154,7 +154,7 @@ export function FoodPage() {
                 <Package className="size-4 text-muted-foreground" />
                 <h2 className="text-lg font-semibold">Recalls across FDA &amp; USDA FSIS</h2>
               </div>
-              <p className="max-w-2xl text-sm text-muted-foreground">
+              <p className="max-w-prose text-sm text-muted-foreground">
                 FDA (openFDA) and USDA FSIS regulate different foods, so a food's recalls can come
                 from either agency. CDC leads the outbreak investigations shown above — it does not
                 issue recalls.
@@ -175,7 +175,7 @@ export function FoodPage() {
             </div>
             {entry && entry.namedEntities.length > 0 ? (
               <>
-                <p className="max-w-2xl text-sm text-muted-foreground">
+                <p className="max-w-prose text-sm text-muted-foreground">
                   Companies FDA or CDC named in the record for this food. Being listed is not a
                   judgment that a location is unsafe — check the linked source and decide for
                   yourself.

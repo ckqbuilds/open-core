@@ -25,7 +25,7 @@ export function AvoidanceDigest({ digest, geo }: { digest: Digest; geo: GeoZip |
         <ShoppingCart className="size-4 text-[color:var(--status-critical)]" />
         <h2 className="text-lg font-semibold">What to avoid on the shelf</h2>
       </div>
-      <p className="max-w-2xl text-sm text-muted-foreground">
+      <p className="max-w-prose text-sm text-muted-foreground">
         The brands, package sizes, and codes each official notice lists, grouped by recall. Being
         listed means the product is under recall, not that a store is unsafe.
       </p>

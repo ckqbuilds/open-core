@@ -111,7 +111,7 @@ export function FoodsPage() {
                 <Search className="size-4 text-muted-foreground" />
                 <h2 className="text-lg font-semibold">Food not yet identified</h2>
               </div>
-              <p className="max-w-2xl text-sm text-muted-foreground">
+              <p className="max-w-prose text-sm text-muted-foreground">
                 These active investigations don't have a food pinned down yet. They're tracked by
                 pathogen until FDA names a vehicle.
               </p>

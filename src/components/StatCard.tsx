@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 export type StatTone = "default" | "critical" | "accent";
 
 const toneAccent: Record<StatTone, string> = {
-  default: "before:bg-border",
-  critical: "before:bg-[var(--status-critical)]",
-  accent: "before:bg-primary",
+  default: "",
+  critical: "text-[color:var(--status-critical)]",
+  accent: "text-primary",
 };
 
 /**
- * A single dashboard KPI: big value, quiet label, optional icon + hint. A thin
- * leading accent bar carries status without shouting. Built on HeroUI Card so
+ * A single dashboard KPI: big value, quiet label, optional icon + hint. Tone colours the
+ * value itself, so status needs no side stripe. Built on HeroUI Card so
  * the whole KPI row shares the library's surface, radius, and elevation.
  */
 export function StatCard({
@@ -30,11 +30,7 @@ export function StatCard({
 }) {
   return (
     <Card
-      className={cn(
-        "relative overflow-hidden p-5",
-        "before:absolute before:inset-y-0 before:left-0 before:w-1 before:content-['']",
-        toneAccent[tone]
-      )}
+      className="p-5"
     >
       <div className="flex items-start justify-between gap-3">
         <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -42,7 +38,7 @@ export function StatCard({
         </span>
         {icon && <span className="shrink-0 text-muted-foreground">{icon}</span>}
       </div>
-      <div className="mt-2 text-3xl font-semibold tabular-nums leading-none tracking-tight">
+      <div className={cn("mt-2 text-3xl font-semibold tabular-nums leading-none tracking-tight", toneAccent[tone])}>
         {value}
       </div>
       {hint && <div className="mt-1.5 text-xs text-muted-foreground">{hint}</div>}

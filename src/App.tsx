@@ -48,14 +48,14 @@ export default function App() {
                 {" · "}
                 <Link to="/shop-local" className="font-medium text-primary hover:underline">Find local food sources</Link>
               </p>
-              <p className="max-w-3xl">
+              <p className="max-w-[58ch]">
                 <strong className="text-foreground">Not medical or official guidance.</strong> This
                 tool aggregates public FDA and CDC data for convenience. It does not determine that
                 any specific store location is unsafe, and it never infers risk from supplier
                 relationships — only companies explicitly named in the official record appear, each
                 with a citation. Always confirm details against the linked FDA/CDC sources.
               </p>
-              <p className="max-w-3xl">
+              <p className="max-w-[58ch]">
                 Data: openFDA food enforcement API · USDA FSIS recalls · USDA Local Food Directories ·
                 FDA CORE outbreak table · CDC investigations
                 {import.meta.env.VITE_MAPBOX_TOKEN ? " · Mapbox (location search & maps)" : ""}. If you are ill, contact a healthcare provider.
