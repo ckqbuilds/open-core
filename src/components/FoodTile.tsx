@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Activity, FileWarning } from "lucide-react";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
+import { foodIcon } from "@/lib/icons";
 import type { FoodEntry } from "@/data/foods";
 
 /** Compact food-category summary — the whole HeroUI card links to its food page. */
 export function FoodTile({ entry }: { entry: FoodEntry }) {
   const { category: c, outbreaks, recallCount, pathogens } = entry;
   const to = `/food/${c.id}`;
+  const Icon = foodIcon(c.id);
 
   return (
     <Card
@@ -21,8 +23,8 @@ export function FoodTile({ entry }: { entry: FoodEntry }) {
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
-          <span aria-hidden className="text-2xl leading-none">
-            {c.emoji}
+          <span aria-hidden className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+            <Icon className="size-5" />
           </span>
           <span className="font-semibold leading-tight">{c.label}</span>
         </div>

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { ZipProvider } from "@/hooks/ZipContext";
 import { TopNav } from "@/components/TopNav";
+import { Wordmark } from "@/components/Wordmark";
 import { ChatWidget } from "@/components/ChatWidget";
 import { FoodsPage } from "@/pages/FoodsPage";
 import { FoodPage } from "@/pages/FoodPage";
@@ -56,7 +57,7 @@ export default function App() {
                 with a citation. Always confirm details against the linked FDA/CDC sources.
               </p>
               <p className="max-w-[58ch]">
-                Data: openFDA food enforcement API · USDA FSIS recalls · USDA Local Food Directories ·
+                <Wordmark showMark={false} className="font-sans text-foreground" /> data: openFDA food enforcement API · USDA FSIS recalls · USDA Local Food Directories ·
                 FDA CORE outbreak table · CDC investigations
                 {import.meta.env.VITE_MAPBOX_TOKEN ? " · Mapbox (location search & maps)" : ""}. If you are ill, contact a healthcare provider.
               </p>

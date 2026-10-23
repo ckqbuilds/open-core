@@ -23,6 +23,7 @@ import { AvoidanceDigest } from "@/components/AvoidanceDigest";
 import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
+import { foodIcon } from "@/lib/icons";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { EmptyState, InfoNote } from "@/components/common";
@@ -114,7 +115,7 @@ export function FoodPage() {
       {backLink}
 
       <PageHeader
-        icon={<span aria-hidden className="text-3xl leading-none">{category.emoji}</span>}
+        icon={<span aria-hidden className="flex size-9 items-center justify-center rounded-lg bg-accent/10 text-accent">{(() => { const Icon = foodIcon(category.id); return <Icon className="size-5" />; })()}</span>}
         title={category.label}
         description="Everything the app is tracking for this food, across FDA, CDC, and USDA FSIS."
       />

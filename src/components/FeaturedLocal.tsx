@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Sprout, Globe, Phone, RefreshCw, MapPin } from "lucide-react";
 import { findAllMarketsNear, DIRECTORIES, type MergedMarket } from "@/data/markets";
+import { DIRECTORY_ICONS } from "@/lib/icons";
 import type { GeoZip } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 
@@ -113,7 +114,8 @@ export function FeaturedLocal({ geo }: { geo: GeoZip | null }) {
           if (!d) return null;
           return (
             <Chip key={id} color="default" variant="soft" size="sm">
-              {d.emoji} {d.label}
+              {(() => { const Icon = DIRECTORY_ICONS[d.id]; return <Icon aria-hidden className="size-3.5" />; })()}
+              {d.label}
             </Chip>
           );
         })}

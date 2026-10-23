@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { ShieldCheck, MapPin, Loader2, Moon, Sun, Menu, X } from "lucide-react";
+import { MapPin, Loader2, Moon, Sun, Menu, X } from "lucide-react";
 import { useZipContext } from "@/hooks/ZipContext";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
+import { Wordmark } from "@/components/Wordmark";
 
 const LINKS = [
   { to: "/", label: "Foods", end: true },
@@ -26,17 +27,20 @@ export function TopNav() {
 
   return (
     <header
-      className="sticky top-0 z-40 px-3 pt-3"
-      style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
+      className="sticky top-0 z-40 border-b bg-background/90 px-3 backdrop-blur"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      <nav className="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border bg-card/80 px-3 py-2 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/70">
-        <Link to="/" className="flex shrink-0 items-center gap-1.5" aria-label="OpenCORE home">
-          <ShieldCheck className="size-5 text-primary" />
-          <span className="hidden text-sm font-semibold md:inline">OpenCORE</span>
+      <nav className="mx-auto flex h-[3.75rem] max-w-6xl items-center gap-2">
+        <Link
+          to="/"
+          className="shrink-0 rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label="OpenCORE home"
+        >
+          <Wordmark hideTextOnMobile />
         </Link>
 
         {/* Desktop: inline links */}
-        <div className="hidden min-w-0 flex-1 items-center gap-1 md:flex">
+        <div className="hidden min-w-0 flex-1 items-stretch gap-1 self-stretch md:flex">
           {LINKS.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.end} className={navLinkClass}>
               {l.label}
@@ -103,10 +107,10 @@ export function TopNav() {
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
   return cn(
-    "shrink-0 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    "-mb-px inline-flex shrink-0 items-center whitespace-nowrap border-b-2 px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
     isActive
-      ? "bg-secondary text-foreground"
-      : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+      ? "border-accent text-foreground"
+      : "border-transparent text-muted-foreground hover:text-foreground"
   );
 }
 

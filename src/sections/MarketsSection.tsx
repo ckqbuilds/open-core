@@ -7,6 +7,7 @@ import { isMapsEnabled } from "@/data/mapbox";
 import type { GeoZip, UsdaDirectory } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { cn } from "@/lib/utils";
+import { DIRECTORY_ICONS } from "@/lib/icons";
 import { MapViewLazy as MapView, type MapMarker } from "@/components/MapViewLazy";
 import { EmptyState, InfoNote, MapsDisabledNote } from "@/components/common";
 
@@ -95,7 +96,10 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                 : "border-border text-muted-foreground hover:text-foreground"
             )}
           >
-            {d.emoji} {d.label}
+            <span className="inline-flex items-center gap-1.5">
+              {(() => { const Icon = DIRECTORY_ICONS[d.id]; return <Icon aria-hidden className="size-4" />; })()}
+              {d.label}
+            </span>
           </button>
         ))}
       </div>
@@ -189,7 +193,8 @@ export function MarketsSection({ geo }: { geo: GeoZip | null }) {
                           if (!d) return null;
                           return (
                             <Chip key={id} color="default" variant="soft" size="sm">
-                              {d.emoji} {d.label}
+                              {(() => { const Icon = DIRECTORY_ICONS[d.id]; return <Icon aria-hidden className="size-3.5" />; })()}
+                              {d.label}
                             </Chip>
                           );
                         })}

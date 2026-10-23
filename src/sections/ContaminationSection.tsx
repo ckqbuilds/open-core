@@ -2,6 +2,7 @@ import { Card } from "@heroui/react";
 import { SourceLink } from "@/components/common";
 import { CONTAMINANTS, type ContaminantInfo } from "@/data/contaminants";
 import { cn } from "@/lib/utils";
+import { HAZARD_ICONS } from "@/lib/icons";
 
 /**
  * Teaches the four food-safety hazard types (+ the honest "other" bucket) and
@@ -56,13 +57,12 @@ const TONE_HEADER: Record<ContaminantInfo["tone"], string> = {
 };
 
 function TypeCard({ info }: { info: ContaminantInfo }) {
+  const Icon = HAZARD_ICONS[info.id];
   return (
     <Card>
       <Card.Header>
         <div className="flex items-center gap-2">
-          <span aria-hidden className="text-xl">
-            {info.emoji}
-          </span>
+          <Icon aria-hidden className="size-5 shrink-0" />
           <Card.Title className={cn("text-base font-semibold", TONE_HEADER[info.tone])}>{info.label}</Card.Title>
         </div>
         <p className="pt-2 text-sm text-muted-foreground">{info.blurb}</p>
