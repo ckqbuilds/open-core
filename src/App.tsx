@@ -34,16 +34,17 @@ export default function App() {
 
           <footer className="mt-8 border-t bg-card/30">
             <div className="container space-y-2 py-6 text-xs text-muted-foreground">
-              <p>
+              <p className="max-w-3xl">
                 <strong className="text-foreground">Not medical or official guidance.</strong> This
                 tool aggregates public FDA and CDC data for convenience. It does not determine that
                 any specific store location is unsafe, and it never infers risk from supplier
                 relationships — only companies explicitly named in the official record appear, each
                 with a citation. Always confirm details against the linked FDA/CDC sources.
               </p>
-              <p>
-                Data: openFDA food enforcement API · FDA CORE outbreak table · CDC investigations ·
-                Mapbox (location search &amp; maps). If you are ill, contact a healthcare provider.
+              <p className="max-w-3xl">
+                Data: openFDA food enforcement API · USDA FSIS recalls · USDA Local Food Directories ·
+                FDA CORE outbreak table · CDC investigations
+                {import.meta.env.VITE_MAPBOX_TOKEN ? " · Mapbox (location search & maps)" : ""}. If you are ill, contact a healthcare provider.
               </p>
             </div>
           </footer>

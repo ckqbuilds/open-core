@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2 } from "lucide-react";
+import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2, ChevronDown } from "lucide-react";
+import { Card } from "@heroui/react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls, type FsisFeed } from "@/data/fsis";
 import { classifyRecall } from "@/data/contaminants";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { RecallTrendChart } from "@/components/RecallTrendChart";
@@ -60,6 +60,7 @@ export function RecallsPage() {
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
   const fsis = useAsync<FsisFeed>((signal) => loadFsisRecalls(signal), []);
   const [archive, setArchive] = useState(false);
+  const [trendOpen, setTrendOpen] = useState(false);
 
   // The two regulatory feeds, newest first. FSIS covers meat/poultry openFDA can't.
   const combined = useMemo(() => {
@@ -174,74 +175,67 @@ export function RecallsPage() {
         </div>
       )}
 
-      <Card>
-        <CardContent className="flex flex-wrap items-end gap-2 p-4">
-          <Select
-            label="Filter by agency"
-            value={agencyFilter}
-            onChange={setAgencyFilter}
-            options={AGENCY_OPTIONS}
-            className="w-full min-w-[11rem] sm:w-auto"
-          />
-          <Select
-            label="Filter by severity class"
-            value={classFilter}
-            onChange={setClassFilter}
-            options={CLASS_OPTIONS}
-            className="w-full min-w-[10rem] sm:w-auto"
-          />
-          <Select
-            label="Filter by status"
-            value={statusFilter}
-            onChange={setStatusFilter}
-            options={STATUS_OPTIONS}
-            className="w-full min-w-[8rem] sm:w-auto"
-          />
-          <Select
-            label="Filter by distribution"
-            value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
-            onChange={setScopeFilter}
-            options={scopeOptions}
-            className="w-full min-w-[9rem] sm:w-auto"
-          />
-          <Select
-            label="Filter by contaminant type"
-            value={typeFilter}
-            onChange={setTypeFilter}
-            options={TYPE_OPTIONS}
-            className="w-full min-w-[10rem] sm:w-auto"
-          />
-          <div
-            role="group"
-            aria-label="Recall scope"
-            className="inline-flex h-10 items-center rounded-md border border-input p-0.5"
-          >
-            {[
-              { v: false, label: "Current" },
-              { v: true, label: "Archive" },
-            ].map((o) => (
-              <button
-                key={o.label}
-                type="button"
-                aria-pressed={archive === o.v}
-                onClick={() => setArchive(o.v)}
-                className={cn(
-                  "h-8 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  archive === o.v
-                    ? "bg-secondary text-secondary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {o.label}
-              </button>
-            ))}
+      <Card className="gap-4 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-sm font-semibold">Filter recalls</h2>
+          <div className="flex items-center gap-2">
+            {filtersActive && (
+              <Button variant="ghost" size="sm" onClick={resetFilters}>
+                <RotateCcw className="size-4" /> Reset
+              </Button>
+            )}
+            <div
+              role="group"
+              aria-label="Recall scope"
+              className="inline-flex h-10 items-center rounded-md border border-input p-0.5"
+            >
+              {[
+                { v: false, label: "Current" },
+                { v: true, label: "Archive" },
+              ].map((o) => (
+                <button
+                  key={o.label}
+                  type="button"
+                  aria-pressed={archive === o.v}
+                  onClick={() => setArchive(o.v)}
+                  className={cn(
+                    "h-8 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    archive === o.v
+                      ? "bg-secondary text-secondary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
           </div>
-          {filtersActive && (
-            <Button variant="ghost" size="sm" onClick={resetFilters}>
-              <RotateCcw className="size-4" /> Reset
-            </Button>
-          )}
-        </CardContent>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[2fr_2fr_1fr]">
+          <fieldset className="min-w-0 space-y-1.5">
+            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">What</legend>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <Select label="Filter by agency" value={agencyFilter} onChange={setAgencyFilter} options={AGENCY_OPTIONS} />
+              <Select label="Filter by contaminant type" value={typeFilter} onChange={setTypeFilter} options={TYPE_OPTIONS} />
+            </div>
+          </fieldset>
+          <fieldset className="min-w-0 space-y-1.5">
+            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">How serious</legend>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <Select label="Filter by severity class" value={classFilter} onChange={setClassFilter} options={CLASS_OPTIONS} />
+              <Select label="Filter by status" value={statusFilter} onChange={setStatusFilter} options={STATUS_OPTIONS} />
+            </div>
+          </fieldset>
+          <fieldset className="min-w-0 space-y-1.5 sm:col-span-2 lg:col-span-1">
+            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">Where</legend>
+            <Select
+              label="Filter by distribution"
+              value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
+              onChange={setScopeFilter}
+              options={scopeOptions}
+            />
+          </fieldset>
+        </div>
       </Card>
 
       {recalls.loading && (
@@ -272,19 +266,30 @@ export function RecallsPage() {
               </button>
             </p>
           )}
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Recalls per month</CardTitle>
-              <CardDescription>
-                Showing {filtered.length} of {total}{" "}
-                {defaultScope ? "ongoing recalls from the last 90 days" : "records in the archive"}
-                {filtersActive && !onlyArchive ? " (filtered)" : ""}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RecallTrendChart recalls={filtered} />
-            </CardContent>
-          </Card>
+          <div className="space-y-2">
+            <h2 className="text-base font-semibold">
+              Showing {filtered.length} of {total}{" "}
+              {defaultScope ? "ongoing recalls from the last 90 days" : "records in the archive"}
+              {filtersActive && !onlyArchive ? " (filtered)" : ""}
+            </h2>
+            <div>
+              <button
+                type="button"
+                aria-expanded={trendOpen}
+                aria-controls="recall-trend"
+                onClick={() => setTrendOpen((o) => !o)}
+                className="inline-flex items-center gap-1.5 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Trend over 18 months
+                <ChevronDown className={cn("size-4 transition-transform", trendOpen && "rotate-180")} />
+              </button>
+              {trendOpen && (
+                <div id="recall-trend" className="pt-2">
+                  <RecallTrendChart recalls={filtered} />
+                </div>
+              )}
+            </div>
+          </div>
 
           {filtered.length === 0 ? (
             <EmptyState>

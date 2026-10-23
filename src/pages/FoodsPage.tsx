@@ -67,7 +67,7 @@ export function FoodsPage() {
         <EmptyState>No foods are named in current outbreak or recall activity right now.</EmptyState>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3">
             <StatCard
               label="Foods affected"
               value={stats.foods}
