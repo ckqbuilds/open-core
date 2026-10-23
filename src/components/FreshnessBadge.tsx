@@ -66,16 +66,12 @@ export function FreshnessBadge({
   return (
     <span
       className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"
-      title={
-        live.stale
-          ? "Live FDA feed unavailable — showing curated outbreaks"
-          : "From the scheduled FDA CORE scrape"
-      }
+      title={live.stale ? undefined : "From the scheduled FDA CORE scrape"}
     >
       <RadioTower
         className={cn("size-3.5", live.stale ? "text-muted-foreground" : "text-[var(--status-good)]")}
       />
-      {live.stale ? "Curated" : `Updated ${relativeTime(live.generatedAt)}`}
+      {live.stale ? "Live FDA feed unavailable · showing curated outbreaks" : `Updated ${relativeTime(live.generatedAt)}`}
     </span>
   );
 }

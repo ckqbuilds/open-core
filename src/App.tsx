@@ -43,11 +43,11 @@ export default function App() {
             <div className="container space-y-2 py-6 text-xs text-muted-foreground">
               <p className="text-sm text-foreground">
                 Not sure what to do next?{" "}
-                <Link to="/recalls" className="font-medium text-primary hover:underline">Check a product barcode</Link>
+                <Link to="/recalls#check" className="inline-block py-2 font-medium text-primary hover:underline">Check a product barcode</Link>
                 {" · "}
-                <Link to="/learn" className="font-medium text-primary hover:underline">Learn the signs of illness</Link>
+                <Link to="/learn" className="inline-block py-2 font-medium text-primary hover:underline">Learn the signs of illness</Link>
                 {" · "}
-                <Link to="/shop-local" className="font-medium text-primary hover:underline">Find local food sources</Link>
+                <Link to="/shop-local" className="inline-block py-2 font-medium text-primary hover:underline">Find local food sources</Link>
               </p>
               <p className="max-w-[58ch]">
                 <strong className="text-foreground">Not medical or official guidance.</strong> This

@@ -1,7 +1,7 @@
 import { Card } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ScanBarcode, Loader2, Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { lookupBarcode, type OffProduct } from "@/data/openfoodfacts";
 import { matchRecalls } from "@/data/barcodeMatch";
 import type { Recall } from "@/data/types";
@@ -68,11 +68,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
   }
 
   return (
-    <section id="check" className="scroll-mt-24 space-y-4">
-      <div className="flex items-center gap-2">
-        <ScanBarcode className="size-5 text-primary" />
-        <h2 className="text-lg font-semibold">Check a product</h2>
-      </div>
+    <div className="space-y-4">
       <p className="max-w-prose text-sm text-muted-foreground">
         In the store? Type or paste a product's barcode number to see whether it's named in a
         current FDA or USDA FSIS recall. Open Food Facts identifies the product; the FDA/FSIS record
@@ -203,6 +199,6 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
           medical advice — always confirm against the official FDA and CDC sources.
         </p>
       </InfoNote>
-    </section>
+    </div>
   );
 }

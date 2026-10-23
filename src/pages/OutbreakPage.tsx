@@ -17,6 +17,8 @@ import { AvoidanceDigest } from "@/components/AvoidanceDigest";
 import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
+import { KeyButton } from "@/components/KeyButton";
+import { Disclosure } from "@/components/Disclosure";
 import { EmptyState } from "@/components/common";
 
 /** How far back "Related recalls" reaches. Older recalls are treated as stale. */
@@ -111,7 +113,10 @@ export function OutbreakPage() {
 
   return (
     <div className="space-y-8">
-      {backLink}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {backLink}
+        <KeyButton />
+      </div>
 
       <OutbreakDetail outbreak={ob} />
 
@@ -120,13 +125,11 @@ export function OutbreakPage() {
       {/* What to avoid on the shelf — the shelf-recognition digest */}
       <AvoidanceDigest digest={digest} geo={geo} />
 
-      <div className="grid gap-8 lg:grid-cols-3">
-      {/* Related recalls for this pathogen */}
-      <section className="lg:col-span-2">
-        <div className="mb-3 flex items-center gap-2">
-          <Package className="size-4 text-muted-foreground" />
-          <h2 className="text-lg font-semibold">Related recalls</h2>
-        </div>
+      {/* All related recall records (the digest above groups them by event) */}
+      <Disclosure
+        label={`All recall records (${(relatedRecalls.data ?? []).length + fsisRelated.length})`}
+        icon={<Package className="size-4 text-muted-foreground" />}
+      >
         {relatedRecalls.loading ? (
           <div role="status" className="flex h-24 items-center justify-center text-sm text-muted-foreground">
             <Loader2 className="mr-2 size-4 animate-spin" /> Searching openFDA for "{recallTerm}"…
@@ -159,9 +162,8 @@ export function OutbreakPage() {
             </div>
           </div>
         )}
-      </section>
+      </Disclosure>
 
-      {/* Recognize the illness — matched CDC symptom card */}
       {matchedPathogen && (
         <section className="lg:col-span-1">
           <div className="mb-3 flex items-center gap-2">
@@ -171,7 +173,6 @@ export function OutbreakPage() {
           <PathogenCard pathogen={matchedPathogen} selected={selected} activeOutbreaks={[]} />
         </section>
       )}
-      </div>
 
       {/* Named locations near you — scoped to THIS outbreak's entities */}
       <section>

@@ -15,7 +15,7 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { FrontDoor } from "@/components/FrontDoor";
 import { FeaturedLocal } from "@/components/FeaturedLocal";
 import { useZipContext } from "@/hooks/ZipContext";
-import { EmptyState, InfoNote } from "@/components/common";
+import { EmptyState } from "@/components/common";
 
 interface FoodsData {
   foods: FoodEntry[];
@@ -101,15 +101,15 @@ export function FoodsPage() {
         <>
           <FeaturedLocal geo={geo} />
 
-          <p className="text-sm text-muted-foreground tabular-nums">
-            {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
-            {stats.recalls} recalls on record (3 years)
-          </p>
-
-          <InfoNote>
-            Foods appear here only because a real FDA, CDC, or USDA FSIS record names them. Grouping
-            into categories is for browsing — it is not a judgment that a whole category is unsafe.
-          </InfoNote>
+          <div className="-mt-4 space-y-1">
+            <p className="text-sm text-muted-foreground tabular-nums">
+              {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
+              {stats.recalls} recalls on record (3 years)
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Foods appear only because an FDA, CDC, or USDA FSIS record names them; categories are for browsing, not a judgment on a whole category.
+            </p>
+          </div>
 
           {foods.length > 0 && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
-/** Sets document.title for the current route. */
+/** Sets document.title for the current route, synchronously before first paint. */
 export function useDocumentTitle(title: string) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.title = title;
   }, [title]);
 }

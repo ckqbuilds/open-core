@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2, ChevronDown, MapPin } from "lucide-react";
+import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2, ChevronDown, MapPin, ScanBarcode, Search } from "lucide-react";
 import { Card } from "@heroui/react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls, type FsisFeed } from "@/data/fsis";
@@ -11,6 +11,8 @@ import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Disclosure } from "@/components/Disclosure";
 import { RecallTrendChart } from "@/components/RecallTrendChart";
 import { RecallRow } from "@/components/RecallRow";
 import { ProductCheck } from "@/components/ProductCheck";
@@ -52,19 +54,44 @@ const CURRENT_DAYS = 90;
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
-  const [archive, setArchive] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const param = (key: string, fallback: string) => params.get(key) || fallback;
+  const setParam = (key: string, value: string, fallback: string) =>
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === fallback || value === "") next.delete(key);
+        else next.set(key, value);
+        return next;
+      },
+      { replace: true }
+    );
+  const archive = params.get("archive") === "1";
+  const setArchive = (v: boolean) => setParam("archive", v ? "1" : "", "");
+  const query = param("q", "");
+  const setQuery = (v: string) => setParam("q", v, "");
+  const classFilter = param("class", "all");
+  const setClassFilter = (v: string) => setParam("class", v, "all");
+  const statusFilter = param("status", "all");
+  const setStatusFilter = (v: string) => setParam("status", v, "all");
+  const scopeFilter = param("scope", "mystate");
+  const setScopeFilter = (v: string) => setParam("scope", v, "mystate");
+  const agencyFilter = param("agency", "all");
+  const setAgencyFilter = (v: string) => setParam("agency", v, "all");
+  const typeFilter = param("type", "all");
+  const setTypeFilter = (v: string) => setParam("type", v, "all");
+
   useDocumentTitle(archive ? "Recall archive · OpenCORE" : "Active recalls · OpenCORE");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const { geo } = useZipContext();
   const { hash } = useLocation();
+  const [checkOpen, setCheckOpen] = useState(hash === "#check");
   useEffect(() => {
-    if (hash === "#check") document.getElementById("check")?.scrollIntoView();
+    if (hash !== "#check") return;
+    setCheckOpen(true);
+    const t = setTimeout(() => document.getElementById("check")?.scrollIntoView(), 50);
+    return () => clearTimeout(t);
   }, [hash]);
-  const [classFilter, setClassFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [scopeFilter, setScopeFilter] = useState("mystate");
-  const [agencyFilter, setAgencyFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("all");
 
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
   const fsis = useAsync<FsisFeed>((signal) => loadFsisRecalls(signal), []);
@@ -118,8 +145,16 @@ export function RecallsPage() {
     else if (scopeFilter === "mystate" && geo)
       list = list.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr));
     if (typeFilter !== "all") list = list.filter((r) => classifyRecall(r).type === typeFilter);
+    const q = query.trim().toLowerCase();
+    if (q)
+      list = list.filter(
+        (r) =>
+          (r.productDescription ?? "").toLowerCase().includes(q) ||
+          (r.reason ?? "").toLowerCase().includes(q) ||
+          (r.recallingFirm ?? "").toLowerCase().includes(q)
+      );
     return list;
-  }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, geo]);
+  }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, query, geo]);
 
   const total = scoped.length;
   const autoScoped = scopeFilter === "mystate" && !!geo;
@@ -129,6 +164,7 @@ export function RecallsPage() {
     scopeFilter !== "mystate" ||
     agencyFilter !== "all" ||
     typeFilter !== "all" ||
+    query !== "" ||
     archive;
   const onlyArchive =
     archive &&
@@ -136,22 +172,17 @@ export function RecallsPage() {
     statusFilter === "all" &&
     scopeFilter === "mystate" &&
     agencyFilter === "all" &&
-    typeFilter === "all";
+    typeFilter === "all" &&
+    query === "";
   const activeCount = [
     classFilter !== "all",
     statusFilter !== "all",
     scopeFilter !== "mystate",
     agencyFilter !== "all",
     typeFilter !== "all",
+    query !== "",
   ].filter(Boolean).length;
-  const resetFilters = () => {
-    setArchive(false);
-    setClassFilter("all");
-    setStatusFilter("all");
-    setScopeFilter("mystate");
-    setAgencyFilter("all");
-    setTypeFilter("all");
-  };
+  const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
 
   return (
     <div className="space-y-8">
@@ -171,7 +202,16 @@ export function RecallsPage() {
         }
       />
 
-      <ProductCheck recalls={combined} />
+      <Disclosure
+        id="check"
+        open={checkOpen}
+        onOpenChange={setCheckOpen}
+        icon={<ScanBarcode className="size-5 text-primary" />}
+        label="Check a product barcode"
+        buttonClassName="text-base font-semibold"
+      >
+        <ProductCheck recalls={combined} />
+      </Disclosure>
 
       {!recalls.loading && !recalls.error && (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -251,6 +291,23 @@ export function RecallsPage() {
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+        <div className="min-w-0 space-y-1.5">
+          <label htmlFor="recall-search" className="text-xs font-medium text-muted-foreground">
+            Search recalls
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              id="recall-search"
+              type="search"
+              autoComplete="off"
+              placeholder="Product, reason, or recalling firm"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="pl-9 text-base sm:text-sm"
+            />
           </div>
         </div>
         <div

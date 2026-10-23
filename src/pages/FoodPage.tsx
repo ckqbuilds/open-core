@@ -24,6 +24,8 @@ import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
 import { foodIcon } from "@/lib/icons";
+import { Disclosure } from "@/components/Disclosure";
+import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { EmptyState, InfoNote } from "@/components/common";
@@ -121,6 +123,7 @@ export function FoodPage() {
         icon={<span aria-hidden className="flex size-9 items-center justify-center rounded-lg bg-accent/10 text-accent">{(() => { const Icon = foodIcon(category.id); return <Icon className="size-5" />; })()}</span>}
         title={category.label}
         description="Everything the app is tracking for this food, across FDA, CDC, and USDA FSIS."
+        actions={<KeyButton />}
       />
 
       {data.loading ? (
@@ -153,12 +156,11 @@ export function FoodPage() {
 
           {/* Coordinated recalls across FDA + USDA FSIS */}
           {recalls.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Package className="size-4 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">Recalls across FDA &amp; USDA FSIS</h2>
-              </div>
-              <p className="max-w-prose text-sm text-muted-foreground">
+            <Disclosure
+              label={`All recall records (${recalls.length})`}
+              icon={<Package className="size-4 text-muted-foreground" />}
+            >
+              <p className="mb-3 max-w-prose text-sm text-muted-foreground">
                 FDA (openFDA) and USDA FSIS regulate different foods, so a food's recalls can come
                 from either agency. CDC leads the outbreak investigations shown above — it does not
                 issue recalls.
@@ -168,7 +170,15 @@ export function FoodPage() {
                   <RecallRow key={r.id} recall={r} />
                 ))}
               </div>
-            </section>
+              {recalls.length > 12 && (
+                <p className="pt-3 text-xs text-muted-foreground">
+                  Showing the 12 most recent of {recalls.length}.{" "}
+                  <Link className="text-primary hover:underline" to="/recalls">
+                    Browse all recalls
+                  </Link>
+                </p>
+              )}
+            </Disclosure>
           )}
 
           {/* Named suppliers & locations near you */}
