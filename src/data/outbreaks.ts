@@ -124,7 +124,7 @@ export const CURATED: Record<string, CuratedDetail> = {
       "Do not eat recalled Taylor Farms / Marketside iceberg lettuce with Best-If-Used-By dates 7/18/2026–8/3/2026; throw it out or return it.",
       "Cyclospora is a parasite spread by contaminated fresh produce — it is not passed person to person.",
       "Symptoms (watery diarrhea, cramps, fatigue) can start ~1 week after exposure and last weeks; it is treatable with antibiotics.",
-      "When in doubt, buy whole heads of lettuce from another source and wash thoroughly, or use the Farmers markets tab.",
+      "When in doubt, buy whole heads of lettuce from another source and wash thoroughly, or find a local source under Shop local.",
     ],
   },
   "1378": {

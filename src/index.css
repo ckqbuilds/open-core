@@ -132,6 +132,12 @@
   li {
     text-wrap: pretty;
   }
+  /* Placeholders default to half-opacity currentColor (3.2:1); use the muted
+     token so hint text clears 4.5:1 in both themes. */
+  ::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "cv11", "ss01";

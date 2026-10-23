@@ -49,7 +49,7 @@ export function MapsDisabledNote() {
       <Card.Content className="space-y-2 text-sm">
         <div className="font-medium text-foreground">Maps and location search aren't available right now</div>
         <p className="text-muted-foreground">
-          The companies and recalls named in the official record still show above. To find local food
+          The recalls and the companies named in the official record are still listed on each food and outbreak page. To find local food
           sources near you, try the{" "}
           <a
             className="text-primary hover:underline"

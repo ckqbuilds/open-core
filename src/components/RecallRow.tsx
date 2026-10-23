@@ -15,6 +15,8 @@ export function RecallRow({ recall }: { recall: Recall }) {
   // Some FSIS descriptions run 90+ words of ALL CAPS; clamp to 3 lines unless short.
   const isLong = description.length > 220 || description.split(/\s+/).length > 35;
   const date = formatFdaDate(recall.reportDate ?? recall.recallInitiationDate);
+  // FSIS records carry "N/A" where FDA has a recall number; don't print a non-number.
+  const hasNumber = Boolean(recall.recallNumber) && !/^(n\/a|—|-|unknown)$/i.test(recall.recallNumber.trim());
   return (
     <Card className="p-4">
       <div className="flex flex-wrap items-center gap-1.5">
@@ -56,18 +58,21 @@ export function RecallRow({ recall }: { recall: Recall }) {
       )}
       <p className="mt-1 text-sm text-muted-foreground">{repairEncoding(recall.reason)}</p>
       <p className="mt-1.5 text-xs text-muted-foreground">
-        Recalling firm: {cleanFirmName(recall.recallingFirm)} ·{" "}
+        Recalling firm: {cleanFirmName(recall.recallingFirm)}
         {recall.url ? (
-          <a
-            href={recall.url}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-primary hover:underline"
-          >
-            #{recall.recallNumber}
-          </a>
+          <>
+            {" · "}
+            <a
+              href={recall.url}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              {hasNumber ? `#${recall.recallNumber}` : "Official notice"}
+            </a>
+          </>
         ) : (
-          <>#{recall.recallNumber}</>
+          hasNumber && <> · #{recall.recallNumber}</>
         )}
         {recall.retailListUrl && (
           <>

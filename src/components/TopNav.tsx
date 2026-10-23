@@ -32,11 +32,11 @@ export function TopNav() {
       <nav className="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border bg-card/80 px-3 py-2 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/70">
         <Link to="/" className="flex shrink-0 items-center gap-1.5" aria-label="OpenCORE home">
           <ShieldCheck className="size-5 text-primary" />
-          <span className="hidden text-sm font-semibold sm:inline">OpenCORE</span>
+          <span className="hidden text-sm font-semibold md:inline">OpenCORE</span>
         </Link>
 
         {/* Desktop: inline links */}
-        <div className="hidden min-w-0 flex-1 items-center gap-1 sm:flex">
+        <div className="hidden min-w-0 flex-1 items-center gap-1 md:flex">
           {LINKS.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.end} className={navLinkClass}>
               {l.label}
@@ -45,7 +45,7 @@ export function TopNav() {
         </div>
 
         {/* Mobile: spacer pushes the right cluster over */}
-        <div className="flex-1 sm:hidden" />
+        <div className="flex-1 md:hidden" />
 
         <NavZip />
         <ThemeToggle />
@@ -57,7 +57,7 @@ export function TopNav() {
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:hidden"
+          className="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
         >
           {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
@@ -70,11 +70,11 @@ export function TopNav() {
             aria-hidden
             tabIndex={-1}
             onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 z-30 cursor-default sm:hidden"
+            className="fixed inset-0 z-30 cursor-default md:hidden"
           />
           <div
             id="mobile-nav"
-            className="relative z-40 mx-auto mt-2 max-w-6xl rounded-xl border bg-card p-2 shadow-lg sm:hidden"
+            className="relative z-40 mx-auto mt-2 max-w-6xl rounded-xl border bg-card p-2 shadow-lg md:hidden"
           >
             {LINKS.map((l) => (
               <NavLink

@@ -282,7 +282,7 @@ export function RecallsPage() {
                 onClick={() => setTrendOpen((o) => !o)}
                 className="inline-flex items-center gap-1.5 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                Trend over 18 months
+                {defaultScope ? "Trend by month, current scope" : "Trend by month, archive"}
                 <ChevronDown className={cn("size-4 transition-transform", trendOpen && "rotate-180")} />
               </button>
               {trendOpen && (
