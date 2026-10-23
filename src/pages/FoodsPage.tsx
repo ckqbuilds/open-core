@@ -59,8 +59,6 @@ export function FoodsPage() {
         description="Foods named in current FDA, CDC, and USDA FSIS activity, grouped by commodity. Pick a food to see the active outbreaks, the recalls across all three agencies, the companies named in the record, locations near you, and what to do if you're sick."
       />
 
-      <FeaturedLocal geo={geo} />
-
       {data.loading ? (
         <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
           <Spinner size="lg" /> Loading FDA, CDC &amp; FSIS activity…
@@ -94,6 +92,8 @@ export function FoodsPage() {
             Foods appear here only because a real FDA, CDC, or USDA FSIS record names them. Grouping
             into categories is for browsing — it is not a judgment that a whole category is unsafe.
           </InfoNote>
+
+          <FeaturedLocal geo={geo} />
 
           {foods.length > 0 && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

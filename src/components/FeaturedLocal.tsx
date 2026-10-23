@@ -4,7 +4,9 @@ import { Loader2, Sprout, Globe, Phone, RefreshCw, MapPin } from "lucide-react";
 import { findAllMarketsNear, DIRECTORIES, type MergedMarket } from "@/data/markets";
 import type { GeoZip } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
+import { useZipContext } from "@/hooks/ZipContext";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 function formatPhone(digits: string): string {
@@ -27,6 +29,52 @@ function Eyebrow() {
     <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-accent">
       <Sprout className="size-3.5" />
       Featured near you
+    </div>
+  );
+}
+
+/** First-run content: what a ZIP unlocks, with an input bound to the shared ZIP value. */
+function FirstRun() {
+  const { zip, setZip, geoLoading, geoError } = useZipContext();
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+      <div className="min-w-0">
+        <h2 className="text-base font-semibold tracking-tight">
+          Add your ZIP to see which recalls reach your state, the named store locations near you,
+          and local food sources
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Your ZIP stays in this browser. It is only used to look up your location.
+        </p>
+      </div>
+      <div className="shrink-0">
+        <label htmlFor="home-zip" className="sr-only">
+          Your ZIP code
+        </label>
+        <div className="relative">
+          <MapPin className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            id="home-zip"
+            inputMode="numeric"
+            maxLength={5}
+            placeholder="ZIP code"
+            autoComplete="postal-code"
+            aria-invalid={geoError ? true : undefined}
+            value={zip}
+            onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
+            className={cn(
+              "h-10 w-full rounded-md border bg-background pl-8 pr-8 text-base tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-40 sm:text-sm",
+              geoError ? "border-destructive" : "border-input"
+            )}
+          />
+          {geoLoading && (
+            <Loader2 className="absolute right-2.5 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+          )}
+        </div>
+        <p role="status" aria-live="polite" className="mt-1 min-h-4 text-xs text-destructive">
+          {geoError}
+        </p>
+      </div>
     </div>
   );
 }
@@ -59,14 +107,11 @@ export function FeaturedLocal({ geo }: { geo: GeoZip | null }) {
     setIndex(next);
   }
 
-  // No ZIP yet → warm invitation, no fetch, no dead end.
+  // No ZIP yet → first-run row: say what a ZIP unlocks and take it right here.
   if (!geo) {
     return (
       <Frame>
-        <Eyebrow />
-        <p className="mt-2 text-sm text-muted-foreground">
-          Add your ZIP above to discover a local food source near you.
-        </p>
+        <FirstRun />
       </Frame>
     );
   }

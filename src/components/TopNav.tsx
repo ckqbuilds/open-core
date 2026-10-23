@@ -111,25 +111,45 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
 }
 
 function NavZip() {
-  const { zip, setZip, geo, geoLoading } = useZipContext();
+  const { zip, setZip, geo, geoLoading, geoError } = useZipContext();
+  const place = geo ? `${geo.place}, ${geo.stateAbbr}` : "";
   return (
-    <div
-      className="relative shrink-0"
-      title={geo ? `${geo.place}, ${geo.stateAbbr}` : "Enter your ZIP"}
-    >
-      <MapPin className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-      <input
-        inputMode="numeric"
-        maxLength={5}
-        placeholder="ZIP"
-        aria-label="Your ZIP code"
-        value={zip}
-        onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-        className="h-8 w-20 rounded-md border border-input bg-background pl-7 pr-2 text-sm tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-24"
-      />
-      {geoLoading && (
-        <Loader2 className="absolute right-1.5 top-1/2 size-3.5 -translate-y-1/2 animate-spin text-muted-foreground" />
+    <div className="relative flex shrink-0 items-center gap-1.5">
+      <label htmlFor="nav-zip" className="hidden text-xs font-medium text-muted-foreground md:inline">
+        ZIP
+      </label>
+      <div className="relative">
+        <MapPin className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+        <input
+          id="nav-zip"
+          inputMode="numeric"
+          maxLength={5}
+          placeholder="ZIP"
+          aria-label="Your ZIP code"
+          aria-invalid={geoError ? true : undefined}
+          value={zip}
+          onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
+          className={cn(
+            "h-8 w-28 rounded-md border bg-background pl-7 pr-6 text-base tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-24 sm:text-sm",
+            geoError ? "border-destructive" : "border-input"
+          )}
+        />
+        {geoLoading && (
+          <Loader2 className="absolute right-1.5 top-1/2 size-3.5 -translate-y-1/2 animate-spin text-muted-foreground" />
+        )}
+      </div>
+      {place && (
+        <span className="hidden max-w-[8rem] truncate text-xs text-muted-foreground lg:inline" title={place}>
+          {place}
+        </span>
       )}
+      <div role="status" aria-live="polite" className="contents">
+        {geoError && (
+          <span className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-destructive/40 bg-card px-2 py-1 text-xs text-destructive shadow-md">
+            {geoError}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

@@ -62,35 +62,33 @@ export function InfoNote({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Shown when location features are used but no Mapbox token is configured. */
+/**
+ * Shown when location features are used but no Mapbox token is configured.
+ *
+ * Developer setup (not shown to the public):
+ *  1. Create a public token at https://account.mapbox.com/access-tokens/ and
+ *     URL-restrict it to your domain + http://localhost:5173.
+ *  2. Copy .env.example to .env.local and set VITE_MAPBOX_TOKEN=pk.…
+ *  3. Restart `npm run dev`.
+ */
 export function MapsDisabledNote() {
   return (
     <Card className="border-dashed">
       <CardContent className="space-y-2 p-6 text-sm">
-        <div className="font-medium text-foreground">Location features need a Mapbox token</div>
+        <div className="font-medium text-foreground">Maps and location search aren't available right now</div>
         <p className="text-muted-foreground">
-          This section uses Mapbox to search nearby locations and render the map. Add a URL-restricted
-          public token to enable it:
+          The companies and recalls named in the official record still show above. To find local food
+          sources near you, try the{" "}
+          <a
+            className="text-primary hover:underline"
+            href="https://www.usdalocalfoodportal.com/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            USDA Local Food Directories
+          </a>
+          .
         </p>
-        <ol className="ml-4 list-decimal space-y-1 text-muted-foreground">
-          <li>
-            Create a token at{" "}
-            <a
-              className="text-primary hover:underline"
-              href="https://account.mapbox.com/access-tokens/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              account.mapbox.com
-            </a>{" "}
-            and restrict it to your domain + <code>http://localhost:5173</code>.
-          </li>
-          <li>
-            Copy <code>.env.example</code> to <code>.env.local</code> and set{" "}
-            <code>VITE_MAPBOX_TOKEN=pk.…</code>
-          </li>
-          <li>Restart <code>npm run dev</code>.</li>
-        </ol>
       </CardContent>
     </Card>
   );
