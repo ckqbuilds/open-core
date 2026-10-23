@@ -15,7 +15,7 @@ export function KeyButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="min-h-10">
           <Info className="size-4" /> Key
         </Button>
       </DialogTrigger>

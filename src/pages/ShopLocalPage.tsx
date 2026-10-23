@@ -4,6 +4,7 @@ import { ShoppingBasket } from "lucide-react";
 import { MarketsSection } from "@/sections/MarketsSection";
 import { DIRECTORIES } from "@/data/markets";
 import { useZipContext } from "@/hooks/ZipContext";
+import { ZipInput } from "@/components/ZipInput";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
@@ -19,6 +20,15 @@ export function ShopLocalPage() {
         title="Shop local"
         description="Every local food source near you, with what each one offers — merged from all five USDA Local Food Directories. Buying whole, local produce and washing it yourself lets you control handling and sidestep recalled pre-packaged products."
       />
+
+      {!geo && (
+        <div className="max-w-xs space-y-1.5">
+          <label htmlFor="shop-zip" className="text-sm font-medium">
+            Your ZIP
+          </label>
+          <ZipInput id="shop-zip" />
+        </div>
+      )}
 
       <MarketsSection geo={geo} onCount={setListed} />
 

@@ -37,7 +37,7 @@ const RECALL_CLASSES: KeyRow[] = [
     badge: <Chip {...classificationChip("Not Yet Classified")} size="sm">Not Yet Classified</Chip>,
     term: "Not yet classified",
     meaning:
-      "FDA has not assigned a class to this recall yet; treat it with the care of a Class I until it does.",
+      "FDA has not assigned a class to this recall yet.",
   },
   {
     badge: <Chip {...classificationChip("Public Health Alert")} size="sm">Public Health Alert</Chip>,

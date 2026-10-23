@@ -35,7 +35,7 @@ function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possi
   const title = exact
     ? recalls.length === 1
       ? "This product is under recall"
-      : `This product matches ${recalls.length} current recalls`
+      : `This product matches ${recalls.length} recalls on record (last 3 years)`
     : "A matching product may be recalled";
   const blurb = exact
     ? "The barcode matches the recalled product code in the official FDA/FSIS record below. Confirm the lot/date codes on your package against the notice."
@@ -96,7 +96,7 @@ function NotFound() {
       <div className="flex items-start gap-3">
         <ShieldCheck className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
         <div className="min-w-0">
-          <p className="text-base font-semibold">Not named in any current recall</p>
+          <p className="text-base font-semibold">Not named in any recall on record (last 3 years)</p>
           <p className="mt-0.5 text-sm text-muted-foreground">
             No FDA or USDA FSIS recall we track names this product. That is not a guarantee of
             safety — coverage is uneven and recalls change often. If in doubt, check the official

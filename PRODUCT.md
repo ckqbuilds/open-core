@@ -48,7 +48,7 @@ Secondary differentiators that follow from it: three agencies in one place, grou
 
 ## Brand Commitments
 
-- Name: **OpenCORE**, with "CORE" capitalised. Current mark is a shield-check icon; no logo asset beyond `public/favicon.svg`.
+- Name: **OpenCORE**, with "CORE" capitalised. Current mark is a scroll-text (record) glyph, chosen because a shield-check would read as "verified safe"; no logo asset beyond `public/favicon.svg`.
 - Voice: plain-spoken, precise, calm under alarm. Says what the record says and no more. Never says "safe." Explains agency jargon inline the first time it appears. Disclaimers are factual, not legalistic. Treats the reader as capable of deciding for themselves once given the cited facts.
 - Standing disclaimer that must remain reachable on every surface: not medical or official guidance; always confirm against the linked FDA/CDC/FSIS sources; if ill, contact a healthcare provider.
 

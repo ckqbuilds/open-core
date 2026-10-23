@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Card } from "@heroui/react";
-import { Loader2, MapPin, ScanBarcode, Search } from "lucide-react";
+import { ScanBarcode, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { ZipInput } from "@/components/ZipInput";
 import { useZipContext } from "@/hooks/ZipContext";
-import { cn } from "@/lib/utils";
 
 export interface FrontDoorResult {
   query: string;
@@ -16,12 +16,15 @@ export function FrontDoor({
   value,
   onChange,
   result,
+  reach,
 }: {
   value: string;
   onChange: (v: string) => void;
   result: FrontDoorResult | null;
+  /** Recalls on record that reach the ZIP's state, when a ZIP is set. */
+  reach?: number | null;
 }) {
-  const { zip, setZip, geo, geoLoading, geoError } = useZipContext();
+  const { geo, geoError } = useZipContext();
   return (
     <Card className="gap-3 p-4 sm:p-5">
       <div className="grid gap-3 sm:grid-cols-[1fr_11rem] sm:items-start">
@@ -47,24 +50,7 @@ export function FrontDoor({
           <label htmlFor="home-zip" className="text-sm font-medium">
             Your ZIP
           </label>
-          <div className="relative">
-            <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              id="home-zip"
-              inputMode="numeric"
-              maxLength={5}
-              autoComplete="postal-code"
-              placeholder="ZIP code"
-              aria-invalid={geoError ? true : undefined}
-              aria-describedby="home-zip-note"
-              value={zip}
-              onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-              className={cn("pl-9 pr-9 text-base tabular-nums sm:text-sm", geoError && "border-destructive")}
-            />
-            {geoLoading && (
-              <Loader2 className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
-            )}
-          </div>
+          <ZipInput id="home-zip" describedBy="home-zip-note" />
         </div>
       </div>
 
@@ -91,16 +77,18 @@ export function FrontDoor({
         {geoError ? (
           <span role="status" className="text-[color:var(--status-critical)]">{geoError}</span>
         ) : geo ? (
-          <>Showing {geo.place}, {geo.stateAbbr}. Your ZIP stays in this browser. </>
+          <>Showing {geo.place}, {geo.stateAbbr}{reach != null && <> · {reach} recall{reach === 1 ? "" : "s"} reach your state</>}. Your ZIP stays in this browser. </>
         ) : (
           <>Unlocks recalls reaching your state, named locations near you, local sources. </>
         )}
+        {!(result && result.foods === 0 && result.recalls === 0) && (
         <Link
           to="/recalls#check"
           className="inline-flex items-center gap-1 whitespace-nowrap rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <ScanBarcode className="size-4" /> Check a product barcode
         </Link>
+        )}
       </p>
     </Card>
   );

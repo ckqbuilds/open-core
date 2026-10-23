@@ -110,7 +110,7 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
             <button
               type="button"
               onClick={() => setAllRetail(true)}
-              className="mt-1.5 text-sm font-medium text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="mt-1 inline-flex min-h-10 items-center text-sm font-medium text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Show all {ev.retail.length} products
             </button>
@@ -124,7 +124,7 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
             type="button"
             onClick={() => setWholesaleOpen((v) => !v)}
             aria-expanded={wholesaleOpen}
-            className="inline-flex items-start gap-1.5 text-left text-sm font-medium hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex min-h-10 items-center gap-1.5 text-left text-sm font-medium hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <ChevronDown
               className={cn("mt-0.5 size-4 shrink-0 transition-transform", wholesaleOpen && "rotate-180")}
@@ -157,7 +157,7 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
             type="button"
             onClick={() => setCodesOpen((v) => !v)}
             aria-expanded={codesOpen}
-            className="inline-flex items-start gap-1.5 text-left text-sm font-medium hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex min-h-10 items-center gap-1.5 text-left text-sm font-medium hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <ChevronDown
               className={cn("mt-0.5 size-4 shrink-0 transition-transform", codesOpen && "rotate-180")}
@@ -252,7 +252,7 @@ function Reach({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="font-medium text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex min-h-10 items-center font-medium text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               +{more} more
             </button>

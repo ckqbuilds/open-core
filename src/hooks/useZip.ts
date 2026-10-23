@@ -10,10 +10,7 @@ export function useZip() {
   const [zip, setZipState] = useState<string>(() => localStorage.getItem(KEY) ?? "");
 
   const setZip = useCallback((next: string) => {
-    const clean = next.trim();
-    setZipState(clean);
-    if (clean) localStorage.setItem(KEY, clean);
-    else localStorage.removeItem(KEY);
+    setZipState(next.trim());
   }, []);
 
   const valid = /^\d{5}$/.test(zip);
@@ -23,9 +20,15 @@ export function useZip() {
     valid
   );
 
+  // Persist only a 5-digit ZIP that geocoded; an invalid one stays in state.
   useEffect(() => {
-    // no-op: keeps hook shape stable; geocode runs via useAsync
-  }, [zip]);
+    try {
+      if (!zip) localStorage.removeItem(KEY);
+      else if (valid && geo.data) localStorage.setItem(KEY, zip);
+    } catch {
+      /* storage unavailable */
+    }
+  }, [zip, valid, geo.data]);
 
   return {
     zip,

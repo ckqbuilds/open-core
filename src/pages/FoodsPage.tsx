@@ -5,7 +5,7 @@ import { Spinner } from "@heroui/react";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
-import { buildFoodIndex, foodsMatching, recallsMatching, NOT_YET_IDENTIFIED, type FoodEntry } from "@/data/foods";
+import { buildFoodIndex, reachCount, foodsMatching, recallsMatching, NOT_YET_IDENTIFIED, type FoodEntry } from "@/data/foods";
 import type { Outbreak, Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { FoodTile } from "@/components/FoodTile";
@@ -50,8 +50,9 @@ export function FoodsPage() {
       foods: foods.length,
       outbreaks: identifiedOutbreaks + (data.data?.unidentified.length ?? 0),
       recalls: foods.reduce((n, f) => n + f.recallCount, 0),
+      reach: geo ? foods.reduce((n, f) => n + reachCount(f, geo.stateAbbr), 0) : null,
     };
-  }, [data.data]);
+  }, [data.data, geo]);
 
   const allFoods = data.data?.foods ?? [];
   const [input, setInput] = useState("");
@@ -79,7 +80,7 @@ export function FoodsPage() {
         description="Foods named in current FDA, CDC, and USDA FSIS activity, grouped by commodity. Pick a food to see the active outbreaks, the recalls across all three agencies, the companies named in the record, locations near you, and what to do if you're sick."
       />
 
-      <FrontDoor value={input} onChange={setInput} result={result} />
+      <FrontDoor value={input} onChange={setInput} result={result} reach={searching ? null : stats.reach} />
 
       {data.loading ? (
         <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
@@ -102,10 +103,13 @@ export function FoodsPage() {
           <FeaturedLocal geo={geo} />
 
           <div className="-mt-4 space-y-1">
-            <p className="text-sm text-muted-foreground tabular-nums">
-              {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
-              {stats.recalls} recalls on record (3 years)
-            </p>
+            {!searching && (
+              <p className="text-sm text-muted-foreground tabular-nums">
+                {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
+                {stats.recalls} recalls on record (3 years)
+                {geo && stats.reach != null ? ` · ${stats.reach} reach ${geo.stateAbbr}` : ""}
+              </p>
+            )}
             <p className="text-xs text-muted-foreground">
               Foods appear only because an FDA, CDC, or USDA FSIS record names them; categories are for browsing, not a judgment on a whole category.
             </p>
@@ -114,7 +118,7 @@ export function FoodsPage() {
           {foods.length > 0 && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {foods.map((f) => (
-                <FoodTile key={f.category.id} entry={f} />
+                <FoodTile key={f.category.id} entry={f} state={geo?.stateAbbr} />
               ))}
             </div>
           )}

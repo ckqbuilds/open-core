@@ -38,7 +38,7 @@ export function TopNav() {
           className="shrink-0 rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="OpenCORE home"
         >
-          <Wordmark hideTextOnMobile />
+          <Wordmark />
         </Link>
 
         {/* Desktop: inline links */}

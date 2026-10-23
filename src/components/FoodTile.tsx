@@ -3,10 +3,10 @@ import { ChevronRight, Activity, FileWarning } from "lucide-react";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import { foodIcon } from "@/lib/icons";
-import type { FoodEntry } from "@/data/foods";
+import { reachCount, type FoodEntry } from "@/data/foods";
 
 /** Compact food-category summary — the whole HeroUI card links to its food page. */
-export function FoodTile({ entry }: { entry: FoodEntry }) {
+export function FoodTile({ entry, state }: { entry: FoodEntry; state?: string }) {
   const { category: c, outbreaks, recallCount, pathogens } = entry;
   const to = `/food/${c.id}`;
   const Icon = foodIcon(c.id);
@@ -48,7 +48,22 @@ export function FoodTile({ entry }: { entry: FoodEntry }) {
             {outbreaks.length} outbreak{outbreaks.length > 1 ? "s" : ""}
           </span>
         )}
-        {recallCount > 0 && (
+        {state && recallCount > 0 ? (
+          (() => {
+            const n = reachCount(entry, state);
+            return n > 0 ? (
+              <span className="flex items-center gap-1.5 font-medium tabular-nums text-[color:var(--status-critical)]">
+                <FileWarning className="size-4" />
+                {n} reach {state}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5">
+                <FileWarning className="size-4" />
+                None listed for {state}
+              </span>
+            );
+          })()
+        ) : recallCount > 0 && (
           <span className="flex items-center gap-1.5 tabular-nums">
             <FileWarning className="size-4" />
             {recallCount} recall{recallCount > 1 ? "s" : ""}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2, ChevronDown, MapPin, ScanBarcode, Search } from "lucide-react";
+import { Loader2, RotateCcw, Package, ChevronDown, ScanBarcode, Search } from "lucide-react";
 import { Card } from "@heroui/react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls, type FsisFeed } from "@/data/fsis";
@@ -20,7 +20,6 @@ import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { FreshnessBadge } from "@/components/FreshnessBadge";
-import { StatCard } from "@/components/StatCard";
 import { EmptyState } from "@/components/common";
 
 const CLASS_OPTIONS = [
@@ -117,19 +116,6 @@ export function RecallsPage() {
     );
   }, [combined, defaultScope]);
 
-  const stats = useMemo(
-    () => ({
-      total: scoped.length,
-      classI: scoped.filter((r) => r.classification === "Class I").length,
-      fsis: scoped.filter((r) => r.agency === "FSIS").length,
-      nationwide: scoped.filter((r) => r.nationwide).length,
-      reach: geo
-        ? scoped.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr)).length
-        : 0,
-    }),
-    [scoped, geo]
-  );
-
   const scopeOptions = [
     { value: "all", label: "Anywhere" },
     { value: "nationwide", label: "Nationwide only" },
@@ -156,7 +142,16 @@ export function RecallsPage() {
     return list;
   }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, query, geo]);
 
-  const total = scoped.length;
+  const summary = useMemo(() => {
+    const reach = geo
+      ? filtered.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr)).length
+      : 0;
+    return {
+      reach,
+      fsis: filtered.filter((r) => r.agency === "FSIS").length,
+      nationwide: filtered.filter((r) => r.nationwide).length,
+    };
+  }, [filtered, geo]);
   const autoScoped = scopeFilter === "mystate" && !!geo;
   const filtersActive =
     classFilter !== "all" ||
@@ -213,40 +208,6 @@ export function RecallsPage() {
         <ProductCheck recalls={combined} />
       </Disclosure>
 
-      {!recalls.loading && !recalls.error && (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <StatCard label="Recalls tracked" value={stats.total} icon={<Package className="size-4" />} />
-          {geo ? (
-            <StatCard
-              label={`Reach ${geo.stateAbbr}`}
-              value={stats.reach}
-              icon={<MapPin className="size-4" />}
-              hint="nationwide or listing your state"
-              tone={stats.reach > 0 ? "critical" : "default"}
-            />
-          ) : (
-            <StatCard label="Nationwide" value={stats.nationwide} icon={<Globe2 className="size-4" />} />
-          )}
-          <StatCard
-            label="USDA FSIS"
-            value={stats.fsis}
-            icon={<Beef className="size-4" />}
-            hint="meat & poultry"
-            tone="accent"
-          />
-          {geo ? (
-            <StatCard label="Nationwide" value={stats.nationwide} icon={<Globe2 className="size-4" />} />
-          ) : (
-            <StatCard
-              label="Class I — most serious"
-              value={stats.classI}
-              icon={<ShieldAlert className="size-4" />}
-              tone="critical"
-            />
-          )}
-        </div>
-      )}
-
       <Card className="gap-4 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="hidden text-sm font-semibold md:block">Filter recalls</h2>
@@ -269,7 +230,7 @@ export function RecallsPage() {
             <div
               role="group"
               aria-label="Recall scope"
-              className="inline-flex h-10 items-center rounded-md border border-input p-0.5"
+              className="inline-flex h-11 items-center rounded-md border border-input p-0.5"
             >
               {[
                 { v: false, label: "Current" },
@@ -281,7 +242,7 @@ export function RecallsPage() {
                   aria-pressed={archive === o.v}
                   onClick={() => setArchive(o.v)}
                   className={cn(
-                    "h-8 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    "h-10 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                     archive === o.v
                       ? "bg-secondary text-secondary-foreground"
                       : "text-muted-foreground hover:text-foreground"
@@ -372,11 +333,14 @@ export function RecallsPage() {
             </p>
           )}
           <div className="space-y-2">
-            <h2 aria-live="polite" className="text-base font-semibold">
-              Showing {filtered.length} of {total}{" "}
-              {defaultScope ? "ongoing recalls from the last 90 days" : "records in the archive"}
+            <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
+              {filtered.length}{" "}
+              {archive || !defaultScope
+                ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years)`
+                : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days)`}
+              {geo ? ` · ${summary.reach} reach ${geo.stateAbbr}` : ""} · {summary.fsis} USDA FSIS · {summary.nationwide} nationwide
               {filtersActive && !onlyArchive ? " (filtered)" : ""}
-            </h2>
+            </p>
             <div>
               <button
                 type="button"
