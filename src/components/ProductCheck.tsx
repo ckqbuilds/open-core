@@ -68,7 +68,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
   }
 
   return (
-    <section className="space-y-4">
+    <section id="check" className="scroll-mt-24 space-y-4">
       <div className="flex items-center gap-2">
         <ScanBarcode className="size-5 text-primary" />
         <h2 className="text-lg font-semibold">Check a product</h2>

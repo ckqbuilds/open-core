@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2, ChevronDown } from "lucide-react";
+import { Loader2, RotateCcw, Package, ShieldAlert, Beef, Globe2, ChevronDown, MapPin } from "lucide-react";
 import { Card } from "@heroui/react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls, type FsisFeed } from "@/data/fsis";
@@ -53,6 +54,10 @@ const CURRENT_DAYS = 90;
 export function RecallsPage() {
   useDocumentTitle("Active recalls · OpenCORE");
   const { geo } = useZipContext();
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash === "#check") document.getElementById("check")?.scrollIntoView();
+  }, [hash]);
   const [classFilter, setClassFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [scopeFilter, setScopeFilter] = useState("mystate");
@@ -90,8 +95,11 @@ export function RecallsPage() {
       classI: scoped.filter((r) => r.classification === "Class I").length,
       fsis: scoped.filter((r) => r.agency === "FSIS").length,
       nationwide: scoped.filter((r) => r.nationwide).length,
+      reach: geo
+        ? scoped.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr)).length
+        : 0,
     }),
-    [scoped]
+    [scoped, geo]
   );
 
   const scopeOptions = [
@@ -156,12 +164,17 @@ export function RecallsPage() {
       {!recalls.loading && !recalls.error && (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <StatCard label="Recalls tracked" value={stats.total} icon={<Package className="size-4" />} />
-          <StatCard
-            label="Class I — most serious"
-            value={stats.classI}
-            icon={<ShieldAlert className="size-4" />}
-            tone="critical"
-          />
+          {geo ? (
+            <StatCard
+              label={`Reach ${geo.stateAbbr}`}
+              value={stats.reach}
+              icon={<MapPin className="size-4" />}
+              hint="nationwide or listing your state"
+              tone={stats.reach > 0 ? "critical" : "default"}
+            />
+          ) : (
+            <StatCard label="Nationwide" value={stats.nationwide} icon={<Globe2 className="size-4" />} />
+          )}
           <StatCard
             label="USDA FSIS"
             value={stats.fsis}
@@ -169,11 +182,16 @@ export function RecallsPage() {
             hint="meat & poultry"
             tone="accent"
           />
-          <StatCard
-            label="Nationwide"
-            value={stats.nationwide}
-            icon={<Globe2 className="size-4" />}
-          />
+          {geo ? (
+            <StatCard label="Nationwide" value={stats.nationwide} icon={<Globe2 className="size-4" />} />
+          ) : (
+            <StatCard
+              label="Class I — most serious"
+              value={stats.classI}
+              icon={<ShieldAlert className="size-4" />}
+              tone="critical"
+            />
+          )}
         </div>
       )}
 

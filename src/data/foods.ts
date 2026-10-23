@@ -148,3 +148,22 @@ export function buildFoodIndex(
       return a.category.label.localeCompare(b.category.label);
     });
 }
+
+/** Recalls whose product description or recalling firm contains `q` (lowercase, trimmed). */
+export function recallsMatching(recalls: Recall[], q: string): Recall[] {
+  return recalls.filter(
+    (r) =>
+      (r.productDescription ?? "").toLowerCase().includes(q) ||
+      (r.recallingFirm ?? "").toLowerCase().includes(q)
+  );
+}
+
+/** Foods whose label or match terms contain `q`, or that hold a recall matching it. */
+export function foodsMatching(foods: FoodEntry[], q: string): FoodEntry[] {
+  return foods.filter(
+    (f) =>
+      f.category.label.toLowerCase().includes(q) ||
+      f.category.matchTerms.some((t) => t.includes(q) || q.includes(t)) ||
+      recallsMatching([...f.fdaRecalls, ...f.fsisRecalls], q).length > 0
+  );
+}
