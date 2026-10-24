@@ -133,12 +133,12 @@ export function RecallTrendChart({
       .attr("y", (d) => (d.count === 0 ? innerH : y(d.count)))
       .attr("height", (d) => (d.count === 0 ? 0 : innerH - y(d.count)))
       .attr("rx", 3)
-      .attr("fill", "var(--accent)");
+      .attr("fill", "var(--land-deep)");
   }, [data, x, y, innerW, innerH, margin.left, margin.top]);
 
   if (recalls.length < 8) {
     return (
-      <p className="py-4 text-sm text-muted-foreground">
+      <p className="py-4 text-sm text-ink-2">
         Too few matching recalls to chart a trend ({recalls.length}).
       </p>
     );
@@ -146,7 +146,7 @@ export function RecallTrendChart({
 
   if (data.length === 0) {
     return (
-      <div className="flex h-[240px] items-center justify-center text-sm text-muted-foreground">
+      <div className="flex h-[240px] items-center justify-center text-sm text-ink-2">
         No dated recall records to chart yet.
       </div>
     );
@@ -192,7 +192,7 @@ export function RecallTrendChart({
           ))}
         </tbody>
       </table>
-      <p className="mt-2 text-xs text-muted-foreground">
+      <p className="mt-2 text-xs text-ink-2">
         The first and last months of the window are partial.
         {fsisAsOf && !isNaN(+fsisAsOf) && (
           <> USDA FSIS records after {fsisAsOf.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included.</>
@@ -200,11 +200,11 @@ export function RecallTrendChart({
       </p>
       {hover && (
         <div
-          className="pointer-events-none absolute top-2 z-10 -translate-x-1/2 rounded-md border bg-card px-2.5 py-1.5 text-xs shadow-md"
+          className="sheet pointer-events-none absolute top-2 z-10 -translate-x-1/2 px-2.5 py-1.5 text-xs"
           style={{ left: Math.min(Math.max(hover.x, 60), width - 60) }}
         >
-          <div className="font-medium">{hover.b.label}</div>
-          <div className="text-muted-foreground">
+          <div className="font-bold">{hover.b.label}</div>
+          <div className="text-ink-2">
             {hover.b.count} recall{hover.b.count === 1 ? "" : "s"}
           </div>
         </div>

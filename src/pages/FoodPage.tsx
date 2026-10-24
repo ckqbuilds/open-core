@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Activity, Package, Stethoscope, MapPin, Loader2 } from "lucide-react";
+import { ArrowLeft, Package } from "lucide-react";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByFood } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
@@ -23,12 +23,11 @@ import { AvoidanceDigest } from "@/components/AvoidanceDigest";
 import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
-import { foodIcon } from "@/lib/icons";
 import { Disclosure } from "@/components/Disclosure";
 import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import { EmptyState, InfoNote } from "@/components/common";
+import { EmptyState, InfoNote, Loading, SectionHeading } from "@/components/common";
 
 const RECALL_WINDOW_YEARS = 3;
 /**
@@ -41,8 +40,6 @@ const RECALL_WINDOW_YEARS = 3;
  * differ from the total shown here.
  */
 const FOOD_RECALL_LIMIT = 100;
-const nextStepLink =
-  "inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 function recallDate(r: Recall): string {
   return r.reportDate ?? r.recallInitiationDate ?? "";
@@ -120,11 +117,8 @@ export function FoodPage() {
   );
 
   const backLink = (
-    <Link
-      to="/"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground pointer-coarse:min-h-11"
-    >
-      <ArrowLeft className="size-4" /> All foods
+    <Link to="/" className="capsule capsule--sm capsule--ghost">
+      <ArrowLeft className="size-4" aria-hidden /> All foods
     </Link>
   );
 
@@ -133,29 +127,27 @@ export function FoodPage() {
       <div className="space-y-4">
         {backLink}
         <EmptyState>
-          Unknown food category. <Link className="text-primary hover:underline" to="/">See all foods</Link>.
+          Unknown food category. <Link className="link" to="/">See all foods</Link>.
         </EmptyState>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {backLink}
 
       <PageHeader
-        icon={<span aria-hidden className="flex size-9 items-center justify-center rounded-lg bg-accent/10 text-accent">{(() => { const Icon = foodIcon(category.id); return <Icon className="size-5" />; })()}</span>}
         title={category.label}
         description="Everything on record for this food in the last 3 years, across FDA, CDC, and USDA FSIS. Home counts only the most recent records; this page lists them all."
         actions={<KeyButton />}
       />
 
-      <div className="-mt-4 flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center">
+      <div className="-mt-4 flex flex-col gap-3 text-sm text-ink-2 sm:flex-row sm:flex-wrap sm:items-center">
         <span>If you have this food:</span>
-        <Link to="/recalls#check" className={nextStepLink}>
+        <Link to="/recalls#check" className="capsule capsule--sun">
           Check the product barcode
         </Link>
-        <span className="hidden sm:inline" aria-hidden>·</span>
         <span className="sm:sr-only">If you feel sick:</span>
         <a
           href="#if-sick"
@@ -163,16 +155,14 @@ export function FoodPage() {
             e.preventDefault();
             document.getElementById("if-sick")?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
-          className={nextStepLink}
+          className="capsule"
         >
           See what to do
         </a>
       </div>
 
       {data.loading ? (
-        <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" /> Loading {category.label.toLowerCase()} activity…
-        </div>
+        <Loading className="h-32">Loading {category.label.toLowerCase()} activity…</Loading>
       ) : entry && entry.outbreaks.length === 0 && recalls.length === 0 ? (
         <EmptyState>
           No current outbreak or recall activity for {category.label.toLowerCase()} in the tracked
@@ -182,12 +172,9 @@ export function FoodPage() {
         <>
           {/* Active outbreaks for this food */}
           {entry && entry.outbreaks.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Activity className="size-4 text-[color:var(--status-critical)]" />
-                <h2 className="text-lg font-semibold">Active outbreaks</h2>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
+            <section className="space-y-4">
+              <SectionHeading count={entry.outbreaks.length}>Active outbreaks</SectionHeading>
+              <div className="grid gap-4 md:grid-cols-2">
                 {entry.outbreaks.map((ob) => (
                   <OutbreakTile key={ob.id} outbreak={ob} />
                 ))}
@@ -201,23 +188,23 @@ export function FoodPage() {
           {recalls.length > 0 && (
             <Disclosure
               label={`All recall records (${recalls.length})`}
-              icon={<Package className="size-4 text-muted-foreground" />}
+              icon={<Package aria-hidden />}
               description="open + related-word + closed"
             >
-              <p className="mb-3 max-w-prose text-sm text-muted-foreground">
+              <p className="prose-measure mb-3 text-sm text-ink-2">
                 FDA (openFDA) and USDA FSIS regulate different foods, so a food's recalls can come
                 from either agency. CDC leads the outbreak investigations shown above — it does not
                 issue recalls.
               </p>
-              <div className="space-y-3">
+              <div>
                 {recalls.slice(0, 12).map((r) => (
                   <RecallRow key={r.id} recall={r} />
                 ))}
               </div>
               {recalls.length > 12 && (
-                <p className="pt-3 text-xs text-muted-foreground">
+                <p className="pt-3 text-sm text-ink-2">
                   Showing the 12 most recent of {recalls.length}.{" "}
-                  <Link className="text-primary hover:underline" to="/recalls">
+                  <Link className="link" to="/recalls">
                     Browse all recalls
                   </Link>
                 </p>
@@ -226,14 +213,11 @@ export function FoodPage() {
           )}
 
           {/* Named suppliers & locations near you */}
-          <section className="space-y-3">
-            <div className="flex items-center gap-2">
-              <MapPin className="size-4 text-muted-foreground" />
-              <h2 className="text-lg font-semibold">Named suppliers &amp; locations near you</h2>
-            </div>
+          <section className="space-y-4">
+            <SectionHeading>Named suppliers &amp; locations near you</SectionHeading>
             {entry && entry.namedEntities.length > 0 ? (
               <>
-                <p className="max-w-prose text-sm text-muted-foreground">
+                <p className="prose-measure text-sm text-ink-2">
                   Companies FDA or CDC named in the record for this food. Being listed is not a
                   judgment that a location is unsafe — check the linked source and decide for
                   yourself.
@@ -251,17 +235,11 @@ export function FoodPage() {
 
           {/* What to do if infected */}
           {entry && entry.pathogens.length > 0 && (
-            <section id="if-sick" className="scroll-mt-24 space-y-3">
-              <div className="flex items-center gap-2">
-                <Stethoscope className="size-4 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">What to do if you're sick</h2>
-              </div>
-              <p className="text-sm text-muted-foreground">
+            <section id="if-sick" className="scroll-mt-24 space-y-4">
+              <SectionHeading>What to do if you're sick</SectionHeading>
+              <p className="prose-measure text-sm text-ink-2">
                 Pregnant, older, young, or immunocompromised?{" "}
-                <Link
-                  to="/learn#risk-groups"
-                  className="inline-flex items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:min-h-11"
-                >
+                <Link to="/learn#risk-groups" className="link inline-flex items-center pointer-coarse:min-h-11">
                   See risk-group guidance
                 </Link>
               </p>

@@ -26,7 +26,7 @@ function Fact({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="border-l-2 border-ink pl-4 first:border-l-0 first:pl-0">
       <dt className="text-xs font-bold text-ink-2">{label}</dt>
-      <dd className="display-md tnum mt-1 text-3xl sm:text-4xl">{value}</dd>
+      <dd className="display-md mt-1 text-3xl sm:text-4xl">{value}</dd>
     </div>
   );
 }
@@ -82,7 +82,7 @@ export function OutbreakDetail({
           {ob.pathogen} outbreak
           {ob.vehicle !== "Not yet identified" ? ` linked to ${ob.vehicle.toLowerCase()}` : ""}
         </h1>
-        <p className="tnum mt-3 text-base text-ink-2">
+        <p className="mt-3 text-base text-ink-2">
           {ob.detailed
             ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
             : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}

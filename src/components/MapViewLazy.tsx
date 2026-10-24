@@ -18,7 +18,8 @@ export function MapViewLazy(props: {
     <Suspense
       fallback={
         <div
-          className="flex items-center justify-center rounded-lg border bg-muted/20 text-sm text-muted-foreground"
+          role="status"
+          className="lobe--soft flex items-center justify-center border-2 border-rule text-sm text-ink-2"
           style={{ height }}
         >
           <Loader2 className="mr-2 size-4 animate-spin" /> Loading map…

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { cn, formatFdaDate } from "@/lib/utils";
-import { Loader2, RotateCcw, Package, ChevronDown, ScanBarcode, Search } from "lucide-react";
-import { Card } from "@heroui/react";
+import { ArrowLeft, RotateCcw, ChevronDown, ScanBarcode, Search } from "lucide-react";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls, type FsisFeed } from "@/data/fsis";
 import { classifyRecall } from "@/data/contaminants";
@@ -23,7 +22,7 @@ import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { FreshnessBadge } from "@/components/FreshnessBadge";
-import { EmptyState } from "@/components/common";
+import { EmptyState, Loading, Sheet } from "@/components/common";
 
 const CLASS_OPTIONS = [
   { value: "all", label: "Any severity" },
@@ -228,11 +227,7 @@ export function RecallsPage() {
   const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
 
   const scopeToggle = (className: string) => (
-    <div
-      role="group"
-      aria-label="Recall scope"
-      className={cn("h-11 items-center rounded-md border border-input p-0.5", className)}
-    >
+    <div role="group" aria-label="Recall scope" className={cn("items-center gap-2", className)}>
       {[
         { v: false, label: "Current" },
         { v: true, label: "Archive" },
@@ -242,22 +237,17 @@ export function RecallsPage() {
           type="button"
           aria-pressed={archive === o.v}
           onClick={() => setArchive(o.v)}
-          className={cn(
-            "h-10 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            archive === o.v
-              ? "bg-secondary text-secondary-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          )}
+          className="capsule capsule--sm"
         >
           {o.label}
+          <span aria-hidden className="capsule__chip" />
         </button>
       ))}
     </div>
   );
   const mobileFilterCount = activeCount + (scopeFilter !== "mystate" ? 1 : 0) + (query !== "" ? 1 : 0);
 
-  const linkBtn =
-    "inline-flex h-10 items-center rounded-sm px-2 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const linkBtn = "link inline-flex min-h-9 items-center px-2 text-sm";
   const emptyRecovery = (
     <>
       {filtersActive && (
@@ -274,18 +264,13 @@ export function RecallsPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {archive && (
-        <button
-          type="button"
-          onClick={() => setArchive(false)}
-          className="-mb-4 inline-flex min-h-10 items-center rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          ← Back to active recalls
+        <button type="button" onClick={() => setArchive(false)} className="capsule capsule--sm capsule--ghost -mb-4">
+          <ArrowLeft className="size-4" aria-hidden /> Back to active recalls
         </button>
       )}
       <PageHeader
-        icon={<Package className="size-6 text-primary" />}
         title={archive ? "Recall archive" : "Active recalls"}
         description={
           archive
@@ -306,20 +291,16 @@ export function RecallsPage() {
           <p
             aria-live="polite"
             title="Most serious first, then newest"
-            className="text-sm text-muted-foreground tabular-nums"
+            className="text-sm text-ink-2"
           >
             {autoScoped && geo ? (
               <>
-                {filtered.length} {filtered.length === 1 ? "recall reaches" : "recalls reach"} {geo.stateAbbr}
+                <span className="tnum">{filtered.length}</span> {filtered.length === 1 ? "recall reaches" : "recalls reach"} {geo.stateAbbr}
                 {nationwideCount > 0 && ` (${nationwideCount} of them nationwide)`}
                 {unscoped.length > filtered.length && (
                   <>
                     {" · "}
-                    <button
-                      type="button"
-                      className="inline-flex h-10 items-center rounded-sm align-middle font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      onClick={() => setScopeFilter("all")}
-                    >
+                    <button type="button" className="link" onClick={() => setScopeFilter("all")}>
                       Show all {unscoped.length}
                     </button>
                   </>
@@ -327,7 +308,7 @@ export function RecallsPage() {
               </>
             ) : (
               <>
-                {filtered.length}{" "}
+                <span className="tnum">{filtered.length}</span>{" "}
                 {archive || !defaultScope
                   ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
                   : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
@@ -341,9 +322,9 @@ export function RecallsPage() {
         id="check"
         open={checkOpen}
         onOpenChange={setCheckOpen}
-        icon={<ScanBarcode className="size-5 text-primary" />}
+        icon={<ScanBarcode aria-hidden />}
         label="Check a product barcode"
-        buttonClassName="text-base font-semibold"
+        buttonClassName="capsule--sun"
       >
         <ProductCheck recalls={combined} feedNote={feedNote} />
       </Disclosure>
@@ -355,29 +336,29 @@ export function RecallsPage() {
           aria-expanded={mobileFiltersOpen}
           aria-controls="recall-filter-card"
           onClick={() => setMobileFiltersOpen((o) => !o)}
-          className="inline-flex h-10 items-center gap-1.5 rounded-md px-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="capsule capsule--sm capsule--ghost"
         >
           Filters{mobileFilterCount > 0 ? ` (${mobileFilterCount} active)` : ""}
-          <ChevronDown className={cn("size-4 transition-transform", mobileFiltersOpen && "rotate-180")} />
+          <ChevronDown aria-hidden className={cn("size-4 transition-transform ease-over", mobileFiltersOpen && "rotate-180")} />
         </button>
       </div>
 
-      <Card id="recall-filter-card" className={cn("gap-4 p-4", !mobileFiltersOpen && "hidden md:flex")}>
+      <Sheet quiet id="recall-filter-card" className={cn("space-y-4 p-4 sm:p-5", !mobileFiltersOpen && "hidden md:block")}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <button
             type="button"
             aria-expanded={filtersOpen}
             aria-controls="recall-filters"
             onClick={() => setFiltersOpen((o) => !o)}
-            className="inline-flex h-10 items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="capsule capsule--sm capsule--ghost -ml-3"
           >
             More filters{activeCount > 0 ? ` (${activeCount} active)` : ""}
-            <ChevronDown className={cn("size-4 transition-transform", filtersOpen && "rotate-180")} />
+            <ChevronDown aria-hidden className={cn("size-4 transition-transform ease-over", filtersOpen && "rotate-180")} />
           </button>
           <div className="flex items-center gap-2">
             {filtersActive && (
               <Button variant="ghost" size="sm" onClick={resetFilters}>
-                <RotateCcw className="size-4" /> Reset
+                <RotateCcw /> Reset
               </Button>
             )}
             {scopeToggle("hidden md:inline-flex")}
@@ -385,11 +366,11 @@ export function RecallsPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
           <div className="min-w-0 space-y-1.5">
-            <label htmlFor="recall-search" className="text-xs font-medium text-muted-foreground">
+            <label htmlFor="recall-search" className="text-xs font-bold text-ink-2">
               Search recalls
             </label>
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Search aria-hidden className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2" />
               <Input
                 id="recall-search"
                 type="search"
@@ -397,12 +378,12 @@ export function RecallsPage() {
                 placeholder="Product, reason, or recalling firm"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-9 text-base sm:text-sm"
+                className="pl-11"
               />
             </div>
           </div>
           <fieldset className="min-w-0 space-y-1.5">
-            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">Where</legend>
+            <legend className="mb-1.5 text-xs font-bold text-ink-2">Where</legend>
             <Select
               label="Filter by distribution"
               value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
@@ -413,31 +394,27 @@ export function RecallsPage() {
         </div>
         <div id="recall-filters" className={cn("gap-4 sm:grid-cols-2", filtersOpen ? "grid" : "hidden")}>
           <fieldset className="min-w-0 space-y-1.5">
-            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">What</legend>
+            <legend className="mb-1.5 text-xs font-bold text-ink-2">What</legend>
             <div className="grid gap-2 sm:grid-cols-2">
               <Select label="Filter by agency" value={agencyFilter} onChange={setAgencyFilter} options={AGENCY_OPTIONS} />
               <Select label="Filter by contaminant type" value={typeFilter} onChange={setTypeFilter} options={TYPE_OPTIONS} />
             </div>
           </fieldset>
           <fieldset className="min-w-0 space-y-1.5">
-            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">How serious</legend>
+            <legend className="mb-1.5 text-xs font-bold text-ink-2">How serious</legend>
             <div className="grid gap-2 sm:grid-cols-2">
               <Select label="Filter by severity class" value={classFilter} onChange={setClassFilter} options={CLASS_OPTIONS} />
               <Select label="Filter by status" value={statusFilter} onChange={setStatusFilter} options={STATUS_OPTIONS} />
             </div>
           </fieldset>
         </div>
-      </Card>
+      </Sheet>
 
-      {recalls.loading && (
-        <div role="status" className="flex h-40 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Loading recalls from openFDA…
-        </div>
-      )}
+      {recalls.loading && <Loading className="h-32">Loading recalls from openFDA…</Loading>}
       {recalls.error && (
         <EmptyState>
           Couldn't reach the openFDA API ({recalls.error}).{" "}
-          <button className="text-primary hover:underline" onClick={recalls.reload}>
+          <button type="button" className="link" onClick={recalls.reload}>
             Retry
           </button>
         </EmptyState>
@@ -454,7 +431,7 @@ export function RecallsPage() {
                   </p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
                     {!archive && (
-                      <Button size="sm" className="h-10" onClick={() => setArchive(true)}>
+                      <Button size="sm" onClick={() => setArchive(true)}>
                         Search the archive for &lsquo;{query.trim()}&rsquo;
                       </Button>
                     )}
@@ -466,7 +443,7 @@ export function RecallsPage() {
                   <p>No recalls match these filters.</p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
                     {!archive && (
-                      <Button size="sm" className="h-10" onClick={() => setArchive(true)}>
+                      <Button size="sm" onClick={() => setArchive(true)}>
                         Include the archive
                       </Button>
                     )}
@@ -476,11 +453,11 @@ export function RecallsPage() {
               )}
             </EmptyState>
           ) : (
-            <div className="space-y-3">
+            <div>
               {groups.slice(0, shown).map((g) => (
                 <RecallRow key={g[0].id} recall={g[0]} showHaveIt="expanded">
                   {relatedTo.get(g[0].id) && (
-                    <p className="mt-2 text-xs text-muted-foreground">
+                    <p className="mt-2 text-sm text-ink-2">
                       Same firm and product as{" "}
                       {relatedTo
                         .get(g[0].id)!
@@ -497,7 +474,7 @@ export function RecallsPage() {
                             const hasNum = Boolean(r.recallNumber) && !/^(n\/a|—|-|unknown)$/i.test(r.recallNumber.trim());
                             return (
                               <li key={r.id}>
-                                <p className="line-clamp-3 text-sm text-muted-foreground">
+                                <p className="line-clamp-3 text-sm text-ink-2">
                                   {repairEncoding(r.productDescription)}
                                 </p>
                                 <RecordLine
@@ -517,8 +494,8 @@ export function RecallsPage() {
                 </RecallRow>
               ))}
               {groups.length > 40 && (
-                <div className="flex flex-col items-center gap-2 pt-1">
-                  <p aria-live="polite" className="text-xs text-muted-foreground tabular-nums">
+                <div className="flex flex-col items-center gap-3 pt-6">
+                  <p aria-live="polite" className="tnum text-sm text-ink-2">
                     Showing {Math.min(shown, groups.length)} of {groups.length} recalls · {filtered.length}{" "}
                     {filtered.length === 1 ? "notice" : "notices"} in total
                   </p>
@@ -526,7 +503,7 @@ export function RecallsPage() {
                     <button
                       type="button"
                       onClick={() => setShown((n) => n + 40)}
-                      className="inline-flex h-10 items-center rounded-md border border-input px-4 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="capsule"
                     >
                       Show {Math.min(40, groups.length - shown)} more
                     </button>
@@ -541,10 +518,10 @@ export function RecallsPage() {
               aria-expanded={trendOpen}
               aria-controls="recall-trend"
               onClick={() => setTrendOpen((o) => !o)}
-              className="inline-flex items-center gap-1.5 min-h-10 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="link inline-flex min-h-9 items-center gap-1.5 text-sm"
             >
               {defaultScope ? "Trend by month, current scope" : "Trend by month, archive"}
-              <ChevronDown className={cn("size-4 transition-transform", trendOpen && "rotate-180")} />
+              <ChevronDown aria-hidden className={cn("size-4 transition-transform ease-over", trendOpen && "rotate-180")} />
             </button>
             {trendOpen && (
               <div id="recall-trend" className="pt-2">

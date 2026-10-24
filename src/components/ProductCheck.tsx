@@ -1,4 +1,3 @@
-import { Card } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Search } from "lucide-react";
@@ -7,7 +6,8 @@ import { matchRecalls } from "@/data/barcodeMatch";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { Button } from "@/components/ui/button";
-import { InfoNote } from "@/components/common";
+import { Input } from "@/components/ui/input";
+import { InfoNote, Loading, Sheet } from "@/components/common";
 import { BarcodeVerdict } from "@/components/BarcodeVerdict";
 
 // NOTE: camera scanning is a deferred backlog feature — it needs an on-device
@@ -69,57 +69,51 @@ export function ProductCheck({ recalls, feedNote }: { recalls: Recall[]; feedNot
 
   return (
     <div className="space-y-4">
-      <p className="max-w-prose text-sm text-muted-foreground">
+      <p className="prose-measure text-sm text-ink-2">
         In the store? Type or paste a product's barcode number to see whether it's named in a
         current FDA or USDA FSIS recall. Open Food Facts identifies the product; the FDA/FSIS record
         is the source of truth.
       </p>
 
-      <Card>
-        <Card.Content>
-          <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-2">
-            <div className="min-w-0 flex-1">
-              <label htmlFor="barcode" className="mb-1 block text-sm font-medium">
-                Barcode number
-              </label>
-              <input
-                id="barcode"
-                inputMode="numeric"
-                autoComplete="off"
-                placeholder="e.g. 737628064502"
-                maxLength={14}
-                value={input}
-                onChange={(e) => setInput(e.target.value.replace(/\D/g, "").slice(0, 14))}
-                aria-invalid={inputError ? true : undefined}
-                aria-describedby={inputError ? "barcode-error" : undefined}
-                className="h-10 w-full min-w-[12rem] rounded-md border border-input bg-background px-3 text-sm tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              />
-            </div>
-            <Button type="submit" disabled={lookup.loading}>
-              {lookup.loading ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" /> Checking…
-                </>
-              ) : (
-                <>
-                  <Search className="size-4" /> Check
-                </>
-              )}
-            </Button>
-          </form>
-          {inputError && (
-            <p id="barcode-error" className="mt-2 text-sm text-[var(--status-critical)]">
-              {inputError}
-            </p>
-          )}
-        </Card.Content>
-      </Card>
+      <div>
+        <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-2">
+          <div className="min-w-0 flex-1">
+            <label htmlFor="barcode" className="mb-1.5 block text-sm font-bold">
+              Barcode number
+            </label>
+            <Input
+              id="barcode"
+              inputMode="numeric"
+              autoComplete="off"
+              placeholder="e.g. 737628064502"
+              maxLength={14}
+              value={input}
+              onChange={(e) => setInput(e.target.value.replace(/\D/g, "").slice(0, 14))}
+              aria-invalid={inputError ? true : undefined}
+              aria-describedby={inputError ? "barcode-error" : undefined}
+              className="tnum min-w-[12rem] font-mono text-lg"
+            />
+          </div>
+          <Button type="submit" variant="ink" className="min-h-12" disabled={lookup.loading}>
+            {lookup.loading ? (
+              <>
+                <Loader2 className="animate-spin" /> Checking…
+              </>
+            ) : (
+              <>
+                <Search /> Check
+              </>
+            )}
+          </Button>
+        </form>
+        {inputError && (
+          <p id="barcode-error" className="mt-2 text-sm font-semibold text-[color:var(--status-critical)]">
+            {inputError}
+          </p>
+        )}
+      </div>
 
-      {lookup.loading && (
-        <div role="status" className="flex h-24 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Looking up the product…
-        </div>
-      )}
+      {lookup.loading && <Loading className="h-20">Looking up the product…</Loading>}
 
       {checked && matches && (
         <div className="space-y-4">
@@ -130,71 +124,56 @@ export function ProductCheck({ recalls, feedNote }: { recalls: Recall[]; feedNot
           />
 
           {/* Resolved product identity (or the raw code, if OFF had no record). */}
-          <Card>
-            <Card.Content className="flex items-center gap-4">
-              {off?.imageUrl && (
-                <img
-                  src={off.imageUrl}
-                  alt=""
-                  className="size-16 shrink-0 rounded-md border object-contain"
-                />
+          <Sheet quiet className="flex items-center gap-4 p-4">
+            {off?.imageUrl && (
+              <img src={off.imageUrl} alt="" className="size-16 shrink-0 rounded-md border border-rule bg-paper object-contain" />
+            )}
+            <div className="min-w-0">
+              {off ? (
+                <>
+                  <p className="truncate text-sm font-bold">{off.name ?? "Unnamed product"}</p>
+                  {off.brands.length > 0 && <p className="truncate text-sm text-ink-2">{off.brands.join(", ")}</p>}
+                  <p className="tnum mt-0.5 text-xs text-ink-2">
+                    Barcode {code}{off.code !== code && ` (matched as ${off.code})`} · identified via Open Food Facts
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="tnum text-sm font-bold">Barcode {code}</p>
+                  <p className="mt-0.5 text-sm text-ink-2">
+                    Open Food Facts has no record for this code, so we matched recalls on the
+                    number alone. You can still search recalls by brand or food name.
+                  </p>
+                </>
               )}
-              <div className="min-w-0">
-                {off ? (
-                  <>
-                    <p className="truncate text-sm font-medium">{off.name ?? "Unnamed product"}</p>
-                    {off.brands.length > 0 && (
-                      <p className="truncate text-sm text-muted-foreground">
-                        {off.brands.join(", ")}
-                      </p>
-                    )}
-                    <p className="mt-0.5 text-xs tabular-nums text-muted-foreground">
-                      Barcode {code}{off.code !== code && ` (matched as ${off.code})`} · identified via Open Food Facts
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-sm font-medium tabular-nums">Barcode {code}</p>
-                    <p className="mt-0.5 text-sm text-muted-foreground">
-                      Open Food Facts has no record for this code, so we matched recalls on the
-                      number alone. You can still search recalls by brand or food name.
-                    </p>
-                  </>
-                )}
-              </div>
-            </Card.Content>
-          </Card>
+            </div>
+          </Sheet>
 
           {/* Never dead-end: point back to the recall feed below to search by name. */}
           {(offMissed || (matches.exact.length === 0 && matches.possible.length === 0)) && (
-            <Card className="border border-dashed">
-              <Card.Content className="text-sm">
-                <p className="font-medium">Want to double-check by name?</p>
-                <p className="mt-1 text-muted-foreground">
-                  Barcode coverage is uneven. Scroll down to the full recall feed and filter by
-                  agency or severity
-                  {brandHint ? (
-                    <>
-                      , or scan the list for{" "}
-                      <span className="font-medium text-foreground">
-                        {off?.brands[0] ?? off?.name}
-                      </span>
-                    </>
-                  ) : null}
-                  . You can also{" "}
-                  <Link className="text-primary hover:underline" to="/">
-                    browse by food
-                  </Link>
-                  .
-                </p>
-              </Card.Content>
-            </Card>
+            <div className="rounded-lg border-2 border-dashed border-rule p-4 text-sm">
+              <p className="font-bold">Want to double-check by name?</p>
+              <p className="mt-1 text-ink-2">
+                Barcode coverage is uneven. Scroll down to the full recall feed and filter by
+                agency or severity
+                {brandHint ? (
+                  <>
+                    , or scan the list for <span className="font-bold text-ink">{off?.brands[0] ?? off?.name}</span>
+                  </>
+                ) : null}
+                . You can also{" "}
+                <Link className="link" to="/">
+                  browse by food
+                </Link>
+                .
+              </p>
+            </div>
           )}
         </div>
       )}
 
       <InfoNote>
-        <p className="font-medium text-foreground">How this works</p>
+        <p className="font-bold text-ink">How this works</p>
         <p className="mt-1">
           Open Food Facts turns the barcode into a product name and brand — it only identifies the
           item and is not a safety authority. We then check that identity, and the raw number,

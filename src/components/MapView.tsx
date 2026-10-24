@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Map as MapIcon, Navigation, Phone, Globe } from "lucide-react";
+import { Map as MapIcon, Navigation, Phone, Globe, X } from "lucide-react";
 import { mapboxToken } from "@/data/mapbox";
 
 export interface MapMarker {
@@ -52,7 +52,7 @@ export function MapView({
       container: containerRef.current,
       style: isDark
         ? "mapbox://styles/mapbox/navigation-night-v1"
-        : "mapbox://styles/mapbox/streets-v12",
+        : "mapbox://styles/mapbox/light-v11",
       center: center ? [center.lng, center.lat] : [-98.5, 39.8],
       zoom: center ? 10 : 3,
       attributionControl: false,
@@ -79,8 +79,9 @@ export function MapView({
       if (center) {
         const el = document.createElement("div");
         el.style.cssText =
-          "width:14px;height:14px;border-radius:50%;background:#2a78d6;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3)";
+          "width:16px;height:16px;border-radius:50%;background:#2ba0ff;border:2.5px solid #2c2e2a";
         el.title = "Your ZIP";
+        el.setAttribute("aria-label", "Your ZIP");
         markersRef.current.push(
           new mapboxgl.Marker(el).setLngLat([center.lng, center.lat]).addTo(map)
         );
@@ -89,8 +90,9 @@ export function MapView({
       for (const m of markers) {
         const el = document.createElement("button");
         el.type = "button";
-        el.style.cssText = `width:18px;height:18px;border-radius:50%;background:${m.color};border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.3);cursor:pointer;padding:0`;
+        el.style.cssText = `width:20px;height:20px;border-radius:50%;background:${m.color};border:2.5px solid #2c2e2a;cursor:pointer;padding:0`;
         el.title = m.label;
+        el.setAttribute("aria-label", m.label);
         el.onclick = (e) => {
           e.stopPropagation();
           setSelected(m);
@@ -123,37 +125,34 @@ export function MapView({
   if (!token) {
     return (
       <div
-        className="flex items-center justify-center rounded-lg border border-dashed bg-muted/30 text-center text-sm text-muted-foreground"
+        className="flex items-center justify-center rounded-lg border-2 border-dashed border-rule text-center text-sm text-ink-2"
         style={{ height }}
       >
         <div className="max-w-xs p-4">
-          <MapIcon className="mx-auto mb-2 size-5" />
-          Map disabled — add a Mapbox token (<code className="text-xs">VITE_MAPBOX_TOKEN</code>) in
-          <code className="text-xs"> .env.local</code> to enable the map and location search.
+          <MapIcon className="mx-auto mb-2 size-5" aria-hidden />
+          The map isn't available right now. The listings still work from your ZIP.
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative overflow-hidden rounded-lg border">
+    <div className="lobe--soft relative overflow-hidden border-2 border-ink">
       <div ref={containerRef} style={{ height }} className="w-full" />
       {selected && (
-        <div className="absolute bottom-3 left-3 right-3 rounded-md border bg-card p-3 shadow-md">
+        <div className="sheet absolute bottom-3 left-3 right-3 p-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <div className="truncate text-sm font-medium">{selected.label}</div>
-              {selected.sublabel && (
-                <div className="truncate text-xs text-muted-foreground">{selected.sublabel}</div>
-              )}
+              <div className="truncate text-sm font-bold">{selected.label}</div>
+              {selected.sublabel && <div className="truncate text-xs text-ink-2">{selected.sublabel}</div>}
               <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                 {selected.distanceMi != null && (
-                  <span className="tabular-nums text-muted-foreground">
+                  <span className="text-ink-2">
                     {selected.distanceMi.toFixed(1)} mi
                   </span>
                 )}
                 <a
-                  className="inline-flex items-center gap-1 text-primary hover:underline"
+                  className="link inline-flex items-center gap-1"
                   href={`https://maps.apple.com/?daddr=${selected.lat},${selected.lng}&q=${encodeURIComponent(selected.label)}`}
                   target="_blank"
                   rel="noreferrer"
@@ -162,7 +161,7 @@ export function MapView({
                 </a>
                 {selected.phone && (
                   <a
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="link inline-flex items-center gap-1"
                     href={`tel:+1${selected.phone}`}
                   >
                     <Phone className="size-3" /> {formatPhone(selected.phone)}
@@ -170,7 +169,7 @@ export function MapView({
                 )}
                 {selected.website && (
                   <a
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="link inline-flex items-center gap-1"
                     href={selected.website}
                     target="_blank"
                     rel="noreferrer"
@@ -180,11 +179,8 @@ export function MapView({
                 )}
               </div>
             </div>
-            <button
-              className="rounded px-2 py-0.5 text-xs text-muted-foreground hover:bg-secondary"
-              onClick={() => setSelected(null)}
-            >
-              Close
+            <button type="button" className="capsule capsule--sm px-2" aria-label="Close" onClick={() => setSelected(null)}>
+              <X className="size-4" aria-hidden />
             </button>
           </div>
         </div>

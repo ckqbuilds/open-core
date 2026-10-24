@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Loader2, MapPin, Stethoscope, Package } from "lucide-react";
+import { ArrowLeft, Package } from "lucide-react";
 import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByTerm } from "@/data/openfda";
 import { loadFsisRecalls, correlateFsisRecalls } from "@/data/fsis";
@@ -19,7 +19,7 @@ import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
 import { KeyButton } from "@/components/KeyButton";
 import { Disclosure } from "@/components/Disclosure";
-import { EmptyState } from "@/components/common";
+import { EmptyState, Loading, SectionHeading } from "@/components/common";
 
 /** How far back "Related recalls" reaches. Older recalls are treated as stale. */
 const RELATED_RECALL_WINDOW_YEARS = 3;
@@ -80,11 +80,8 @@ export function OutbreakPage() {
   );
 
   const backLink = (
-    <Link
-      to="/outbreaks"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-    >
-      <ArrowLeft className="size-4" /> All outbreaks
+    <Link to="/outbreaks" className="capsule capsule--sm capsule--ghost">
+      <ArrowLeft className="size-4" aria-hidden /> All outbreaks
     </Link>
   );
 
@@ -92,9 +89,7 @@ export function OutbreakPage() {
     return (
       <div className="space-y-4">
         {backLink}
-        <div role="status" className="flex h-40 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Loading outbreak…
-        </div>
+        <Loading>Loading outbreak…</Loading>
       </div>
     );
   }
@@ -105,14 +100,14 @@ export function OutbreakPage() {
         {backLink}
         <EmptyState>
           No outbreak found for reference #{refId}. It may have closed since you last opened this
-          link. <Link className="text-primary hover:underline" to="/">See active outbreaks</Link>.
+          link. <Link className="link" to="/">See active outbreaks</Link>.
         </EmptyState>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         {backLink}
         <KeyButton />
@@ -136,18 +131,16 @@ export function OutbreakPage() {
       {/* All related recall records (the digest above groups them by event) */}
       <Disclosure
         label={`All recall records (${(relatedRecalls.data ?? []).length + fsisRelated.length})`}
-        icon={<Package className="size-4 text-muted-foreground" />}
+        icon={<Package aria-hidden />}
       >
         {relatedRecalls.loading ? (
-          <div role="status" className="flex h-24 items-center justify-center text-sm text-muted-foreground">
-            <Loader2 className="mr-2 size-4 animate-spin" /> Searching openFDA for "{recallTerm}"…
-          </div>
+          <Loading className="h-20">Searching openFDA for "{recallTerm}"…</Loading>
         ) : relatedRecalls.error ? (
           <EmptyState>Couldn't load related recalls ({relatedRecalls.error}).</EmptyState>
         ) : (relatedRecalls.data ?? []).length === 0 ? (
           <EmptyState>No recalls in the openFDA database mention "{recallTerm}" right now.</EmptyState>
         ) : (
-          <div className="space-y-3">
+          <div>
             {(relatedRecalls.data ?? []).slice(0, 8).map((r) => (
               <RecallRow key={r.id} recall={r} />
             ))}
@@ -155,15 +148,15 @@ export function OutbreakPage() {
         )}
 
         {fsisRelated.length > 0 && (
-          <div className="mt-6">
-            <h3 className="text-sm font-semibold">USDA FSIS — possibly related</h3>
-            <p className="mb-3 mt-1 text-xs text-muted-foreground">
+          <div className="mt-8">
+            <h3 className="text-base font-extrabold">USDA FSIS — possibly related</h3>
+            <p className="prose-measure mb-3 mt-1 text-sm text-ink-2">
               Meat, poultry, or egg recalls from USDA FSIS naming the same pathogen
               {matchedPathogen ? ` (${matchedPathogen.name})` : ""} within about six months of this
               investigation. Matched on pathogen and timeframe only — the agencies share no outbreak
               ID, so this is a possible connection, not a confirmed link.
             </p>
-            <div className="space-y-3">
+            <div>
               {fsisRelated.slice(0, 6).map((r) => (
                 <RecallRow key={r.id} recall={r} />
               ))}
@@ -173,25 +166,21 @@ export function OutbreakPage() {
       </Disclosure>
 
       {matchedPathogen && (
-        <section id="symptoms" className="scroll-mt-24 lg:col-span-1">
-          <div className="mb-3 flex items-center gap-2">
-            <Stethoscope className="size-4 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Recognize the illness</h2>
-          </div>
+        <section id="symptoms" className="scroll-mt-24 space-y-4">
+          <SectionHeading>Recognize the illness</SectionHeading>
           <PathogenCard pathogen={matchedPathogen} selected={selected} activeOutbreaks={[]} />
         </section>
       )}
 
       {/* Named locations near you — scoped to THIS outbreak's entities */}
-      <section>
-        <div className="mb-1 flex items-center gap-2">
-          <MapPin className="size-4 text-muted-foreground" />
-          <h2 className="text-lg font-semibold">Named locations near you</h2>
+      <section className="space-y-4">
+        <div className="space-y-2">
+          <SectionHeading>Named locations near you</SectionHeading>
+          <p className="prose-measure text-sm text-ink-2">
+            Locations of the companies FDA/CDC named for this outbreak. Being listed is not a judgment
+            that a location is unsafe — check the linked source and decide for yourself.
+          </p>
         </div>
-        <p className="mb-3 text-sm text-muted-foreground">
-          Locations of the companies FDA/CDC named for this outbreak. Being listed is not a judgment
-          that a location is unsafe — check the linked source and decide for yourself.
-        </p>
         <NamedLocationsMap entities={ob.namedEntities ?? []} geo={geo} />
       </section>
     </div>
