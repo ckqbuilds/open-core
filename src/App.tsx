@@ -43,9 +43,9 @@ export default function App() {
             <div className="container space-y-2 py-6 text-xs text-muted-foreground">
               <div className="flex flex-wrap items-center gap-x-5 text-sm text-foreground">
                 <span>Not sure what to do next?</span>
-                <Link to="/recalls#check" className="inline-block py-2 font-medium text-primary hover:underline">Check a product barcode</Link>
-                <Link to="/learn" className="inline-block py-2 font-medium text-primary hover:underline">Learn the signs of illness</Link>
-                <Link to="/shop-local" className="inline-block py-2 font-medium text-primary hover:underline">Find local food sources</Link>
+                <Link to="/recalls#check" className="inline-flex items-center py-2 font-medium text-primary hover:underline pointer-coarse:min-h-11">Check a product barcode</Link>
+                <Link to="/learn" className="inline-flex items-center py-2 font-medium text-primary hover:underline pointer-coarse:min-h-11">Learn the signs of illness</Link>
+                <Link to="/shop-local" className="inline-flex items-center py-2 font-medium text-primary hover:underline pointer-coarse:min-h-11">Find local food sources</Link>
               </div>
               <p className="max-w-[52ch]">
                 <strong className="text-foreground">Not medical or official guidance.</strong> This

@@ -11,7 +11,7 @@ import { SourceLink } from "./common";
 import { ReachLine } from "./ReachLine";
 import { RecordLine, recordRule } from "./RecordLine";
 import { PATHOGENS } from "@/data/symptoms";
-import { formatFdaDate, formatIso, cn } from "@/lib/utils";
+import { formatFdaDate, formatIso, cn, isStale, staleNotice } from "@/lib/utils";
 
 const RETAIL_PREVIEW = 6;
 
@@ -39,8 +39,12 @@ export function AvoidanceDigest({
   const isClosed = (e: AvoidanceEvent) => e.status === "Terminated" || e.status === "Completed";
   const openEvents = digest.events.filter((e) => !isClosed(e));
   const closed = digest.events.filter(isClosed);
-  const tied = openEvents.filter((e) => e.tiedPathogen);
-  const other = openEvents.filter((e) => !e.tiedPathogen);
+  const tied = openEvents.filter((e) => e.tiedPathogen || e.namedInAdvisory);
+  const other = openEvents.filter((e) => !e.tiedPathogen && !e.namedInAdvisory);
+  const otherLabel =
+    group?.kind === "pathogen"
+      ? `Same pathogen, other recalls (${other.length})`
+      : `Other recalls that mention a ${group?.label ?? "food"} term (${other.length})`;
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
@@ -50,21 +54,12 @@ export function AvoidanceDigest({
       <p className="max-w-prose text-sm text-muted-foreground">
         The brands, package sizes, and codes each official notice lists, grouped by recall. Being
         listed means the product is under recall, not that a store is unsafe.
+        {other.length > 0 && group?.kind === "food" && " Recalls that only mention a related word are folded below."}
         {closed.length > 0 && " Closed recalls are listed separately."}
       </p>
       <KeyButton variant="link" />
       <div className="space-y-3">
         {tied.map((ev) => (
-          <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
-        ))}
-        {tied.length > 0 && other.length > 0 && (
-          <h3 className="pt-2 text-sm font-semibold text-muted-foreground">
-            {group?.kind === "pathogen"
-              ? "Same pathogen, other recalls"
-              : `Other recalls grouped under ${group?.label ?? "this food"}`}
-          </h3>
-        )}
-        {other.map((ev) => (
           <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
         ))}
         {retailers.length > 0 && (
@@ -74,6 +69,15 @@ export function AvoidanceDigest({
               <RetailerCard key={r.id} item={r} />
             ))}
           </>
+        )}
+        {other.length > 0 && (
+          <Disclosure label={otherLabel}>
+            <div className="space-y-3 pt-2">
+              {other.map((ev) => (
+                <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
+              ))}
+            </div>
+          </Disclosure>
         )}
         {closed.length > 0 && (
           <Disclosure label={`Closed recalls (${closed.length})`}>
@@ -232,6 +236,10 @@ function EventCard({
             </pre>
           )}
         </div>
+      )}
+
+      {isStale(ev.sourceDate) && (
+        <p className="mt-3 text-xs text-muted-foreground">{staleNotice(ev.sourceDate)}</p>
       )}
 
       {ev.status !== "Terminated" && ev.status !== "Completed" && (

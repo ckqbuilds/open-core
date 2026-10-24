@@ -4,7 +4,7 @@ import { Check, Copy, Share2, Loader2, ExternalLink } from "lucide-react";
 import type { Outbreak } from "@/data/types";
 import { shareOrCopy } from "@/lib/share";
 import { outbreakStatusChip } from "@/lib/classification";
-import { formatIso } from "@/lib/utils";
+import { formatIso, isStale, staleNotice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/StatCard";
 import { SourceLink } from "@/components/common";
@@ -26,7 +26,14 @@ function shareText(ob: Outbreak): string {
  * The core outbreak record — everything CORE + the curated layer holds for one
  * outbreak. Extracted from the old modal so it can headline a full page.
  */
-export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
+export function OutbreakDetail({
+  outbreak: ob,
+  symptomsHref,
+}: {
+  outbreak: Outbreak;
+  /** Set only when the page renders a symptoms section to jump to. */
+  symptomsHref?: string;
+}) {
   const [shareState, setShareState] = useState<"idle" | "busy" | "shared" | "copied">("idle");
 
   const onShare = async () => {
@@ -94,6 +101,17 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
               </li>
             ))}
           </ul>
+          {isStale(ob.lastIllnessDate) && (
+            <p className="mt-2 text-xs text-muted-foreground">{staleNotice(ob.lastIllnessDate)}</p>
+          )}
+          {symptomsHref && (
+            <a
+              href={symptomsHref}
+              className="mt-3 inline-flex min-h-10 items-center rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              If you have eaten this: see the symptoms and what to do
+            </a>
+          )}
         </div>
       )}
 

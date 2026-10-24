@@ -32,3 +32,27 @@ export function formatFdaDate(raw?: string): string {
     day: "numeric",
   });
 }
+
+const STALE_DAYS = 60;
+
+/** Parse YYYYMMDD or an ISO date into a Date, or null. */
+function parseRecordDate(raw?: string | null): Date | null {
+  if (!raw) return null;
+  const d = /^\d{8}$/.test(raw)
+    ? new Date(`${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}T00:00:00`)
+    : new Date(raw.length === 10 ? `${raw}T00:00:00` : raw);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/** True when the record's date is more than 60 days before today. */
+export function isStale(raw?: string | null): boolean {
+  const d = parseRecordDate(raw);
+  return !!d && Date.now() - d.getTime() > STALE_DAYS * 86400000;
+}
+
+/** One factual line for notices whose date is old; no advice beyond what the record supports. */
+export function staleNotice(raw?: string | null): string {
+  const d = parseRecordDate(raw);
+  const when = d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "an earlier date";
+  return `This notice is from ${when}. Dates it names may have passed; recalled product can remain in homes.`;
+}

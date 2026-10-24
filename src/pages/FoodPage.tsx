@@ -122,7 +122,7 @@ export function FoodPage() {
   const backLink = (
     <Link
       to="/"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground pointer-coarse:min-h-11"
     >
       <ArrowLeft className="size-4" /> All foods
     </Link>
@@ -259,7 +259,7 @@ export function FoodPage() {
                 Pregnant, older, young, or immunocompromised?{" "}
                 <Link
                   to="/learn#risk-groups"
-                  className="inline-flex items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:py-2"
+                  className="inline-flex items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:min-h-11"
                 >
                   See risk-group guidance
                 </Link>

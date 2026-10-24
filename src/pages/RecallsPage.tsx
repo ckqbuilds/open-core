@@ -161,10 +161,6 @@ export function RecallsPage() {
   const fsisSince = fsis.data?.generatedAt ? new Date(fsis.data.generatedAt) : null;
   const fsisOld = !!fsisSince && !isNaN(+fsisSince) && Date.now() - +fsisSince > 14 * 86400000;
   const fsisUnavailable = !!fsis.error || (!fsis.loading && (!!fsis.data?.stale || fsisOld));
-  const fsisSegment =
-    fsisSince && !isNaN(+fsisSince) && !fsis.error
-      ? `USDA FSIS: incomplete since ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
-      : "USDA FSIS: feed unavailable";
   const feedNote = fsisUnavailable
     ? fsisSince && !isNaN(+fsisSince) && !fsis.error
       ? `Meat and poultry recalls after ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included (USDA FSIS feed incomplete)`
@@ -174,15 +170,14 @@ export function RecallsPage() {
     ? filtered.filter((r) => !r.nationwide && r.distributionStates.includes(geo.stateAbbr)).length
     : 0;
   const summaryTail = [
-    geo
-      ? summary.reach > 0
-        ? summary.nationwide > 0
-          ? `${stateListed} listed for ${geo.stateAbbr} + ${summary.nationwide} nationwide`
-          : `${summary.reach} reach ${geo.stateAbbr}`
-        : null
+    geo && summary.reach > 0
+      ? summary.nationwide > 0
+        ? `${stateListed} listed for ${geo.stateAbbr} + ${summary.nationwide} nationwide`
+        : `${summary.reach} reach ${geo.stateAbbr}`
       : null,
-    fsisUnavailable ? fsisSegment : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
-    summary.nationwide > 0 && !(geo && summary.reach > 0) ? `${summary.nationwide} nationwide` : null,
+    fsisUnavailable ? null : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
+    !geo && summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
+    geo && summary.reach === 0 && summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
   ]
     .filter(Boolean)
     .map((t) => ` · ${t}`)
@@ -214,13 +209,22 @@ export function RecallsPage() {
 
   return (
     <div className="space-y-8">
+      {archive && (
+        <button
+          type="button"
+          onClick={() => setArchive(false)}
+          className="-mb-4 inline-flex min-h-10 items-center rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          ← Back to active recalls
+        </button>
+      )}
       <PageHeader
         icon={<Package className="size-6 text-primary" />}
         title={archive ? "Recall archive" : "Active recalls"}
         description={
           archive
-            ? "Every recall on record from the last 3 years, including completed and terminated ones, from two regulatory feeds: the openFDA food enforcement database (FDA) and USDA FSIS for meat, poultry, and egg."
-            : "Ongoing recalls reported in the last 90 days, from two regulatory feeds: the openFDA food enforcement database (FDA) and USDA FSIS for meat, poultry, and egg. Completed, terminated, and older recalls are in the archive."
+            ? "Every recall on record from the last 3 years, including completed and terminated ones, from FDA and USDA FSIS."
+            : "Ongoing FDA and USDA FSIS recalls from the last 90 days; older and closed recalls are in the archive."
         }
         actions={
           <div className="flex flex-col items-end gap-2">
@@ -241,11 +245,10 @@ export function RecallsPage() {
                 : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               {summaryTail}
             </p>
-            {filtered.length > 0 && <KeyButton variant="link" />}
           </div>
           {autoScoped && geo && (
-            <p className="text-sm text-muted-foreground">
-              Showing recalls that reach {geo.stateAbbr} ·{" "}
+            <p className="inline-flex flex-wrap items-center gap-x-1.5 rounded-md border border-input px-3 text-sm text-muted-foreground">
+              Scoped to {geo.stateAbbr} ·
               <button
                 type="button"
                 className="inline-flex h-10 items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

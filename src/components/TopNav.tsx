@@ -35,7 +35,7 @@ export function TopNav() {
       <nav className="mx-auto flex h-[3.75rem] max-w-6xl items-center gap-2">
         <Link
           to="/"
-          className="shrink-0 rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex shrink-0 items-center rounded-md text-sm pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="OpenCORE home"
         >
           <Wordmark />

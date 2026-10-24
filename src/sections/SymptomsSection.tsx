@@ -258,7 +258,7 @@ export function PathogenCard({
         ))}
 
         <button
-          className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm font-medium hover:bg-secondary"
+          className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm font-medium hover:bg-secondary pointer-coarse:min-h-11"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
         >

@@ -182,13 +182,19 @@ const PACK_BOUNDARY = /(\d+\/\d+\s?(?:#|oz|lbs?|ct)\.?)\s+(?=[A-Z][A-Za-z])/g;
 /** Remove "UPC <digits>" phrases whose digits are already shown as chips. */
 function stripUpcTokens(text: string, upcs: string[]): string {
   let out = text;
+  // Every extracted digit run goes (spaces/hyphens inside it allowed), along
+  // with a leading "UPC(s)"/"UPC codes" label that precedes it.
   for (const u of upcs) {
     const re = new RegExp(
-      String.raw`[,;:]?\s*(?:UPC|EAN|GTIN)\s*[:#]?\s*` + u.split("").join("[ -]?") + String.raw`\b[.,;]?`,
+      String.raw`[,;:&]?\s*(?:(?:and|&)\s+)?(?:(?:UPCs?|EANs?|GTINs?)(?:\s+codes?)?\s*[:#]?\s*)?(?<![\d])` +
+        u.split("").join("[ -]?") +
+        String.raw`(?!\d)[.,;]?`,
       "gi"
     );
     out = out.replace(re, "");
   }
+  // A label left dangling once its numbers are gone ("UPC codes" at the end).
+  out = out.replace(/[,;:&]?\s*\b(?:UPCs?|EANs?|GTINs?)(?:\s+codes?)?\s*[:#]?\s*$/i, "");
   out = out.replace(/\s{2,}/g, " ").replace(/\s+([,.;])/g, "$1").trim().replace(/[,;]$/, "");
   return out.length >= 4 ? out : text;
 }

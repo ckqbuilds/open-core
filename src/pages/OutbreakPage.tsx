@@ -118,7 +118,7 @@ export function OutbreakPage() {
         <KeyButton />
       </div>
 
-      <OutbreakDetail outbreak={ob} />
+      <OutbreakDetail outbreak={ob} symptomsHref={matchedPathogen ? "#symptoms" : undefined} />
 
       {/* What to avoid on the shelf — the shelf-recognition digest */}
       <AvoidanceDigest
@@ -172,7 +172,7 @@ export function OutbreakPage() {
       </Disclosure>
 
       {matchedPathogen && (
-        <section className="lg:col-span-1">
+        <section id="symptoms" className="scroll-mt-24 lg:col-span-1">
           <div className="mb-3 flex items-center gap-2">
             <Stethoscope className="size-4 text-muted-foreground" />
             <h2 className="text-lg font-semibold">Recognize the illness</h2>

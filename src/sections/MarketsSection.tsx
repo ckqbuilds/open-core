@@ -48,7 +48,7 @@ export function MarketsSection({
   // Back to page 1 whenever the filter, ZIP, or page size changes.
   useEffect(() => setPage(1), [filter, geo?.zip, pageSize]);
 
-  if (!geo) return mapsOn ? null : <MapsDisabledNote page="shop-local" />;
+  if (!geo) return null;
 
   const all = markets.data ?? [];
   const list =
