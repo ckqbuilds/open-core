@@ -5,7 +5,7 @@ import type { Recall } from "@/data/types";
 import { classifyRecall } from "@/data/contaminants";
 import { ContaminantBadge } from "@/components/ContaminantBadge";
 import { cleanFirmName, repairEncoding } from "@/data/avoidance";
-import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
+import { classificationChip, classificationTitle, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { RecordLine, recordRule } from "@/components/RecordLine";
 import { cn, formatFdaDate } from "@/lib/utils";
 
@@ -22,7 +22,7 @@ export function RecallRow({ recall }: { recall: Recall }) {
     <Card className="p-4">
       <p className="text-sm font-medium">{repairEncoding(recall.reason)}</p>
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        <Chip {...classificationChip(recall.classification)} size="sm">
+        <Chip {...classificationChip(recall.classification)} title={classificationTitle(recall.classification)} size="sm">
           {recall.classification}
         </Chip>
         <Chip {...statusChip(recall.status)} size="sm">

@@ -24,7 +24,7 @@ export function useZip() {
   useEffect(() => {
     try {
       if (!zip) localStorage.removeItem(KEY);
-      else if (valid && geo.data) localStorage.setItem(KEY, zip);
+      else if (valid && geo.data?.zip === zip) localStorage.setItem(KEY, zip);
     } catch {
       /* storage unavailable */
     }
@@ -34,8 +34,9 @@ export function useZip() {
     zip,
     setZip,
     valid,
-    geo: geo.data ?? null,
+    // Ignore a previous ZIP's result while the new one is still resolving.
+    geo: geo.data?.zip === zip ? geo.data : null,
     geoLoading: geo.loading,
-    geoError: valid && !geo.loading && !geo.data ? "We couldn't find that ZIP. Check the 5 digits." : geo.error,
+    geoError: valid && !geo.loading && geo.data?.zip !== zip && !geo.error ? "We couldn't find that ZIP. Check the 5 digits." : geo.error,
   };
 }

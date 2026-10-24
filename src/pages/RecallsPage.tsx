@@ -439,7 +439,7 @@ export function RecallsPage() {
             </button>
             {trendOpen && (
               <div id="recall-trend" className="pt-2">
-                <RecallTrendChart recalls={filtered} />
+                <RecallTrendChart recalls={filtered} fsisAsOf={fsisUnavailable ? fsisSince : null} />
               </div>
             )}
           </div>

@@ -31,6 +31,8 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { EmptyState, InfoNote } from "@/components/common";
 
 const RECALL_WINDOW_YEARS = 3;
+const nextStepLink =
+  "rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 function recallDate(r: Recall): string {
   return r.reportDate ?? r.recallInitiationDate ?? "";
@@ -83,6 +85,13 @@ export function FoodPage() {
   // Shelf-recognition digest: what to check for at the store, built from the
   // official recall records + the curated named entities for this food. Named
   // sources only — nothing inferred. Grouped by recall event.
+  const outbreakStart = useMemo(() => {
+    const starts = (entry?.outbreaks ?? [])
+      .map((o) => o.firstIllnessDate ?? o.datePosted)
+      .filter((d): d is string => !!d)
+      .sort();
+    return starts[0] ?? null;
+  }, [entry]);
   const digest = useMemo(
     () =>
       buildAvoidanceDigest(
@@ -90,9 +99,10 @@ export function FoodPage() {
         entry?.namedEntities ?? [],
         PATHOGENS.filter((p) => entry?.outbreaks.some((o) => matchesOutbreakPathogen(p, o.pathogen))).map(
           (p) => p.id
-        )
+        ),
+        outbreakStart
       ),
-    [entry]
+    [entry, outbreakStart]
   );
 
   const backLink = (
@@ -125,6 +135,24 @@ export function FoodPage() {
         description="Everything the app is tracking for this food, across FDA, CDC, and USDA FSIS."
         actions={<KeyButton />}
       />
+
+      <p className="-mt-4 max-w-prose text-sm text-muted-foreground">
+        If you have this food:{" "}
+        <Link to="/recalls#check" className={nextStepLink}>
+          check the product barcode
+        </Link>{" "}
+        · if you feel sick,{" "}
+        <a
+          href="#if-sick"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("if-sick")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          className={nextStepLink}
+        >
+          see what to do
+        </a>
+      </p>
 
       {data.loading ? (
         <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
@@ -207,7 +235,7 @@ export function FoodPage() {
 
           {/* What to do if infected */}
           {entry && entry.pathogens.length > 0 && (
-            <section className="space-y-3">
+            <section id="if-sick" className="scroll-mt-24 space-y-3">
               <div className="flex items-center gap-2">
                 <Stethoscope className="size-4 text-muted-foreground" />
                 <h2 className="text-lg font-semibold">What to do if you're sick</h2>

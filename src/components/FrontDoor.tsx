@@ -79,21 +79,23 @@ export function FrontDoor({
         </p>
       )}
 
-      <p id="home-zip-note" className="text-sm text-muted-foreground">
-        {geoError ? null : geo ? (
-          <>Showing {geo.place}, {geo.stateAbbr}{reach != null && <> · {reach} recall{reach === 1 ? "" : "s"} reach your state</>}. Your ZIP stays in this browser. </>
-        ) : (
-          <>Unlocks recalls reaching your state, named locations near you, local sources. </>
-        )}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <p id="home-zip-note" className="text-sm text-muted-foreground">
+          {geoError ? null : geo ? (
+            <>Showing {geo.place}, {geo.stateAbbr}{reach != null && <> · {reach} recall{reach === 1 ? "" : "s"} reach your state</>}. Your ZIP stays in this browser.</>
+          ) : (
+            <>Unlocks recalls reaching your state, named locations near you, local sources.</>
+          )}
+        </p>
         {!(result && result.foods === 0 && result.recalls === 0) && (
           <Link
             to="/recalls#check"
-            className="inline-flex items-center gap-1 whitespace-nowrap rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 self-start whitespace-nowrap rounded-md border border-border px-3 text-sm font-medium text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <ScanBarcode className="size-4" /> Check a product barcode
           </Link>
         )}
-      </p>
+      </div>
     </Card>
   );
 }

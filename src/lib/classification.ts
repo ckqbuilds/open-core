@@ -41,3 +41,21 @@ export function agencyChip(agency?: string): ChipStyle {
 export function outbreakStatusChip(active: boolean): ChipStyle {
   return { color: active ? "danger" : "success", variant: "soft" };
 }
+
+/** The issuing agency's own one-line definition of a classification, for a chip `title`. */
+export function classificationTitle(c?: string): string | undefined {
+  switch (c) {
+    case "Class I":
+      return "FDA: reasonable probability that use will cause serious adverse health consequences or death";
+    case "Class II":
+      return "FDA: may cause temporary or medically reversible adverse health consequences";
+    case "Class III":
+      return "FDA: not likely to cause adverse health consequences";
+    case "Public Health Alert":
+      return "USDA FSIS: a public health concern without a formal recall";
+    case "Not Yet Classified":
+      return "FDA has not assigned a class yet";
+    default:
+      return undefined;
+  }
+}

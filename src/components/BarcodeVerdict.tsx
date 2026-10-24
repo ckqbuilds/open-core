@@ -7,7 +7,7 @@ import type { Recall } from "@/data/types";
 import type { RecallMatches } from "@/data/barcodeMatch";
 // Read-only reuse of the shared classification → chip-color mapping.
 import { cn } from "@/lib/utils";
-import { classificationChip, agencyChip, agencyLabel } from "@/lib/classification";
+import { classificationChip, classificationTitle, agencyChip, agencyLabel } from "@/lib/classification";
 
 /**
  * The verdict for an in-store barcode check.
@@ -66,7 +66,7 @@ function Recalled({ recalls, tier, total, brand, feedNote }: { recalls: Recall[]
             {recalls.map((r) => (
               <li key={r.id} className="rounded-md border bg-card p-3">
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <Chip {...classificationChip(r.classification)} size="sm">
+                  <Chip {...classificationChip(r.classification)} title={classificationTitle(r.classification)} size="sm">
                     {r.classification}
                   </Chip>
                   <Chip {...agencyChip(r.agency)} size="sm">

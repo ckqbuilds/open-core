@@ -148,7 +148,7 @@ export function FeaturedLocal({ geo }: { geo: GeoZip | null }) {
       </div>
 
       <p className="mt-3 text-sm text-muted-foreground">
-        Buying whole and local lets you control handling and sidestep recalled packaged products.
+        Listed in the USDA Local Food Directories: farmers markets, CSAs, on-farm markets, food hubs, and agritourism.
       </p>
 
       <div className="mt-3">

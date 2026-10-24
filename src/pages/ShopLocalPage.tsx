@@ -18,7 +18,7 @@ export function ShopLocalPage() {
       <PageHeader
         icon={<ShoppingBasket className="size-6 text-primary" />}
         title="Shop local"
-        description="Every local food source near you, with what each one offers — merged from all five USDA Local Food Directories. Buying whole, local produce and washing it yourself lets you control handling and sidestep recalled pre-packaged products."
+        description="Every local food source near you, with what each one offers — merged from all five USDA Local Food Directories. The directories list farmers markets, CSAs, on-farm markets, food hubs, and agritourism."
       />
 
       {!geo && (

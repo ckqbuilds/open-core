@@ -264,6 +264,8 @@ export interface AvoidanceEvent {
   retailers: string[];
   /** Canonical ids of the pathogens these records name (Recall.pathogen). */
   pathogens: string[];
+  /** YYYYMMDD the recall was initiated (else reported); used to date-gate the outbreak tie. */
+  recallDate?: string;
   /** Pathogen id shared with an active outbreak the caller passed in, if any. */
   tiedPathogen?: string;
 }
@@ -334,8 +336,11 @@ export function buildAvoidanceDigest(
   recalls: Recall[],
   entities: NamedEntity[] = [],
   /** Pathogen ids of the active outbreaks in scope; matching events sort first. */
-  pathogenIds: string[] = []
+  pathogenIds: string[] = [],
+  /** ISO date the outbreak began; a recall dated earlier is not tied to it. */
+  outbreakStart?: string | null
 ): AvoidanceDigest {
+  const startKey = outbreakStart ? outbreakStart.slice(0, 10).replace(/-/g, "") : null;
   const byKey = new Map<string, AvoidanceEvent & { lineKeys: Set<string> }>();
 
   for (const r of recalls) {
@@ -352,6 +357,7 @@ export function buildAvoidanceDigest(
         classification: r.classification && r.classification !== "—" ? r.classification : undefined,
         status: r.status,
         sourceDate: r.reportDate ?? r.recallInitiationDate,
+        recallDate: date || undefined,
         url: r.url,
         retailListUrl: r.retailListUrl,
         recordCount: 0,
@@ -398,7 +404,8 @@ export function buildAvoidanceDigest(
     .map(({ lineKeys: _drop, ...ev }) => {
       void _drop;
       ev.states.sort();
-      ev.tiedPathogen = ev.pathogens.find((id) => pathogenIds.includes(id));
+      const onOrAfter = !startKey || (!!ev.recallDate && ev.recallDate >= startKey);
+      ev.tiedPathogen = onOrAfter ? ev.pathogens.find((id) => pathogenIds.includes(id)) : undefined;
       return ev;
     })
     .sort((a, b) => {

@@ -4,7 +4,8 @@ import { Chip } from "@/components/ui/chip";
 import { ChevronDown, MapPin, ShoppingCart } from "lucide-react";
 import type { AvoidanceDigest as Digest, AvoidanceEvent, AvoidanceLine, NamedRetailerItem } from "@/data/avoidance";
 import type { GeoZip } from "@/data/types";
-import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
+import { Disclosure } from "@/components/Disclosure";
+import { classificationChip, classificationTitle, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { SourceLink } from "./common";
 import { RecordLine, recordRule } from "./RecordLine";
 import { PATHOGENS } from "@/data/symptoms";
@@ -30,8 +31,11 @@ export function AvoidanceDigest({
   foodLabel?: string;
 }) {
   if (digest.events.length === 0 && digest.retailers.length === 0) return null;
-  const tied = digest.events.filter((e) => e.tiedPathogen);
-  const other = digest.events.filter((e) => !e.tiedPathogen);
+  const isClosed = (e: AvoidanceEvent) => e.status === "Terminated" || e.status === "Completed";
+  const openEvents = digest.events.filter((e) => !isClosed(e));
+  const closed = digest.events.filter(isClosed);
+  const tied = openEvents.filter((e) => e.tiedPathogen);
+  const other = openEvents.filter((e) => !e.tiedPathogen);
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
@@ -41,6 +45,7 @@ export function AvoidanceDigest({
       <p className="max-w-prose text-sm text-muted-foreground">
         The brands, package sizes, and codes each official notice lists, grouped by recall. Being
         listed means the product is under recall, not that a store is unsafe.
+        {closed.length > 0 && " Closed recalls are listed separately."}
       </p>
       <div className="space-y-3">
         {tied.map((ev) => (
@@ -54,6 +59,15 @@ export function AvoidanceDigest({
         {other.map((ev) => (
           <EventCard key={ev.id} ev={ev} geo={geo} />
         ))}
+        {closed.length > 0 && (
+          <Disclosure label={`Closed recalls (${closed.length})`}>
+            <div className="space-y-3 pt-2">
+              {closed.map((ev) => (
+                <EventCard key={ev.id} ev={{ ...ev, tiedPathogen: undefined }} geo={geo} />
+              ))}
+            </div>
+          </Disclosure>
+        )}
         {digest.retailers.map((r) => (
           <RetailerCard key={r.id} item={r} />
         ))}
@@ -75,7 +89,7 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
     <Card className="p-4">
       <div className="flex flex-wrap items-center gap-1.5">
         {ev.classification && (
-          <Chip {...classificationChip(ev.classification)} size="sm">
+          <Chip {...classificationChip(ev.classification)} title={classificationTitle(ev.classification)} size="sm">
             {ev.classification}
           </Chip>
         )}

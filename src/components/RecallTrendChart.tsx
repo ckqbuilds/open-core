@@ -38,7 +38,14 @@ function bucketByMonth(recalls: Recall[]): Bucket[] {
   return out.slice(-18); // last 18 months
 }
 
-export function RecallTrendChart({ recalls }: { recalls: Recall[] }) {
+export function RecallTrendChart({
+  recalls,
+  fsisAsOf,
+}: {
+  recalls: Recall[];
+  /** Date of the FSIS feed's last update; passed only when that feed is stale or unavailable. */
+  fsisAsOf?: Date | null;
+}) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [width, setWidth] = useState(720);
@@ -168,6 +175,29 @@ export function RecallTrendChart({ recalls }: { recalls: Recall[] }) {
         }}
         onMouseLeave={() => setHover(null)}
       />
+      <table className="sr-only">
+        <caption>Recalls per month</caption>
+        <thead>
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Recalls</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((d) => (
+            <tr key={d.month}>
+              <th scope="row">{d.label}</th>
+              <td>{d.count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="mt-2 text-xs text-muted-foreground">
+        The current month is partial.
+        {fsisAsOf && !isNaN(+fsisAsOf) && (
+          <> USDA FSIS records after {fsisAsOf.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included.</>
+        )}
+      </p>
       {hover && (
         <div
           className="pointer-events-none absolute top-2 z-10 -translate-x-1/2 rounded-md border bg-card px-2.5 py-1.5 text-xs shadow-md"
