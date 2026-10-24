@@ -302,7 +302,7 @@ export function RecallsPage() {
         }
       />
 
-      {!recalls.loading && !recalls.error && (
+      {!recalls.loading && !recalls.error && filtered.length > 0 && (
         <div className="-mt-4 space-y-2">
           <h2 className="sr-only">Recall records</h2>
           <p
