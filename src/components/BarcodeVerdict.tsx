@@ -76,14 +76,18 @@ function Recalled({ recalls, tier, total, brand, feedNote, emphasize }: { recall
                   <PossibleDesc text={r.productDescription} />
                 )}
                 <p className="mt-1 text-xs text-ink-2">
-                  Recalling firm: {r.recallingFirm} ·{" "}
-                  {r.url ? (
-                    <a href={r.url} target="_blank" rel="noreferrer" className="link inline-flex items-center gap-1">
-                      <ExternalLink className="size-3" />#{r.recallNumber}
-                    </a>
-                  ) : (
-                    <>#{r.recallNumber}</>
-                  )}
+                  Recalling firm: {r.recallingFirm}
+                  {r.recallNumber &&
+                    (r.url ? (
+                      <>
+                        {" · "}
+                        <a href={r.url} target="_blank" rel="noreferrer" className="link inline-flex items-center gap-1">
+                          <ExternalLink className="size-3" />#{r.recallNumber}
+                        </a>
+                      </>
+                    ) : (
+                      <> · #{r.recallNumber}</>
+                    ))}
                 </p>
               </li>
             ))}

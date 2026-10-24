@@ -1,3 +1,4 @@
+import { currentCutoff, isCurrentNotice } from "@/data/recallScope";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { cn, formatFdaDate } from "@/lib/utils";
@@ -61,8 +62,6 @@ const SEVERITY_RANK: Record<string, number> = {
   "Class III": 4,
 };
 
-/** Default view: Ongoing recalls reported within this many days. */
-const CURRENT_DAYS = 90;
 
 /** Standalone live recall feed: chart + severity/status/distribution filters + rows. */
 export function RecallsPage() {
@@ -126,12 +125,8 @@ export function RecallsPage() {
   const defaultScope = !archive && statusFilter === "all";
   const scoped = useMemo(() => {
     if (!defaultScope) return combined;
-    const d = new Date();
-    d.setDate(d.getDate() - CURRENT_DAYS);
-    const cutoff = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
-    return combined.filter(
-      (r) => r.status === "Ongoing" && (r.reportDate ?? r.recallInitiationDate ?? "") >= cutoff
-    );
+    const cutoff = currentCutoff();
+    return combined.filter((r) => isCurrentNotice(r, cutoff));
   }, [combined, defaultScope]);
 
   const scopeOptions = [

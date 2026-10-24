@@ -79,9 +79,7 @@ export function FoodRow({
           ) : (
             <span className="text-ink-2">{state} not listed</span>
           )
-        ) : (
-          <span className="sr-only">add a ZIP to see reach</span>
-        )}
+        ) : null}
         <ArrowRight aria-hidden className="ml-2 hidden size-4 align-[-2px] text-ink-2 transition-transform ease-over group-hover:translate-x-1 md:inline" />
       </span>
     </Link>

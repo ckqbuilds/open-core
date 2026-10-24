@@ -1,5 +1,6 @@
 import type { Outbreak, Recall, NamedEntity } from "./types";
 import { PATHOGENS, matchesOutbreakPathogen, type Pathogen } from "./symptoms";
+import { currentCutoff, isCurrentNotice } from "./recallScope";
 
 /**
  * A derived food-commodity category. The app has no food field — the only food
@@ -153,6 +154,16 @@ export function buildFoodIndex(
 export function reachCount(entry: FoodEntry, state: string): number {
   return [...entry.fdaRecalls, ...entry.fsisRecalls].filter(
     (r) => r.nationwide || r.distributionStates.includes(state)
+  ).length;
+}
+
+/**
+ * Notices reaching `state` in the current view (Ongoing, last 90 days): the
+ * same rule the recalls page uses, so a "right now" count matches it.
+ */
+export function currentReachCount(entry: FoodEntry, state: string, cutoff = currentCutoff()): number {
+  return [...entry.fdaRecalls, ...entry.fsisRecalls].filter(
+    (r) => isCurrentNotice(r, cutoff) && (r.nationwide || r.distributionStates.includes(state))
   ).length;
 }
 

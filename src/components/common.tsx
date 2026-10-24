@@ -118,7 +118,12 @@ export function SectionHeading({
         {icon}
         <span>
           {children}
-          {count !== undefined && <span className="tnum ml-2 font-medium text-ink-2">{count}</span>}
+          {count !== undefined && (
+            <>
+              {" "}
+              <span className="tnum ml-1 font-medium text-ink-2">{count}</span>
+            </>
+          )}
         </span>
       </Tag>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}

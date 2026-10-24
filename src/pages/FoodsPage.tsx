@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
-import { buildFoodIndex, reachCount, foodsMatching, recallsMatching, NOT_YET_IDENTIFIED, type FoodEntry } from "@/data/foods";
+import { buildFoodIndex, currentReachCount, reachCount, foodsMatching, recallsMatching, NOT_YET_IDENTIFIED, type FoodEntry } from "@/data/foods";
 import type { Outbreak, Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { FoodRow, FoodRowHeader } from "@/components/FoodRow";
@@ -95,7 +95,7 @@ export function FoodsPage() {
       foods: foods.length,
       outbreaks: identifiedOutbreaks + (data.data?.unidentified.length ?? 0),
       recalls: foods.reduce((n, f) => n + f.recallCount, 0),
-      reach: geo ? foods.reduce((n, f) => n + reachCount(f, geo.stateAbbr), 0) : null,
+      reach: geo ? foods.reduce((n, f) => n + currentReachCount(f, geo.stateAbbr), 0) : null,
     };
   }, [data.data, geo]);
 
@@ -134,11 +134,11 @@ export function FoodsPage() {
                 {geo && stats.reach != null ? (
                   stats.reach > 0 ? (
                     <>
-                      <span className="tnum">{stats.reach}</span> recall {stats.reach === 1 ? "notice reaches" : "notices reach"}{" "}
+                      <span className="tnum">{stats.reach}</span> ongoing recall {stats.reach === 1 ? "notice reaches" : "notices reach"}{" "}
                       {geo.state} right now.
                     </>
                   ) : (
-                    <>No recalls on record list {geo.state} right now.</>
+                    <>No ongoing recall notice from the last 90 days reaches {geo.state}.</>
                   )
                 ) : (
                   <>
