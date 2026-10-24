@@ -7,10 +7,13 @@ import { ContaminantBadge } from "@/components/ContaminantBadge";
 import { cleanFirmName, repairEncoding } from "@/data/avoidance";
 import { classificationChip, classificationTitle, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { RecordLine, recordRule } from "@/components/RecordLine";
+import { ReachLine } from "@/components/ReachLine";
+import { useZipContext } from "@/hooks/ZipContext";
 import { cn, formatFdaDate } from "@/lib/utils";
 
 /** One recall record card — used by the recall feed and the outbreak detail page. */
 export function RecallRow({ recall }: { recall: Recall }) {
+  const { geo } = useZipContext();
   const [expanded, setExpanded] = useState(false);
   const description = repairEncoding(recall.productDescription);
   // Some FSIS descriptions run 90+ words of ALL CAPS; clamp to 3 lines unless short.
@@ -38,18 +41,8 @@ export function RecallRow({ recall }: { recall: Recall }) {
           {agencyLabel(recall.agency)}
         </Chip>
         <ContaminantBadge classification={classifyRecall(recall)} critical={/^class i$/i.test(recall.classification.trim())} />
-        {recall.nationwide && (
-          <Chip color="default" variant="soft" size="sm">
-            Nationwide
-          </Chip>
-        )}
-        {!recall.nationwide &&
-          recall.distributionStates.slice(0, 6).map((s) => (
-            <Chip key={s} color="default" variant="soft" size="sm">
-              {s}
-            </Chip>
-          ))}
       </div>
+      <ReachLine ev={{ states: recall.distributionStates, nationwide: recall.nationwide, distribution: recall.distributionPattern ? [repairEncoding(recall.distributionPattern)] : [] }} geo={geo} />
       {classDefinition && <p className="mt-1.5 text-xs text-muted-foreground">{classDefinition}</p>}
       <p className="mt-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">Product record</p>
       <p className={cn("mt-0.5 text-sm text-muted-foreground", isLong && !expanded && "line-clamp-3")}>

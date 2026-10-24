@@ -23,9 +23,9 @@ export function useZip() {
   // Persist only a 5-digit ZIP that geocoded; an invalid one stays in state.
   useEffect(() => {
     try {
+      // Clear only when emptied; a failed lookup leaves a previously stored ZIP alone.
       if (!zip) localStorage.removeItem(KEY);
       else if (valid && geo.data?.zip === zip) localStorage.setItem(KEY, zip);
-      else if (valid && !geo.loading && geo.data?.zip !== zip) localStorage.removeItem(KEY);
     } catch {
       /* storage unavailable */
     }

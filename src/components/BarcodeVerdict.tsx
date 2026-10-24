@@ -18,26 +18,28 @@ import { classificationChip, classificationTitle, agencyChip, agencyLabel } from
  * item. We NEVER say "safe": a non-match is phrased as "not named in any current
  * recall", the honest claim we can make.
  */
-function FeedNote({ note }: { note?: string | null }) {
+function FeedNote({ note, emphasize }: { note?: string | null; emphasize?: boolean }) {
   if (!note) return null;
-  return <p className="mt-3 border-t border-dotted pt-2 text-xs text-muted-foreground">{note}</p>;
+  return (
+    <p className={cn("mt-2 text-sm text-muted-foreground", emphasize && "font-medium text-foreground")}>{note}</p>
+  );
 }
 
-export function BarcodeVerdict({ matches, feedNote }: { matches: RecallMatches; feedNote?: string | null }) {
+export function BarcodeVerdict({ matches, feedNote, emphasizeNote }: { matches: RecallMatches; feedNote?: string | null; emphasizeNote?: boolean }) {
   return (
     <div role="status">
       {matches.exact.length > 0 ? (
-        <Recalled recalls={matches.exact} tier="exact" feedNote={feedNote} />
+        <Recalled recalls={matches.exact} tier="exact" feedNote={feedNote} emphasize={emphasizeNote} />
       ) : matches.possible.length > 0 ? (
-        <Recalled recalls={matches.possible} total={matches.possibleTotal} brand={matches.possibleBrand} tier="possible" feedNote={feedNote} />
+        <Recalled recalls={matches.possible} total={matches.possibleTotal} brand={matches.possibleBrand} tier="possible" feedNote={feedNote} emphasize={emphasizeNote} />
       ) : (
-        <NotFound feedNote={feedNote} />
+        <NotFound feedNote={feedNote} emphasize={emphasizeNote} />
       )}
     </div>
   );
 }
 
-function Recalled({ recalls, tier, total, brand, feedNote }: { recalls: Recall[]; tier: "exact" | "possible"; total?: number; brand?: string | null; feedNote?: string | null }) {
+function Recalled({ recalls, tier, total, brand, feedNote, emphasize }: { recalls: Recall[]; tier: "exact" | "possible"; total?: number; brand?: string | null; feedNote?: string | null; emphasize?: boolean }) {
   const exact = tier === "exact";
   const accent = exact ? "var(--status-critical)" : "var(--warning)";
   const title = exact
@@ -61,6 +63,7 @@ function Recalled({ recalls, tier, total, brand, feedNote }: { recalls: Recall[]
             {title}
           </p>
           <p className="mt-0.5 text-sm text-muted-foreground">{blurb}</p>
+          <FeedNote note={feedNote} emphasize={emphasize} />
 
           <ul className="mt-3 space-y-3">
             {recalls.map((r) => (
@@ -104,7 +107,6 @@ function Recalled({ recalls, tier, total, brand, feedNote }: { recalls: Recall[]
               </Link>
             </p>
           )}
-          <FeedNote note={feedNote} />
         </div>
       </div>
     </Card>
@@ -131,7 +133,7 @@ function PossibleDesc({ text }: { text: string }) {
   );
 }
 
-function NotFound({ feedNote }: { feedNote?: string | null }) {
+function NotFound({ feedNote, emphasize }: { feedNote?: string | null; emphasize?: boolean }) {
   return (
     <Card className="p-4">
       <div className="flex items-start gap-3">
@@ -143,7 +145,7 @@ function NotFound({ feedNote }: { feedNote?: string | null }) {
             safety — coverage is uneven and recalls change often. If in doubt, check the official
             FDA/CDC sources.
           </p>
-          <FeedNote note={feedNote} />
+          <FeedNote note={feedNote} emphasize={emphasize} />
         </div>
       </div>
     </Card>

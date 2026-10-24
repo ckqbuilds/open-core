@@ -50,7 +50,7 @@ const DISTRIBUTION_STOPWORDS = new Set([
   "foodservice", "food service", "restaurant", "restaurants", "consumer",
   "consumers", "customer", "customers", "location", "locations", "outlet",
   "outlets", "market", "markets", "chain", "chains", "us", "usa", "domestic",
-  "foreign", "not applicable",
+  "foreign", "not applicable", "u s", "territories", "territory", "puerto rico", "wi u",
 ]);
 
 const RETAILER_BREAKERS = new Set([
@@ -71,12 +71,14 @@ export function parseRetailers(pattern: string): string[] {
   if (!pattern) return [];
   const seen = new Set<string>();
   const out: string[] = [];
+  // "U.S." / "U.S.A." would otherwise be split on their dots into "U" and "S".
   const parts = pattern
+    .replace(/\bU\.\s?S\.(?:\s?A\.)?/gi, "US")
     .replace(/\s+/g, " ")
-    .split(/[,;.:()]|\band\b|\bvia\b|\bthrough\b|\bto\b|\bin\b/i);
+    .split(/[,;:()]|\band\b|\bvia\b|\bthrough\b|\bto\b|\bin\b|\bat\b/i);
   for (const raw of parts) {
     const s = raw.replace(/^\s*(the|at|and|of)\s+/i, "").trim().replace(/[.]+$/, "");
-    if (!s) continue;
+    if (s.replace(/[^A-Za-z]/g, "").length <= 2) continue;
     const words = s.split(" ");
     if (words.length > 5) continue; // a sentence fragment, not a store name
     const low = s.toLowerCase();
@@ -89,7 +91,7 @@ export function parseRetailers(pattern: string): string[] {
     if (words.some((w) => RETAILER_BREAKERS.has(w.toLowerCase().replace(/[^a-z]/g, "")))) continue;
     // Drop fragments that are only stopwords + a state (e.g. "retail stores").
     const meaningful = words.some(
-      (w) => !DISTRIBUTION_STOPWORDS.has(w.toLowerCase()) && !STATE_ABBR[w.toLowerCase()]
+      (w) => !DISTRIBUTION_STOPWORDS.has(w.toLowerCase()) && !STATE_ABBR[w.toLowerCase()] && !/^[A-Z]{2}$/.test(w)
     );
     if (!meaningful) continue;
     if (seen.has(low)) continue;
@@ -268,6 +270,8 @@ export interface AvoidanceEvent {
   recallDate?: string;
   /** Pathogen id shared with an active outbreak the caller passed in, if any. */
   tiedPathogen?: string;
+  /** Set when a curated FDA/CDC record names this firm's product itself (not just its pathogen). */
+  namedInAdvisory?: SourceCitation;
   /** First of the caller's category terms found in this event's product lines. */
   matchedTerm?: string;
 }
@@ -409,6 +413,7 @@ export function buildAvoidanceDigest(
       void _drop;
       ev.states.sort();
       const onOrAfter = !startKey || (!!ev.recallDate && ev.recallDate >= startKey);
+      ev.namedInAdvisory = entities.find((e) => e.kind === "retailer" && sameFirm(ev.firm, e.name))?.source;
       ev.tiedPathogen = onOrAfter ? ev.pathogens.find((id) => pathogenIds.includes(id)) : undefined;
       if (matchTerms.length > 0) {
         const hay = [...ev.retail, ...ev.wholesale].map((l) => l.text).join(" \n ").toLowerCase();

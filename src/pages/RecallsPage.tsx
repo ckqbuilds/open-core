@@ -230,6 +230,34 @@ export function RecallsPage() {
         }
       />
 
+      {!recalls.loading && !recalls.error && (
+        <div className="-mt-4 space-y-2">
+          <div className="space-y-2">
+            <h2 className="sr-only">Recall records</h2>
+            <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
+              {filtered.length}{" "}
+              {archive || !defaultScope
+                ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
+                : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
+              {summaryTail}
+            </p>
+            {filtered.length > 0 && <KeyButton variant="link" />}
+          </div>
+          {autoScoped && geo && (
+            <p className="text-sm text-muted-foreground">
+              Showing recalls that reach {geo.stateAbbr} ·{" "}
+              <button
+                type="button"
+                className="inline-flex h-10 items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={() => setScopeFilter("all")}
+              >
+                Show all
+              </button>
+            </p>
+          )}
+        </div>
+      )}
+
       <Disclosure
         id="check"
         open={checkOpen}
@@ -348,30 +376,6 @@ export function RecallsPage() {
 
       {!recalls.loading && !recalls.error && (
         <>
-          {autoScoped && geo && (
-            <p className="text-sm text-muted-foreground">
-              Showing recalls that reach {geo.stateAbbr} ·{" "}
-              <button
-                type="button"
-                className="font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                onClick={() => setScopeFilter("all")}
-              >
-                Show all
-              </button>
-            </p>
-          )}
-          <div className="space-y-2">
-            <h2 className="sr-only">Recall records</h2>
-            <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
-              {filtered.length}{" "}
-              {archive || !defaultScope
-                ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
-                : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
-              {summaryTail}
-            </p>
-            {filtered.length > 0 && <KeyButton variant="link" />}
-          </div>
-
           {filtered.length === 0 ? (
             <EmptyState>
               {query.trim() !== "" ? (

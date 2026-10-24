@@ -22,6 +22,8 @@ export interface OffProduct {
   brands: string[];
   /** Small front image, when available. */
   imageUrl?: string;
+  /** OFF category tags/text, used only to decide whether the FSIS caveat is relevant. */
+  categories?: string;
 }
 
 interface RawOffResponse {
@@ -32,6 +34,7 @@ interface RawOffResponse {
     product_name?: string;
     brands?: string;
     image_front_small_url?: string;
+    categories?: string;
   };
 }
 
@@ -47,7 +50,7 @@ export async function lookupBarcode(
   const clean = code.replace(/\D/g, "");
   if (!clean) return null;
 
-  const fields = "code,product_name,brands,image_front_small_url";
+  const fields = "code,product_name,brands,image_front_small_url,categories";
   const res = await fetch(`${BASE}/${clean}.json?fields=${fields}`, { signal });
 
   // OFF returns 404 for an unknown barcode — treat as a miss, not an error.
@@ -68,5 +71,6 @@ export async function lookupBarcode(
     name: p.product_name?.trim() || undefined,
     brands,
     imageUrl: p.image_front_small_url || undefined,
+    categories: p.categories || undefined,
   };
 }

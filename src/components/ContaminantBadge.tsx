@@ -43,9 +43,9 @@ export function ContaminantBadge({
       title="Hazard type — categorized from the recall's reason text, not an official FDA field"
     >
       <Icon aria-hidden className="size-3.5 shrink-0" />
-      <span aria-hidden>{classification.label}</span>
-      <span className="sr-only">
-        {classification.label} (from reason text, not an official field)
+      <span>
+        {classification.label}
+        {classification.type !== "other" && <span className="font-normal opacity-75"> · inferred</span>}
       </span>
     </span>
   );

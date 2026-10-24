@@ -123,7 +123,11 @@ export function ProductCheck({ recalls, feedNote }: { recalls: Recall[]; feedNot
 
       {checked && matches && (
         <div className="space-y-4">
-          <BarcodeVerdict matches={matches} feedNote={feedNote} />
+          <BarcodeVerdict
+            matches={matches}
+            feedNote={feedNote}
+            emphasizeNote={/meat|poultry|chicken|beef|pork|turkey|egg|sausage/i.test(`${off?.categories ?? ""} ${off?.name ?? ""}`)}
+          />
 
           {/* Resolved product identity (or the raw code, if OFF had no record). */}
           <Card>

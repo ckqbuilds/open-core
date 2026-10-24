@@ -39,7 +39,7 @@ export function FrontDoor({
               type="search"
               inputMode="search"
               autoComplete="off"
-              placeholder="romaine, cheese, a brand"
+              placeholder="romaine or a brand"
               value={value}
               onChange={(e) => onChange(e.target.value)}
               className="pl-9 text-base sm:text-sm"

@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
-import { ChevronDown, MapPin, ShoppingCart } from "lucide-react";
+import { ChevronDown, ShoppingCart } from "lucide-react";
 import type { AvoidanceDigest as Digest, AvoidanceEvent, AvoidanceLine, NamedRetailerItem } from "@/data/avoidance";
 import type { GeoZip } from "@/data/types";
 import { Disclosure } from "@/components/Disclosure";
 import { KeyButton } from "@/components/KeyButton";
 import { classificationChip, classificationTitle, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { SourceLink } from "./common";
+import { ReachLine } from "./ReachLine";
 import { RecordLine, recordRule } from "./RecordLine";
 import { PATHOGENS } from "@/data/symptoms";
 import { formatFdaDate, formatIso, cn } from "@/lib/utils";
 
 const RETAIL_PREVIEW = 6;
-const STATES_PREVIEW = 8;
 
 /**
  * "What to avoid on the shelf": one card per recall event (however many
@@ -125,11 +125,25 @@ function EventCard({
       </div>
 
       <h3 className="mt-2.5 text-base font-semibold leading-snug">{ev.firm}</h3>
-      {ev.tiedPathogen && (
+      {ev.namedInAdvisory ? (
         <p className="mt-0.5 text-xs font-medium text-muted-foreground">
-          Tied to the active {PATHOGENS.find((p) => p.id === ev.tiedPathogen)?.name ?? ev.tiedPathogen}{" "}
-          outbreak by pathogen, not a confirmed link
+          Named in {ev.namedInAdvisory.agency}&rsquo;s advisory:{" "}
+          <a
+            href={ev.namedInAdvisory.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {ev.namedInAdvisory.label}
+          </a>
         </p>
+      ) : (
+        ev.tiedPathogen && (
+          <p className="mt-0.5 text-xs font-medium text-muted-foreground">
+            Tied to the active {PATHOGENS.find((p) => p.id === ev.tiedPathogen)?.name ?? ev.tiedPathogen}{" "}
+            outbreak by pathogen, not a confirmed link
+          </p>
+        )
       )}
       {ev.reasons[0] && <p className="mt-0.5 text-sm text-muted-foreground">{ev.reasons[0]}</p>}
       {!ev.tiedPathogen && group?.kind === "food" && ev.matchedTerm && (
@@ -143,7 +157,7 @@ function EventCard({
         </p>
       )}
 
-      <Reach ev={ev} geo={geo} />
+      <ReachLine ev={ev} geo={geo} />
 
       {ev.retail.length > 0 && (
         <div className="mt-3">
@@ -244,59 +258,6 @@ function EventCard({
         ]}
       />
     </Card>
-  );
-}
-
-/** Where the notice says it went, with the reader's own state answered first. */
-function Reach({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
-  const [open, setOpen] = useState(false);
-  const mine = geo?.stateAbbr;
-  const hasStates = ev.states.length > 0;
-  if (!ev.nationwide && !hasStates) {
-    return ev.distribution[0] ? (
-      <p className="mt-2 text-sm text-muted-foreground">
-        <MapPin className="mr-1 inline size-3.5 -translate-y-px" aria-hidden />
-        {ev.distribution[0]}
-      </p>
-    ) : null;
-  }
-  const reachesMine = !!mine && (ev.nationwide || ev.states.includes(mine));
-  const shown = open ? ev.states : ev.states.slice(0, STATES_PREVIEW);
-  const more = ev.states.length - shown.length;
-
-  return (
-    <p className="mt-2 text-sm">
-      <MapPin
-        aria-hidden
-        className={cn(
-          "mr-1 inline size-3.5 -translate-y-px",
-          reachesMine ? "text-[color:var(--status-critical)]" : "text-muted-foreground"
-        )}
-      />
-      {mine && (
-        <span className={cn("font-medium", !reachesMine && "text-muted-foreground")}>
-          {reachesMine ? `Reaches ${mine}` : `${mine} not listed`}
-          <span aria-hidden> · </span>
-        </span>
-      )}
-      <span className="text-muted-foreground">
-        {ev.nationwide
-          ? "Distributed nationwide"
-          : `Distributed in ${ev.states.length} ${ev.states.length === 1 ? "state" : "states"}: ${shown.join(", ")}`}
-        {more > 0 && (
-          <>
-            {" "}
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              className="inline-flex min-h-10 items-center font-medium text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              +{more} more
-            </button>
-          </>
-        )}
-      </span>
-    </p>
   );
 }
 
