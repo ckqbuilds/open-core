@@ -40,7 +40,6 @@ export function RecordLine({
     <>
       <span>{agency}</span>
       {reference && <span className="font-mono tabular-nums text-foreground">{reference}</span>}
-      {isJson && <span className="font-normal">FDA record (JSON)</span>}
     </>
   );
   return (
@@ -61,13 +60,13 @@ export function RecordLine({
         className="hidden min-w-8 flex-1 -translate-y-[3px] border-b border-dotted border-[color:var(--muted)]/50 sm:block"
       />
       <span className="flex w-full min-w-0 flex-wrap items-baseline gap-x-3 gap-y-0.5 sm:w-auto sm:justify-end sm:text-right">
-        {url ? (
+        {url && !isJson ? (
           <a
             href={url}
             target="_blank"
             rel="noreferrer"
             className={linkClass}
-            title={/api\.fda\.gov/.test(url) ? "Opens this record in the openFDA API (JSON)" : "Opens the official notice"}
+            title="Opens the official notice"
           >
             {body}
           </a>
@@ -76,9 +75,20 @@ export function RecordLine({
         )}
         {date && <span className="tabular-nums">{date}</span>}
         {isJson && (
-          <a href={FDA_PAGE} target="_blank" rel="noreferrer" className={linkClass}>
-            FDA recalls page
-          </a>
+          <>
+            <a href={FDA_PAGE} target="_blank" rel="noreferrer" className={linkClass}>
+              FDA recalls page
+            </a>
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+              title="Opens this record in the openFDA API (JSON)"
+              className={cn(linkClass, "font-normal text-muted-foreground")}
+            >
+              raw record (JSON)
+            </a>
+          </>
         )}
         {extras?.map((x) =>
           x.url ? (

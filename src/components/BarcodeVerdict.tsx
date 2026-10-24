@@ -18,21 +18,26 @@ import { classificationChip, agencyChip, agencyLabel } from "@/lib/classificatio
  * item. We NEVER say "safe": a non-match is phrased as "not named in any current
  * recall", the honest claim we can make.
  */
-export function BarcodeVerdict({ matches }: { matches: RecallMatches }) {
+function FeedNote({ note }: { note?: string | null }) {
+  if (!note) return null;
+  return <p className="mt-3 border-t border-dotted pt-2 text-xs text-muted-foreground">{note}</p>;
+}
+
+export function BarcodeVerdict({ matches, feedNote }: { matches: RecallMatches; feedNote?: string | null }) {
   return (
     <div role="status">
       {matches.exact.length > 0 ? (
-        <Recalled recalls={matches.exact} tier="exact" />
+        <Recalled recalls={matches.exact} tier="exact" feedNote={feedNote} />
       ) : matches.possible.length > 0 ? (
-        <Recalled recalls={matches.possible} total={matches.possibleTotal} brand={matches.possibleBrand} tier="possible" />
+        <Recalled recalls={matches.possible} total={matches.possibleTotal} brand={matches.possibleBrand} tier="possible" feedNote={feedNote} />
       ) : (
-        <NotFound />
+        <NotFound feedNote={feedNote} />
       )}
     </div>
   );
 }
 
-function Recalled({ recalls, tier, total, brand }: { recalls: Recall[]; tier: "exact" | "possible"; total?: number; brand?: string | null }) {
+function Recalled({ recalls, tier, total, brand, feedNote }: { recalls: Recall[]; tier: "exact" | "possible"; total?: number; brand?: string | null; feedNote?: string | null }) {
   const exact = tier === "exact";
   const accent = exact ? "var(--status-critical)" : "var(--warning)";
   const title = exact
@@ -99,6 +104,7 @@ function Recalled({ recalls, tier, total, brand }: { recalls: Recall[]; tier: "e
               </Link>
             </p>
           )}
+          <FeedNote note={feedNote} />
         </div>
       </div>
     </Card>
@@ -125,7 +131,7 @@ function PossibleDesc({ text }: { text: string }) {
   );
 }
 
-function NotFound() {
+function NotFound({ feedNote }: { feedNote?: string | null }) {
   return (
     <Card className="p-4">
       <div className="flex items-start gap-3">
@@ -137,6 +143,7 @@ function NotFound() {
             safety — coverage is uneven and recalls change often. If in doubt, check the official
             FDA/CDC sources.
           </p>
+          <FeedNote note={feedNote} />
         </div>
       </div>
     </Card>

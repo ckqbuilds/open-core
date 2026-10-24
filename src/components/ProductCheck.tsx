@@ -23,7 +23,7 @@ import { BarcodeVerdict } from "@/components/BarcodeVerdict";
  * page already loaded (`recalls` prop = FDA + USDA FSIS), which is the source of
  * truth for the verdict.
  */
-export function ProductCheck({ recalls }: { recalls: Recall[] }) {
+export function ProductCheck({ recalls, feedNote }: { recalls: Recall[]; feedNote?: string | null }) {
   const [input, setInput] = useState("");
   const [code, setCode] = useState("");
   const [inputError, setInputError] = useState<string | null>(null);
@@ -123,7 +123,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
 
       {checked && matches && (
         <div className="space-y-4">
-          <BarcodeVerdict matches={matches} />
+          <BarcodeVerdict matches={matches} feedNote={feedNote} />
 
           {/* Resolved product identity (or the raw code, if OFF had no record). */}
           <Card>
@@ -195,8 +195,7 @@ export function ProductCheck({ recalls }: { recalls: Recall[] }) {
           Open Food Facts turns the barcode into a product name and brand — it only identifies the
           item and is not a safety authority. We then check that identity, and the raw number,
           against the current FDA (openFDA food enforcement) and USDA FSIS recall records, which are
-          the source of truth. A "not named" result is not a guarantee of safety, and this is not
-          medical advice — always confirm against the official FDA and CDC sources.
+          the source of truth. This is not medical advice — always confirm against the official FDA and CDC sources.
         </p>
       </InfoNote>
     </div>

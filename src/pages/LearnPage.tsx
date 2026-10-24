@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Stethoscope, Sprout, GraduationCap, Biohazard } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SymptomsSection } from "@/sections/SymptomsSection";
@@ -9,6 +11,17 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 /** Educational section: how to recognize the illnesses + how to grow your own. */
 export function LearnPage() {
   useDocumentTitle("Learn · OpenCORE");
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash !== "#risk-groups") return;
+    const t = setTimeout(() => {
+      const el = document.getElementById("risk-groups");
+      if (!el) return;
+      el.scrollIntoView();
+      el.querySelector<HTMLElement>("button[aria-pressed]")?.focus({ preventScroll: true });
+    }, 150);
+    return () => clearTimeout(t);
+  }, [hash]);
   return (
     <div className="space-y-8">
       <PageHeader

@@ -98,6 +98,7 @@ export function RecallsPage() {
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
   const fsis = useAsync<FsisFeed>((signal) => loadFsisRecalls(signal), []);
   const [trendOpen, setTrendOpen] = useState(false);
+  const [shown, setShown] = useState(40);
 
   // The two regulatory feeds, newest first. FSIS covers meat/poultry openFDA can't.
   const combined = useMemo(() => {
@@ -145,6 +146,8 @@ export function RecallsPage() {
     return list;
   }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, query, geo]);
 
+  useEffect(() => setShown(40), [filtered]);
+
   const summary = useMemo(() => {
     const reach = geo
       ? filtered.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr)).length
@@ -162,6 +165,11 @@ export function RecallsPage() {
     fsisSince && !isNaN(+fsisSince) && !fsis.error
       ? `USDA FSIS: incomplete since ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
       : "USDA FSIS: feed unavailable";
+  const feedNote = fsisUnavailable
+    ? fsisSince && !isNaN(+fsisSince) && !fsis.error
+      ? `Meat and poultry recalls after ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included (USDA FSIS feed incomplete)`
+      : "Meat and poultry recalls after the last update are not included (USDA FSIS feed unavailable)"
+    : null;
   const summaryTail = [
     geo
       ? summary.reach === filtered.length && filtered.length > 0
@@ -193,14 +201,11 @@ export function RecallsPage() {
     agencyFilter === "all" &&
     typeFilter === "all" &&
     query === "";
-  const activeCount = [
-    classFilter !== "all",
-    statusFilter !== "all",
-    scopeFilter !== "mystate",
-    agencyFilter !== "all",
-    typeFilter !== "all",
-    query !== "",
-  ].filter(Boolean).length;
+  // Controls behind the "More filters" disclosure (What, How serious).
+  const activeCount = [classFilter !== "all", statusFilter !== "all", agencyFilter !== "all", typeFilter !== "all"].filter(
+    Boolean
+  ).length;
+  const selectsNonDefault = activeCount > 0 || scopeFilter !== "mystate";
   const filterNote = filtersActive && !onlyArchive ? ", filtered" : "";
   const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
 
@@ -230,20 +235,19 @@ export function RecallsPage() {
         label="Check a product barcode"
         buttonClassName="text-base font-semibold"
       >
-        <ProductCheck recalls={combined} />
+        <ProductCheck recalls={combined} feedNote={feedNote} />
       </Disclosure>
 
       <Card className="gap-4 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="hidden text-sm font-semibold md:block">Filter recalls</h2>
           <button
             type="button"
             aria-expanded={filtersOpen}
             aria-controls="recall-filters"
             onClick={() => setFiltersOpen((o) => !o)}
-            className="inline-flex h-10 items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+            className="inline-flex h-10 items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            Filters{activeCount > 0 ? ` · ${activeCount} active` : ""}
+            More filters{activeCount > 0 ? ` (${activeCount} active)` : ""}
             <ChevronDown className={cn("size-4 transition-transform", filtersOpen && "rotate-180")} />
           </button>
           <div className="flex items-center gap-2">
@@ -279,30 +283,35 @@ export function RecallsPage() {
             </div>
           </div>
         </div>
-        <div className="min-w-0 space-y-1.5">
-          <label htmlFor="recall-search" className="text-xs font-medium text-muted-foreground">
-            Search recalls
-          </label>
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              id="recall-search"
-              type="search"
-              autoComplete="off"
-              placeholder="Product, reason, or recalling firm"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="pl-9 text-base sm:text-sm"
-            />
+        <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
+          <div className="min-w-0 space-y-1.5">
+            <label htmlFor="recall-search" className="text-xs font-medium text-muted-foreground">
+              Search recalls
+            </label>
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="recall-search"
+                type="search"
+                autoComplete="off"
+                placeholder="Product, reason, or recalling firm"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-9 text-base sm:text-sm"
+              />
+            </div>
           </div>
+          <fieldset className="min-w-0 space-y-1.5">
+            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">Where</legend>
+            <Select
+              label="Filter by distribution"
+              value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
+              onChange={setScopeFilter}
+              options={scopeOptions}
+            />
+          </fieldset>
         </div>
-        <div
-          id="recall-filters"
-          className={cn(
-            "gap-4 sm:grid-cols-2 md:grid lg:grid-cols-[2fr_2fr_1fr]",
-            filtersOpen ? "grid" : "hidden"
-          )}
-        >
+        <div id="recall-filters" className={cn("gap-4 sm:grid-cols-2", filtersOpen ? "grid" : "hidden")}>
           <fieldset className="min-w-0 space-y-1.5">
             <legend className="mb-1.5 text-xs font-medium text-muted-foreground">What</legend>
             <div className="grid gap-2 sm:grid-cols-2">
@@ -316,15 +325,6 @@ export function RecallsPage() {
               <Select label="Filter by severity class" value={classFilter} onChange={setClassFilter} options={CLASS_OPTIONS} />
               <Select label="Filter by status" value={statusFilter} onChange={setStatusFilter} options={STATUS_OPTIONS} />
             </div>
-          </fieldset>
-          <fieldset className="min-w-0 space-y-1.5 sm:col-span-2 lg:col-span-1">
-            <legend className="mb-1.5 text-xs font-medium text-muted-foreground">Where</legend>
-            <Select
-              label="Filter by distribution"
-              value={scopeFilter === "mystate" && !geo ? "all" : scopeFilter}
-              onChange={setScopeFilter}
-              options={scopeOptions}
-            />
           </fieldset>
         </div>
       </Card>
@@ -365,23 +365,6 @@ export function RecallsPage() {
                 : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               {summaryTail}
             </p>
-            <div>
-              <button
-                type="button"
-                aria-expanded={trendOpen}
-                aria-controls="recall-trend"
-                onClick={() => setTrendOpen((o) => !o)}
-                className="inline-flex items-center gap-1.5 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {defaultScope ? "Trend by month, current scope" : "Trend by month, archive"}
-                <ChevronDown className={cn("size-4 transition-transform", trendOpen && "rotate-180")} />
-              </button>
-              {trendOpen && (
-                <div id="recall-trend" className="pt-2">
-                  <RecallTrendChart recalls={filtered} />
-                </div>
-              )}
-            </div>
           </div>
 
           {filtered.length === 0 ? (
@@ -389,7 +372,7 @@ export function RecallsPage() {
               {query.trim() !== "" ? (
                 <>
                   <p>
-                    No {archive ? "recall in the archive" : "ongoing recall in the last 90 days"} mentions &ldquo;{query.trim()}&rdquo;. That is not a sign it is unaffected.
+                    No {archive ? "recall in the archive" : "ongoing recall in the last 90 days"} mentions &ldquo;{query.trim()}&rdquo;{selectsNonDefault ? " with the current filters" : ""}. That is not a sign it is unaffected.
                   </p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
                     {!archive && (
@@ -422,17 +405,44 @@ export function RecallsPage() {
             </EmptyState>
           ) : (
             <div className="space-y-3">
-              {filtered.slice(0, 40).map((r) => (
+              {filtered.slice(0, shown).map((r) => (
                 <RecallRow key={r.id} recall={r} />
               ))}
               {filtered.length > 40 && (
-                <p className="pt-1 text-center text-xs text-muted-foreground">
-                  Showing first 40 of {filtered.length}. Narrow the filters to see more specific
-                  results.
-                </p>
+                <div className="flex flex-col items-center gap-2 pt-1">
+                  <p aria-live="polite" className="text-xs text-muted-foreground tabular-nums">
+                    Showing {Math.min(shown, filtered.length)} of {filtered.length}
+                  </p>
+                  {shown < filtered.length && (
+                    <button
+                      type="button"
+                      onClick={() => setShown((n) => n + 40)}
+                      className="inline-flex h-10 items-center rounded-md border border-input px-4 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      Show 40 more
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           )}
+          <div>
+            <button
+              type="button"
+              aria-expanded={trendOpen}
+              aria-controls="recall-trend"
+              onClick={() => setTrendOpen((o) => !o)}
+              className="inline-flex items-center gap-1.5 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {defaultScope ? "Trend by month, current scope" : "Trend by month, archive"}
+              <ChevronDown className={cn("size-4 transition-transform", trendOpen && "rotate-180")} />
+            </button>
+            {trendOpen && (
+              <div id="recall-trend" className="pt-2">
+                <RecallTrendChart recalls={filtered} />
+              </div>
+            )}
+          </div>
         </>
       )}
     </div>

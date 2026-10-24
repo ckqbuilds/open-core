@@ -214,7 +214,10 @@ export function FoodPage() {
               </div>
               <p className="text-sm text-muted-foreground">
                 Pregnant, older, young, or immunocompromised?{" "}
-                <Link to="/learn" className="font-medium text-primary hover:underline">
+                <Link
+                  to="/learn#risk-groups"
+                  className="inline-flex items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:py-2"
+                >
                   See risk-group guidance
                 </Link>
               </p>

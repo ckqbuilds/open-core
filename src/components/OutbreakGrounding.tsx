@@ -8,7 +8,6 @@ import { classifyOutbreak } from "@/data/contaminants";
 import { extractSerotype, fetchSerotypeContext } from "@/data/beam";
 import { fetchPathogenHistory } from "@/data/nors";
 import { useAsync } from "@/hooks/useAsync";
-import { SourceLink } from "@/components/common";
 import { Sparkline } from "@/components/Sparkline";
 
 /**
@@ -46,6 +45,16 @@ export function OutbreakGrounding({
     [pathogen?.id],
     pathogen != null
   );
+
+  // Each distinct source once, by URL. The per-entity record lines carry the
+  // full citations; this is only the pointer to the investigation itself.
+  const investigationLinks: { url: string; label: string }[] = [];
+  const addLink = (url: string | null | undefined, label: string) => {
+    if (url && !investigationLinks.some((l) => l.url === url)) investigationLinks.push({ url, label });
+  };
+  outbreak.sources?.forEach((x: SourceCitation) => addLink(x.url, `${x.agency} source`));
+  addLink(outbreak.advisoryUrl, "FDA advisory");
+  if (!outbreak.advisoryUrl && !outbreak.sources?.length) addLink(outbreak.sourceUrl, "FDA CORE table");
 
   return (
     <Card className="border-accent/30 bg-accent/5 p-5">
@@ -154,32 +163,22 @@ export function OutbreakGrounding({
           </div>
         )}
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-accent/20 pt-3 text-xs">
-          <span className="w-full text-muted-foreground">Read the official FDA/CDC investigation:</span>
-          {outbreak.sources?.map((s: SourceCitation) => (
-            <SourceLink key={s.url} source={s} />
+        <p className="border-t border-accent/20 pt-3 text-xs">
+          <span className="text-muted-foreground">Official investigation: </span>
+          {investigationLinks.map((l, i) => (
+            <span key={l.url}>
+              {i > 0 && <span className="text-muted-foreground"> · </span>}
+              <a
+                href={l.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:min-h-10"
+              >
+                <ExternalLink className="size-3" /> {l.label}
+              </a>
+            </span>
           ))}
-          {outbreak.advisoryUrl && (
-            <a
-              href={outbreak.advisoryUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" /> FDA advisory
-            </a>
-          )}
-          {!outbreak.advisoryUrl && !outbreak.sources?.length && outbreak.sourceUrl && (
-            <a
-              href={outbreak.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" /> FDA CORE table
-            </a>
-          )}
-        </div>
+        </p>
       </div>
     </Card>
   );

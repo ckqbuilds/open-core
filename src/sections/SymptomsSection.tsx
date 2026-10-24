@@ -154,7 +154,7 @@ function RiskGroupPicker({
   urgentCount: number;
 }) {
   return (
-    <Card>
+    <Card id="risk-groups" className="scroll-mt-24">
       <Card.Content className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
@@ -181,7 +181,7 @@ function RiskGroupPicker({
                 aria-pressed={on}
                 onClick={() => onToggle(g.id)}
                 className={cn(
-                  "rounded-full border px-3 py-1.5 text-sm transition-colors",
+                  "rounded-full border px-3 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   on
                     ? "border-primary bg-primary text-primary-foreground"
                     : "hover:bg-secondary"
