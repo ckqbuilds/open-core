@@ -51,11 +51,13 @@ const TYPE_OPTIONS = [
 ];
 
 /** Feed order: how serious the agency says the recall is. */
+// Most serious first. "Not Yet Classified" sits next to Class I: FDA has not
+// said how serious it is, which is not the same as saying it is minor.
 const SEVERITY_RANK: Record<string, number> = {
   "Class I": 0,
-  "Public Health Alert": 1,
-  "Class II": 2,
-  "Not Yet Classified": 3,
+  "Not Yet Classified": 1,
+  "Public Health Alert": 2,
+  "Class II": 3,
   "Class III": 4,
 };
 
@@ -285,18 +287,19 @@ export function RecallsPage() {
         }
       />
 
-      {!recalls.loading && !recalls.error && (
+      {!recalls.loading && !recalls.error && filtered.length > 0 && (
         <div className="-mt-4 space-y-2">
           <h2 className="sr-only">Recall records</h2>
           <p
             aria-live="polite"
-            title="Most serious first, then newest"
+            title="Most serious first (Class I, then not-yet-classified), then newest"
             className="text-sm text-ink-2"
           >
             {autoScoped && geo ? (
               <>
-                <span className="tnum">{filtered.length}</span> {filtered.length === 1 ? "recall reaches" : "recalls reach"} {geo.stateAbbr}
+                <span className="tnum">{filtered.length}</span> recall {filtered.length === 1 ? "notice reaches" : "notices reach"} {geo.stateAbbr}
                 {nationwideCount > 0 && ` (${nationwideCount} of them nationwide)`}
+                {` in ${groups.length} ${groups.length === 1 ? "recall" : "recalls"}`}
                 {unscoped.length > filtered.length && (
                   <>
                     {" · "}
@@ -308,10 +311,11 @@ export function RecallsPage() {
               </>
             ) : (
               <>
-                <span className="tnum">{filtered.length}</span>{" "}
+                <span className="tnum">{filtered.length}</span> recall {filtered.length === 1 ? "notice" : "notices"} in{" "}
+                <span className="tnum">{groups.length}</span> {groups.length === 1 ? "recall" : "recalls"}
                 {archive || !defaultScope
-                  ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
-                  : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
+                  ? ` on record (3 years${filterNote})`
+                  : `, ongoing in the last 90 days${filterNote}`}
               </>
             )}
           </p>
@@ -496,8 +500,7 @@ export function RecallsPage() {
               {groups.length > 40 && (
                 <div className="flex flex-col items-center gap-3 pt-6">
                   <p aria-live="polite" className="tnum text-sm text-ink-2">
-                    Showing {Math.min(shown, groups.length)} of {groups.length} recalls · {filtered.length}{" "}
-                    {filtered.length === 1 ? "notice" : "notices"} in total
+                    Showing {Math.min(shown, groups.length)} of {groups.length} recalls
                   </p>
                   {shown < groups.length && (
                     <button

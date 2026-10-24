@@ -29,7 +29,7 @@ export function ContaminantBadge({
       <Icon aria-hidden className="size-3.5 shrink-0" />
       <span>
         {classification.label}
-        {!quiet && <span className="font-medium opacity-80"> · inferred</span>}
+        {!quiet && <span className="font-medium"> · inferred</span>}
       </span>
     </span>
   );

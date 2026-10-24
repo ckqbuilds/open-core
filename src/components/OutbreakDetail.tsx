@@ -81,6 +81,12 @@ export function OutbreakDetail({
               : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
           </Digits>
         </p>
+        {ob.curated && (
+          <p className="prose-measure mt-2 text-xs text-ink-2" role="status">
+            Live FDA feed unavailable · showing the curated list last checked{" "}
+            {formatIsoShort(CURATED_CHECKED_AT)}; this status may be out of date.
+          </p>
+        )}
         {ob.detailed && ob.guidance && symptomsHref && (
           <a href={symptomsHref} className="capsule capsule--sun mt-4 max-w-full whitespace-normal text-left">
             If you have eaten this: see the symptoms and what to do

@@ -149,7 +149,7 @@ export function FoodsPage() {
             ) : (
               <p className="prose-measure text-base text-ink-2">
                 <span className="tnum">{stats.outbreaks}</span> active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
-                <span className="tnum">{stats.recalls}</span> recent recall{stats.recalls === 1 ? "" : "s"} on record.{" "}
+                <span className="tnum">{stats.recalls}</span> recent recall notice{stats.recalls === 1 ? "" : "s"} on record.{" "}
                 {RECORD_RULE}
               </p>
             )}

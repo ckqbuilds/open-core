@@ -56,7 +56,7 @@ export function FrontDoor({
             <>
               <span className="tnum">{result.foods}</span> food{result.foods === 1 ? "" : "s"} ·{" "}
               <Link to={`/recalls?q=${encodeURIComponent(result.query)}&archive=1&scope=all`} className="link">
-                <span className="tnum">{result.recalls}</span> recall{result.recalls === 1 ? "" : "s"}
+                <span className="tnum">{result.recalls}</span> recall notice{result.recalls === 1 ? "" : "s"}
               </Link>{" "}
               match '{result.query}'
             </>
