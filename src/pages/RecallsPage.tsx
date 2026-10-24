@@ -161,7 +161,6 @@ export function RecallsPage() {
     }
     return [...map.values()];
   }, [filtered]);
-  const anyOngoing = filtered.some((r) => r.status === "Ongoing");
 
   useEffect(() => setShown(40), [filtered]);
 
@@ -193,7 +192,6 @@ export function RecallsPage() {
         : `${summary.reach} reach ${geo.stateAbbr}`
       : null,
     fsisUnavailable ? null : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
-    !geo && summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
     geo && summary.reach === 0 && summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
   ]
     .filter(Boolean)
@@ -224,6 +222,23 @@ export function RecallsPage() {
   const filterNote = filtersActive && !onlyArchive ? ", filtered" : "";
   const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
 
+  const linkBtn =
+    "inline-flex h-10 items-center rounded-sm px-2 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const emptyRecovery = (
+    <>
+      {filtersActive && (
+        <button type="button" className={linkBtn} onClick={resetFilters}>
+          Reset filters
+        </button>
+      )}
+      {autoScoped && (
+        <button type="button" className={linkBtn} onClick={() => setScopeFilter("all")}>
+          Show all states
+        </button>
+      )}
+    </>
+  );
+
   return (
     <div className="space-y-8">
       {archive && (
@@ -253,33 +268,26 @@ export function RecallsPage() {
 
       {!recalls.loading && !recalls.error && (
         <div className="-mt-4 space-y-2">
-          <div className="space-y-2">
-            <h2 className="sr-only">Recall records</h2>
-            <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
-              {filtered.length}{" "}
-              {archive || !defaultScope
-                ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
-                : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
-              {summaryTail}
-            </p>
-            {anyOngoing && (
-              <p className="text-xs text-muted-foreground">
-                Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
-              </p>
+          <h2 className="sr-only">Recall records</h2>
+          <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
+            {filtered.length}{" "}
+            {archive || !defaultScope
+              ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
+              : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
+            {summaryTail}
+            {autoScoped && geo && (
+              <>
+                {" · "}scoped to {geo.stateAbbr} ·{" "}
+                <button
+                  type="button"
+                  className="inline-flex h-10 items-center rounded-sm align-middle font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onClick={() => setScopeFilter("all")}
+                >
+                  Show all
+                </button>
+              </>
             )}
-          </div>
-          {autoScoped && geo && (
-            <p className="inline-flex flex-wrap items-center gap-x-1.5 rounded-md border border-input px-3 text-sm text-muted-foreground">
-              Scoped to {geo.stateAbbr} ·
-              <button
-                type="button"
-                className="inline-flex h-10 items-center rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                onClick={() => setScopeFilter("all")}
-              >
-                Show all
-              </button>
-            </p>
-          )}
+          </p>
         </div>
       )}
 
@@ -289,6 +297,7 @@ export function RecallsPage() {
         onOpenChange={setCheckOpen}
         icon={<ScanBarcode className="size-5 text-primary" />}
         label="Check a product barcode"
+        description="Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal."
         buttonClassName="text-base font-semibold"
       >
         <ProductCheck recalls={combined} feedNote={feedNote} />
@@ -410,10 +419,11 @@ export function RecallsPage() {
                   </p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
                     {!archive && (
-                      <Button size="sm" onClick={() => setArchive(true)}>
+                      <Button size="sm" className="h-10" onClick={() => setArchive(true)}>
                         Search the archive for &lsquo;{query.trim()}&rsquo;
                       </Button>
                     )}
+                    {emptyRecovery}
                   </div>
                 </>
               ) : (
@@ -421,10 +431,11 @@ export function RecallsPage() {
                   <p>No recalls match these filters.</p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
                     {!archive && (
-                      <Button size="sm" onClick={() => setArchive(true)}>
+                      <Button size="sm" className="h-10" onClick={() => setArchive(true)}>
                         Include the archive
                       </Button>
                     )}
+                    {emptyRecovery}
                   </div>
                 </>
               )}

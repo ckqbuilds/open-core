@@ -27,7 +27,7 @@ export function FoodTile({ entry, state, matched }: { entry: FoodEntry; state?: 
           <span aria-hidden className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
             <Icon className="size-5" />
           </span>
-          <span className="font-semibold leading-tight">{c.label}</span>
+          <h3 className="font-semibold leading-tight">{c.label}</h3>
         </div>
         <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
       </div>

@@ -20,6 +20,20 @@ export function useZip() {
     valid
   );
 
+  // The last ZIP that resolved stays active while a bad or partial value is typed.
+  const [lastGeo, setLastGeo] = useState<GeoZip | null>(null);
+  useEffect(() => {
+    if (!zip) setLastGeo(null);
+    else if (geo.data?.zip === zip) setLastGeo(geo.data);
+  }, [zip, geo.data]);
+  const resolved = geo.data?.zip === zip ? geo.data : null;
+  const keep = !resolved && zip && !geo.loading ? lastGeo : null;
+  const failed = valid && !geo.loading && !resolved;
+  const keepLabel = keep ? `${keep.place}, ${keep.stateAbbr}` : "";
+  const notFound = failed
+    ? `We couldn't find ${zip}.${keepLabel ? ` Still showing ${keepLabel}.` : " Check the 5 digits."}`
+    : null;
+
   // Persist only a 5-digit ZIP that geocoded; an invalid one stays in state.
   useEffect(() => {
     try {
@@ -36,8 +50,8 @@ export function useZip() {
     setZip,
     valid,
     // Ignore a previous ZIP's result while the new one is still resolving.
-    geo: geo.data?.zip === zip ? geo.data : null,
+    geo: resolved ?? keep,
     geoLoading: geo.loading,
-    geoError: valid && !geo.loading && geo.data?.zip !== zip && !geo.error ? "We couldn't find that ZIP. Check the 5 digits." : geo.error,
+    geoError: failed ? notFound : geo.error,
   };
 }

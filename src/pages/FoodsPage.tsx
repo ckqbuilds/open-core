@@ -116,16 +116,20 @@ export function FoodsPage() {
           </div>
 
           {foods.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {foods.map((f) => (
-                <FoodTile
-                  key={f.category.id}
-                  entry={f}
-                  state={geo?.stateAbbr}
-                  matched={searching ? recallsMatching([...f.fdaRecalls, ...f.fsisRecalls], query) : undefined}
-                />
-              ))}
-            </div>
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold">{searching ? "Matching foods" : "Foods with current activity"}</h2>
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {foods.map((f) => (
+                  <li key={f.category.id} className="min-w-0">
+                    <FoodTile
+                      entry={f}
+                      state={geo?.stateAbbr}
+                      matched={searching ? recallsMatching([...f.fdaRecalls, ...f.fsisRecalls], query) : undefined}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
 
           {unidentified.length > 0 && (

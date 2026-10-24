@@ -202,6 +202,7 @@ export function FoodPage() {
             <Disclosure
               label={`All recall records (${recalls.length})`}
               icon={<Package className="size-4 text-muted-foreground" />}
+              description="open + related-word + closed"
             >
               <p className="mb-3 max-w-prose text-sm text-muted-foreground">
                 FDA (openFDA) and USDA FSIS regulate different foods, so a food's recalls can come
