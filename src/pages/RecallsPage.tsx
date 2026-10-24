@@ -16,7 +16,7 @@ import { Disclosure } from "@/components/Disclosure";
 import { RecallTrendChart } from "@/components/RecallTrendChart";
 import { RecallRow } from "@/components/RecallRow";
 import { RecordLine, recordRule } from "@/components/RecordLine";
-import { recallEventKey, repairEncoding } from "@/data/avoidance";
+import { cleanFirmName, recallEventKey, repairEncoding } from "@/data/avoidance";
 import { agencyLabel } from "@/lib/classification";
 import { ProductCheck } from "@/components/ProductCheck";
 import { KeyButton } from "@/components/KeyButton";
@@ -179,6 +179,26 @@ export function RecallsPage() {
     return [...map.values()].sort((a, b) => rank(a) - rank(b));
   }, [filtered]);
 
+  // Events from the same firm about the same product on different dates read
+  // as duplicates; name the relationship instead of hiding it.
+  const relatedTo = useMemo(() => {
+    const sig = (r: Recall) =>
+      `${cleanFirmName(r.recallingFirm).toLowerCase()}|${r.productDescription.toLowerCase().replace(/\s+/g, " ").slice(0, 40)}`;
+    const bySig = new Map<string, Recall[]>();
+    for (const g of groups) {
+      const k = sig(g[0]);
+      const list = bySig.get(k);
+      if (list) list.push(g[0]);
+      else bySig.set(k, [g[0]]);
+    }
+    const out = new Map<string, Recall[]>();
+    for (const list of bySig.values()) {
+      if (list.length < 2) continue;
+      for (const r of list) out.set(r.id, list.filter((o) => o.id !== r.id));
+    }
+    return out;
+  }, [groups]);
+
   useEffect(() => setShown(40), [filtered]);
 
   const nationwideCount = useMemo(() => filtered.filter((r) => r.nationwide).length, [filtered]);
@@ -199,20 +219,12 @@ export function RecallsPage() {
     typeFilter !== "all" ||
     query !== "" ||
     archive;
-  const onlyArchive =
-    archive &&
-    classFilter === "all" &&
-    statusFilter === "all" &&
-    scopeFilter === "mystate" &&
-    agencyFilter === "all" &&
-    typeFilter === "all" &&
-    query === "";
   // Controls behind the "More filters" disclosure (What, How serious).
   const activeCount = [classFilter !== "all", statusFilter !== "all", agencyFilter !== "all", typeFilter !== "all"].filter(
     Boolean
   ).length;
   const selectsNonDefault = activeCount > 0 || scopeFilter !== "mystate";
-  const filterNote = filtersActive && !onlyArchive ? ", filtered" : "";
+  const filterNote = activeCount > 0 || query.trim() !== "" ? ", filtered" : "";
   const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
 
   const scopeToggle = (className: string) => (
@@ -300,14 +312,18 @@ export function RecallsPage() {
               <>
                 {filtered.length} {filtered.length === 1 ? "recall reaches" : "recalls reach"} {geo.stateAbbr}
                 {nationwideCount > 0 && ` (${nationwideCount} of them nationwide)`}
-                {" · "}
-                <button
-                  type="button"
-                  className="inline-flex h-10 items-center rounded-sm align-middle font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  onClick={() => setScopeFilter("all")}
-                >
-                  Show all {unscoped.length}
-                </button>
+                {unscoped.length > filtered.length && (
+                  <>
+                    {" · "}
+                    <button
+                      type="button"
+                      className="inline-flex h-10 items-center rounded-sm align-middle font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onClick={() => setScopeFilter("all")}
+                    >
+                      Show all {unscoped.length}
+                    </button>
+                  </>
+                )}
               </>
             ) : (
               <>
@@ -463,6 +479,16 @@ export function RecallsPage() {
             <div className="space-y-3">
               {groups.slice(0, shown).map((g) => (
                 <RecallRow key={g[0].id} recall={g[0]} showHaveIt="expanded">
+                  {relatedTo.get(g[0].id) && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Same firm and product as{" "}
+                      {relatedTo
+                        .get(g[0].id)!
+                        .map((o) => `#${o.recallNumber} (${formatFdaDate(o.reportDate ?? o.recallInitiationDate)})`)
+                        .join(", ")}
+                      ; listed separately because the agency filed them on different dates.
+                    </p>
+                  )}
                   {g.length > 1 && (
                     <div className={cn("mt-3 pt-1", recordRule)}>
                       <Disclosure label={`${g.length - 1} more notice${g.length - 1 === 1 ? "" : "s"} from this recall`}>
@@ -493,7 +519,8 @@ export function RecallsPage() {
               {groups.length > 40 && (
                 <div className="flex flex-col items-center gap-2 pt-1">
                   <p aria-live="polite" className="text-xs text-muted-foreground tabular-nums">
-                    Showing {Math.min(shown, groups.length)} of {groups.length} recall events ({filtered.length} records)
+                    Showing {Math.min(shown, groups.length)} of {groups.length} recalls · {filtered.length}{" "}
+                    {filtered.length === 1 ? "notice" : "notices"} in total
                   </p>
                   {shown < groups.length && (
                     <button

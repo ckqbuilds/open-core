@@ -82,7 +82,7 @@ export function OutbreakDetail({
         {ob.detailed && ob.guidance && symptomsHref && (
           <a
             href={symptomsHref}
-            className="mt-1 inline-flex min-h-10 items-center rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="mt-2 inline-flex min-h-11 items-center rounded-md border border-border bg-background px-3 text-sm font-medium text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             If you have eaten this: see the symptoms and what to do
           </a>
