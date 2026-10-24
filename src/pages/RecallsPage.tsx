@@ -88,7 +88,10 @@ export function RecallsPage() {
   useEffect(() => {
     if (hash !== "#check") return;
     setCheckOpen(true);
-    const t = setTimeout(() => document.getElementById("check")?.scrollIntoView(), 50);
+    const t = setTimeout(() => {
+      document.getElementById("check")?.scrollIntoView();
+      document.getElementById("barcode")?.focus({ preventScroll: true });
+    }, 120);
     return () => clearTimeout(t);
   }, [hash]);
 
@@ -152,7 +155,13 @@ export function RecallsPage() {
       nationwide: filtered.filter((r) => r.nationwide).length,
     };
   }, [filtered, geo]);
-  const fsisUnavailable = !!fsis.error || (!fsis.loading && !!fsis.data?.stale);
+  const fsisSince = fsis.data?.generatedAt ? new Date(fsis.data.generatedAt) : null;
+  const fsisOld = !!fsisSince && !isNaN(+fsisSince) && Date.now() - +fsisSince > 14 * 86400000;
+  const fsisUnavailable = !!fsis.error || (!fsis.loading && (!!fsis.data?.stale || fsisOld));
+  const fsisSegment =
+    fsisSince && !isNaN(+fsisSince) && !fsis.error
+      ? `USDA FSIS: incomplete since ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
+      : "USDA FSIS: feed unavailable";
   const summaryTail = [
     geo
       ? summary.reach === filtered.length && filtered.length > 0
@@ -161,7 +170,7 @@ export function RecallsPage() {
           ? `${summary.reach} reach ${geo.stateAbbr}`
           : null
       : null,
-    fsisUnavailable ? "USDA FSIS: feed unavailable" : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
+    fsisUnavailable ? fsisSegment : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
     summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
   ]
     .filter(Boolean)
@@ -192,6 +201,7 @@ export function RecallsPage() {
     typeFilter !== "all",
     query !== "",
   ].filter(Boolean).length;
+  const filterNote = filtersActive && !onlyArchive ? ", filtered" : "";
   const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
 
   return (
@@ -351,10 +361,9 @@ export function RecallsPage() {
             <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
               {filtered.length}{" "}
               {archive || !defaultScope
-                ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years)`
-                : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days)`}
+                ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
+                : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               {summaryTail}
-              {filtersActive && !onlyArchive ? " (filtered)" : ""}
             </p>
             <div>
               <button
@@ -377,11 +386,38 @@ export function RecallsPage() {
 
           {filtered.length === 0 ? (
             <EmptyState>
-              No recalls match these filters.{" "}
-              {filtersActive && (
-                <button className="text-primary hover:underline" onClick={resetFilters}>
-                  Reset filters
-                </button>
+              {query.trim() !== "" ? (
+                <>
+                  <p>
+                    No {archive ? "recall in the archive" : "ongoing recall in the last 90 days"} mentions &ldquo;{query.trim()}&rdquo;. That is not a sign it is unaffected.
+                  </p>
+                  <div className="mt-3 flex flex-wrap justify-center gap-2">
+                    {!archive && (
+                      <Button size="sm" onClick={() => setArchive(true)}>
+                        Search the archive for &lsquo;{query.trim()}&rsquo;
+                      </Button>
+                    )}
+                    <Button variant="ghost" size="sm" onClick={resetFilters}>
+                      Reset filters
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p>No recalls match these filters.</p>
+                  <div className="mt-3 flex flex-wrap justify-center gap-2">
+                    {filtersActive && (
+                      <Button variant="ghost" size="sm" onClick={resetFilters}>
+                        Reset filters
+                      </Button>
+                    )}
+                    {!archive && (
+                      <Button size="sm" onClick={() => setArchive(true)}>
+                        Include the archive
+                      </Button>
+                    )}
+                  </div>
+                </>
               )}
             </EmptyState>
           ) : (

@@ -1,9 +1,12 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import { AlertTriangle, ShieldCheck, ExternalLink } from "lucide-react";
 import type { Recall } from "@/data/types";
 import type { RecallMatches } from "@/data/barcodeMatch";
 // Read-only reuse of the shared classification → chip-color mapping.
+import { cn } from "@/lib/utils";
 import { classificationChip, agencyChip, agencyLabel } from "@/lib/classification";
 
 /**
@@ -21,7 +24,7 @@ export function BarcodeVerdict({ matches }: { matches: RecallMatches }) {
       {matches.exact.length > 0 ? (
         <Recalled recalls={matches.exact} tier="exact" />
       ) : matches.possible.length > 0 ? (
-        <Recalled recalls={matches.possible} tier="possible" />
+        <Recalled recalls={matches.possible} total={matches.possibleTotal} brand={matches.possibleBrand} tier="possible" />
       ) : (
         <NotFound />
       )}
@@ -29,17 +32,17 @@ export function BarcodeVerdict({ matches }: { matches: RecallMatches }) {
   );
 }
 
-function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possible" }) {
+function Recalled({ recalls, tier, total, brand }: { recalls: Recall[]; tier: "exact" | "possible"; total?: number; brand?: string | null }) {
   const exact = tier === "exact";
   const accent = exact ? "var(--status-critical)" : "var(--warning)";
   const title = exact
     ? recalls.length === 1
       ? "This product is under recall"
       : `This product matches ${recalls.length} recalls on record (last 3 years)`
-    : "A matching product may be recalled";
+    : "A similarly named brand appears in recalls";
   const blurb = exact
     ? "The barcode matches the recalled product code in the official FDA/FSIS record below. Confirm the lot/date codes on your package against the notice."
-    : "A product from this brand is under recall, but the barcode didn't match a listed code — check the item and package against the notice below to see if it's the same one.";
+    : "Records name a similarly named brand. Compare the product in your hand to each notice; a name match is not a recall match.";
 
   return (
     <Card
@@ -65,7 +68,11 @@ function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possi
                     {agencyLabel(r.agency)}
                   </Chip>
                 </div>
-                <p className="mt-2 text-sm font-medium">{r.productDescription}</p>
+                {exact ? (
+                  <p className="mt-2 text-sm font-medium">{r.productDescription}</p>
+                ) : (
+                  <PossibleDesc text={r.productDescription} />
+                )}
                 <p className="mt-1 text-xs text-muted-foreground">
                   Recalling firm: {r.recallingFirm} ·{" "}
                   {r.url ? (
@@ -84,9 +91,37 @@ function Recalled({ recalls, tier }: { recalls: Recall[]; tier: "exact" | "possi
               </li>
             ))}
           </ul>
+          {!exact && total != null && total > recalls.length && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              Showing {recalls.length} of {total} records naming this brand, highest severity first.{" "}
+              <Link to={`/recalls?archive=1&q=${encodeURIComponent(brand ?? "")}`} className="font-medium text-primary hover:underline">
+                Show all {total}
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </Card>
+  );
+}
+
+function PossibleDesc({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  const long = text.length > 160;
+  return (
+    <>
+      <p className={cn("mt-2 text-sm font-medium", long && !open && "line-clamp-2")}>{text}</p>
+      {long && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="-my-2 inline-flex min-h-10 items-center rounded-sm text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {open ? "Show less" : "Show more"}
+        </button>
+      )}
+    </>
   );
 }
 

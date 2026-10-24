@@ -57,7 +57,7 @@ export function FoodTile({ entry, state, matched }: { entry: FoodEntry; state?: 
           const n = state ? reachCount(view, state) : 0;
           if (state && n > 0) {
             return (
-              <span className="flex items-center gap-1.5 font-medium tabular-nums text-[color:var(--status-critical)]">
+              <span className="flex items-center gap-1.5 font-medium tabular-nums text-foreground">
                 <FileWarning className="size-4" />
                 {searching ? `${total} match · ${n} of those reach ${state}` : `${n} reach ${state}`}
               </span>

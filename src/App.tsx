@@ -41,14 +41,12 @@ export default function App() {
 
           <footer className="mt-8 border-t bg-card/30">
             <div className="container space-y-2 py-6 text-xs text-muted-foreground">
-              <p className="text-sm text-foreground">
-                Not sure what to do next?{" "}
+              <div className="flex flex-wrap items-center gap-x-5 text-sm text-foreground">
+                <span>Not sure what to do next?</span>
                 <Link to="/recalls#check" className="inline-block py-2 font-medium text-primary hover:underline">Check a product barcode</Link>
-                {" · "}
                 <Link to="/learn" className="inline-block py-2 font-medium text-primary hover:underline">Learn the signs of illness</Link>
-                {" · "}
                 <Link to="/shop-local" className="inline-block py-2 font-medium text-primary hover:underline">Find local food sources</Link>
-              </p>
+              </div>
               <p className="max-w-3xl">
                 <strong className="text-foreground">Not medical or official guidance.</strong> This
                 tool aggregates public FDA and CDC data for convenience. It does not determine that

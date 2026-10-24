@@ -7,7 +7,7 @@ import { HAZARD_ICONS } from "@/lib/icons";
 
 /** Tone-per-type styling — five visually distinct hues, theme-aware. */
 const TONE_CLASSES: Record<ContaminantType, string> = {
-  biological: "border-red-500/30 bg-red-500/12 text-red-700 dark:text-red-300",
+  biological: "border-amber-500/40 bg-amber-500/15 text-amber-800 dark:text-amber-300",
   chemical: "border-violet-500/30 bg-violet-500/12 text-violet-700 dark:text-violet-300",
   physical: "border-slate-400/40 bg-slate-400/15 text-slate-700 dark:text-slate-300",
   allergenic: "border-amber-500/40 bg-amber-500/15 text-amber-800 dark:text-amber-300",
@@ -22,9 +22,12 @@ const TONE_CLASSES: Record<ContaminantType, string> = {
  */
 export function ContaminantBadge({
   classification,
+  critical,
   className,
 }: {
   classification: ContaminantClassification;
+  /** True for a Class I record: biological then takes the critical (red) tone. */
+  critical?: boolean;
   className?: string;
 }) {
   const Icon = HAZARD_ICONS[classification.type];
@@ -32,7 +35,9 @@ export function ContaminantBadge({
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium",
-        TONE_CLASSES[classification.type],
+        critical && classification.type === "biological"
+          ? "border-red-500/30 bg-red-500/12 text-red-700 dark:text-red-300"
+          : TONE_CLASSES[classification.type],
         className
       )}
       title="Hazard type — categorized from the recall's reason text, not an official FDA field"

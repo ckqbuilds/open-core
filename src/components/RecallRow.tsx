@@ -31,7 +31,7 @@ export function RecallRow({ recall }: { recall: Recall }) {
         <Chip {...agencyChip(recall.agency)} size="sm">
           {agencyLabel(recall.agency)}
         </Chip>
-        <ContaminantBadge classification={classifyRecall(recall)} />
+        <ContaminantBadge classification={classifyRecall(recall)} critical={/^class i$/i.test(recall.classification.trim())} />
         {recall.nationwide && (
           <Chip color="default" variant="soft" size="sm">
             Nationwide

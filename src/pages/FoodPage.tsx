@@ -212,6 +212,12 @@ export function FoodPage() {
                 <Stethoscope className="size-4 text-muted-foreground" />
                 <h2 className="text-lg font-semibold">What to do if you're sick</h2>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Pregnant, older, young, or immunocompromised?{" "}
+                <Link to="/learn" className="font-medium text-primary hover:underline">
+                  See risk-group guidance
+                </Link>
+              </p>
               <div className="grid gap-4 lg:grid-cols-2">
                 {entry.pathogens.map((p) => (
                   <PathogenCard

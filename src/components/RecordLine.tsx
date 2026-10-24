@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 const linkClass =
   "inline-flex items-baseline gap-1.5 rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-coarse:-my-3 pointer-coarse:min-h-10 pointer-coarse:items-center";
 
+const FDA_PAGE = "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts";
+
 /** The dotted hairline used to rule a card's record line off from its body. */
 export const recordRule = "border-t border-dotted border-[color:var(--muted)]/50";
 
@@ -33,10 +35,12 @@ export function RecordLine({
   extras?: RecordExtra[];
   className?: string;
 }) {
+  const isJson = !!url && /api\.fda\.gov/.test(url);
   const body = (
     <>
       <span>{agency}</span>
       {reference && <span className="font-mono tabular-nums text-foreground">{reference}</span>}
+      {isJson && <span className="font-normal">FDA record (JSON)</span>}
     </>
   );
   return (
@@ -71,6 +75,11 @@ export function RecordLine({
           <span className="inline-flex items-baseline gap-1.5">{body}</span>
         )}
         {date && <span className="tabular-nums">{date}</span>}
+        {isJson && (
+          <a href={FDA_PAGE} target="_blank" rel="noreferrer" className={linkClass}>
+            FDA recalls page
+          </a>
+        )}
         {extras?.map((x) =>
           x.url ? (
             <a key={x.label} href={x.url} target="_blank" rel="noreferrer" className={linkClass}>
