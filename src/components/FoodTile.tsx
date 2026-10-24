@@ -4,9 +4,10 @@ import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import { foodIcon } from "@/lib/icons";
 import { reachCount, type FoodEntry } from "@/data/foods";
+import type { Recall } from "@/data/types";
 
 /** Compact food-category summary — the whole HeroUI card links to its food page. */
-export function FoodTile({ entry, state }: { entry: FoodEntry; state?: string }) {
+export function FoodTile({ entry, state, matched }: { entry: FoodEntry; state?: string; /** While searching: the recalls in this food that match the query. */ matched?: Recall[] }) {
   const { category: c, outbreaks, recallCount, pathogens } = entry;
   const to = `/food/${c.id}`;
   const Icon = foodIcon(c.id);
@@ -48,27 +49,35 @@ export function FoodTile({ entry, state }: { entry: FoodEntry; state?: string })
             {outbreaks.length} outbreak{outbreaks.length > 1 ? "s" : ""}
           </span>
         )}
-        {state && recallCount > 0 ? (
-          (() => {
-            const n = reachCount(entry, state);
-            return n > 0 ? (
+        {(() => {
+          const searching = matched !== undefined;
+          const total = searching ? matched.length : recallCount;
+          if (total === 0) return null;
+          const view = searching ? { ...entry, fdaRecalls: matched, fsisRecalls: [] } : entry;
+          const n = state ? reachCount(view, state) : 0;
+          if (state && n > 0) {
+            return (
               <span className="flex items-center gap-1.5 font-medium tabular-nums text-[color:var(--status-critical)]">
                 <FileWarning className="size-4" />
-                {n} reach {state}
-              </span>
-            ) : (
-              <span className="flex items-center gap-1.5">
-                <FileWarning className="size-4" />
-                None listed for {state}
+                {searching ? `${total} match · ${n} of those reach ${state}` : `${n} reach ${state}`}
               </span>
             );
-          })()
-        ) : recallCount > 0 && (
-          <span className="flex items-center gap-1.5 tabular-nums">
-            <FileWarning className="size-4" />
-            {recallCount} recall{recallCount > 1 ? "s" : ""}
-          </span>
-        )}
+          }
+          if (state) {
+            return (
+              <span className="flex items-center gap-1.5 tabular-nums">
+                <FileWarning className="size-4" />
+                {searching ? `${total} match · none listed for ${state}` : `None listed for ${state}`}
+              </span>
+            );
+          }
+          return (
+            <span className="flex items-center gap-1.5 tabular-nums">
+              <FileWarning className="size-4" />
+              {searching ? `${total} match` : `${total} recall${total > 1 ? "s" : ""}`}
+            </span>
+          );
+        })()}
       </div>
     </Card>
   );

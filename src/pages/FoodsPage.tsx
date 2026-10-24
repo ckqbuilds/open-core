@@ -89,8 +89,8 @@ export function FoodsPage() {
       ) : foods.length === 0 && unidentified.length === 0 ? (
         searching ? (
           <EmptyState>
-            No food or recall record mentions &ldquo;{query}&rdquo;. That is not a sign the food is
-            unaffected: records name products and firms, not every food.{" "}
+            That is not a sign the food is unaffected: records name products and firms, not every
+            food.{" "}
             <Link className="text-primary hover:underline" to="/recalls#check">
               Check a product barcode
             </Link>
@@ -118,7 +118,12 @@ export function FoodsPage() {
           {foods.length > 0 && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {foods.map((f) => (
-                <FoodTile key={f.category.id} entry={f} state={geo?.stateAbbr} />
+                <FoodTile
+                  key={f.category.id}
+                  entry={f}
+                  state={geo?.stateAbbr}
+                  matched={searching ? recallsMatching([...f.fdaRecalls, ...f.fsisRecalls], query) : undefined}
+                />
               ))}
             </div>
           )}

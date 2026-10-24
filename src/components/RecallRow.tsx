@@ -19,7 +19,8 @@ export function RecallRow({ recall }: { recall: Recall }) {
   const hasNumber = Boolean(recall.recallNumber) && !/^(n\/a|—|-|unknown)$/i.test(recall.recallNumber.trim());
   return (
     <Card className="p-4">
-      <div className="flex flex-wrap items-center gap-1.5">
+      <p className="text-sm font-medium">{repairEncoding(recall.reason)}</p>
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
         <Chip {...classificationChip(recall.classification)} size="sm">
           {recall.classification}
         </Chip>
@@ -43,7 +44,8 @@ export function RecallRow({ recall }: { recall: Recall }) {
           ))}
         {date && <span className="ml-auto text-xs text-muted-foreground">{date}</span>}
       </div>
-      <p className={cn("mt-2 text-sm font-medium", isLong && !expanded && "line-clamp-3")}>
+      <p className="mt-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">Product record</p>
+      <p className={cn("mt-0.5 text-sm text-muted-foreground", isLong && !expanded && "line-clamp-3")}>
         {description}
       </p>
       {isLong && (
@@ -56,7 +58,6 @@ export function RecallRow({ recall }: { recall: Recall }) {
           {expanded ? "Show less" : "Show more"}
         </button>
       )}
-      <p className="mt-1 text-sm text-muted-foreground">{repairEncoding(recall.reason)}</p>
       <p className="mt-1.5 text-xs text-muted-foreground">
         Recalling firm: {cleanFirmName(recall.recallingFirm)}
         {recall.url ? (

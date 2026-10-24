@@ -152,6 +152,21 @@ export function RecallsPage() {
       nationwide: filtered.filter((r) => r.nationwide).length,
     };
   }, [filtered, geo]);
+  const fsisUnavailable = !!fsis.error || (!fsis.loading && !!fsis.data?.stale);
+  const summaryTail = [
+    geo
+      ? summary.reach === filtered.length && filtered.length > 0
+        ? `all reach ${geo.stateAbbr}`
+        : summary.reach > 0
+          ? `${summary.reach} reach ${geo.stateAbbr}`
+          : null
+      : null,
+    fsisUnavailable ? "USDA FSIS: feed unavailable" : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
+    summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
+  ]
+    .filter(Boolean)
+    .map((t) => ` · ${t}`)
+    .join("");
   const autoScoped = scopeFilter === "mystate" && !!geo;
   const filtersActive =
     classFilter !== "all" ||
@@ -338,7 +353,7 @@ export function RecallsPage() {
               {archive || !defaultScope
                 ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years)`
                 : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days)`}
-              {geo ? ` · ${summary.reach} reach ${geo.stateAbbr}` : ""} · {summary.fsis} USDA FSIS · {summary.nationwide} nationwide
+              {summaryTail}
               {filtersActive && !onlyArchive ? " (filtered)" : ""}
             </p>
             <div>

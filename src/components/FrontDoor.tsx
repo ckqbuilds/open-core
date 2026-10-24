@@ -73,21 +73,25 @@ export function FrontDoor({
         </p>
       )}
 
+      {geoError && (
+        <p role="status" className="text-sm text-[color:var(--status-critical)]">
+          {geoError}
+        </p>
+      )}
+
       <p id="home-zip-note" className="text-sm text-muted-foreground">
-        {geoError ? (
-          <span role="status" className="text-[color:var(--status-critical)]">{geoError}</span>
-        ) : geo ? (
+        {geoError ? null : geo ? (
           <>Showing {geo.place}, {geo.stateAbbr}{reach != null && <> · {reach} recall{reach === 1 ? "" : "s"} reach your state</>}. Your ZIP stays in this browser. </>
         ) : (
           <>Unlocks recalls reaching your state, named locations near you, local sources. </>
         )}
         {!(result && result.foods === 0 && result.recalls === 0) && (
-        <Link
-          to="/recalls#check"
-          className="inline-flex items-center gap-1 whitespace-nowrap rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <ScanBarcode className="size-4" /> Check a product barcode
-        </Link>
+          <Link
+            to="/recalls#check"
+            className="inline-flex items-center gap-1 whitespace-nowrap rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ScanBarcode className="size-4" /> Check a product barcode
+          </Link>
         )}
       </p>
     </Card>

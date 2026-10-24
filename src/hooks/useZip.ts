@@ -36,6 +36,6 @@ export function useZip() {
     valid,
     geo: geo.data ?? null,
     geoLoading: geo.loading,
-    geoError: valid && !geo.loading && !geo.data ? "ZIP not found" : geo.error,
+    geoError: valid && !geo.loading && !geo.data ? "We couldn't find that ZIP. Check the 5 digits." : geo.error,
   };
 }
