@@ -14,8 +14,6 @@
     "start": "npm run build && node --env-file-if-exists=.env.local --env-file-if-exists=.env server/index.mjs"
   },
   "dependencies": {
-    "@heroui/react": "^3.2.3",
-    "@heroui/styles": "^3.2.3",
     "@radix-ui/react-dialog": "^1.1.23",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
