@@ -5,7 +5,7 @@ const linkClass =
   "inline-flex items-baseline gap-1.5 rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-coarse:-my-3 pointer-coarse:min-h-10 pointer-coarse:items-center";
 
 /** The dotted hairline used to rule a card's record line off from its body. */
-export const recordRule = "border-t border-dotted border-border";
+export const recordRule = "border-t border-dotted border-[color:var(--muted)]/50";
 
 export interface RecordExtra {
   label: string;
@@ -40,15 +40,31 @@ export function RecordLine({
     </>
   );
   return (
-    <div className={cn("flex w-full flex-wrap items-baseline gap-x-2 gap-y-0.5 text-xs text-muted-foreground", className)}>
+    <div
+      className={cn(
+        "flex w-full flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted-foreground",
+        className
+      )}
+    >
       <span className="inline-flex shrink-0 items-center gap-1">
         <ScrollText aria-hidden className="size-3.5 shrink-0" />
         Record
       </span>
-      <span aria-hidden className="min-w-4 flex-1 -translate-y-[3px] border-b border-dotted border-border" />
-      <span className="flex min-w-0 flex-wrap items-baseline justify-end gap-x-3 gap-y-0.5 text-right">
+      {/* The dotted leader fills the line on wide screens; on phones the
+          values drop to their own line so the leader never collapses. */}
+      <span
+        aria-hidden
+        className="hidden min-w-8 flex-1 -translate-y-[3px] border-b border-dotted border-[color:var(--muted)]/50 sm:block"
+      />
+      <span className="flex w-full min-w-0 flex-wrap items-baseline gap-x-3 gap-y-0.5 sm:w-auto sm:justify-end sm:text-right">
         {url ? (
-          <a href={url} target="_blank" rel="noreferrer" className={linkClass}>
+          <a
+            href={url}
+            target="_blank"
+            rel="noreferrer"
+            className={linkClass}
+            title={/api\.fda\.gov/.test(url) ? "Opens this record in the openFDA API (JSON)" : "Opens the official notice"}
+          >
             {body}
           </a>
         ) : (

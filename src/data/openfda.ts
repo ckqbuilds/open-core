@@ -20,6 +20,24 @@ interface RawEnforcement {
   country?: string;
 }
 
+/**
+ * A citation for one openFDA record. Prefer the recall number; records that
+ * carry "N/A" fall back to a firm + report-date query, which still resolves to
+ * the record itself in the FDA's API.
+ */
+function openFdaRecordUrl(raw: RawEnforcement): string | undefined {
+  const base = "https://api.fda.gov/food/enforcement.json?search=";
+  const num = raw.recall_number?.trim();
+  if (num && !/^(n\/a|none|unknown|-+)$/i.test(num)) {
+    return `${base}recall_number:%22${encodeURIComponent(num)}%22`;
+  }
+  if (raw.recalling_firm && raw.report_date) {
+    const firm = encodeURIComponent(raw.recalling_firm.replace(/"/g, ""));
+    return `${base}recalling_firm:%22${firm}%22+AND+report_date:${raw.report_date}`;
+  }
+  return undefined;
+}
+
 function normalize(raw: RawEnforcement, idx: number): Recall {
   const pattern = raw.distribution_pattern ?? "";
   const { states, nationwide } = parseDistributionStates(pattern);
@@ -41,6 +59,9 @@ function normalize(raw: RawEnforcement, idx: number): Recall {
     city: raw.city,
     state: raw.state,
     country: raw.country,
+    // openFDA publishes no page per recall, so the citation points at the
+    // record itself in the FDA's own API. Every cited number must link.
+    url: openFdaRecordUrl(raw),
   };
 }
 
