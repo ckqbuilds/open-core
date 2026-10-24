@@ -112,8 +112,9 @@
     opacity: 1;
   }
   :focus-visible {
-    outline: 3px solid var(--focus);
+    outline: 3px solid var(--ink);
     outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--ground);
   }
   .tnum {
     font-variant-numeric: tabular-nums;

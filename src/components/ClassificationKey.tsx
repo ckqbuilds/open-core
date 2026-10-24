@@ -19,7 +19,7 @@ const RECALL_CLASSES: KeyRow[] = [
     badge: <Chip {...classificationChip("Class I")}>Class I</Chip>,
     term: "Most serious",
     meaning:
-      "Reasonable probability that eating the product will cause serious health harm or death. Act on these immediately.",
+      "Reasonable probability that eating the product will cause serious health harm or death. Check what you have and follow the notice.",
   },
   {
     badge: <Chip {...classificationChip("Class II")}>Class II</Chip>,

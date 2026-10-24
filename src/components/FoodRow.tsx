@@ -14,7 +14,7 @@ export function FoodRowHeader() {
     <div className={cn("row-rule hidden gap-4 px-3 pb-2 text-xs font-bold text-ink-2 md:grid", FOOD_GRID)}>
       <span>Food</span>
       <span>Named with</span>
-      <span className="text-right">Recalls</span>
+      <span className="text-right">Notices</span>
       <span className="text-right">Reaches you</span>
     </div>
   );
@@ -67,7 +67,7 @@ export function FoodRow({
 
       <span className="tnum text-sm md:text-right">
         <span className="font-semibold">{total}</span>
-        <span className="text-ink-2"> {searching ? "match" : total === 1 ? "recall" : "recalls"}</span>
+        <span className="text-ink-2"> {searching ? "match" : total === 1 ? "notice" : "notices"}</span>
       </span>
 
       <span className="tnum text-sm md:text-right">

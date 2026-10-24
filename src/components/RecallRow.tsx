@@ -81,7 +81,7 @@ export function RecallRow({
             {expanded ? "Show less" : "Show the whole record"}
           </button>
         )}
-        {showHaveIt && (showHaveIt === true || expanded || !isLong) && recall.status === "Ongoing" && (
+        {showHaveIt && recall.status === "Ongoing" && (
           <p className="mt-2 text-sm">
             Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
           </p>

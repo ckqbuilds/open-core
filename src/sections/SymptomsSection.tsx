@@ -153,7 +153,7 @@ function RiskGroupPicker({
     <Sheet quiet id="risk-groups" className="scroll-mt-24 space-y-3 p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <div className="text-sm font-bold">Does any of this describe you or your household?</div>
+          <h3 className="text-sm font-bold">Does any of this describe you or your household?</h3>
           <div className="prose-measure text-xs text-ink-2">
             CDC publishes different guidance for these groups. Selecting one adds that guidance to
             the cards below; nothing is hidden either way.

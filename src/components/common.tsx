@@ -10,7 +10,7 @@ export function SourceLink({ source, className }: { source: SourceCitation; clas
       href={source.url}
       target="_blank"
       rel="noreferrer"
-      className={cn("link inline-flex items-center gap-1 text-xs", className)}
+      className={cn("link inline-flex items-center gap-1 text-xs pointer-coarse:-my-2 pointer-coarse:min-h-10", className)}
     >
       <ExternalLink className="size-3" />
       {source.agency} source ({formatIso(source.date)})

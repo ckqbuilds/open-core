@@ -69,7 +69,7 @@ export function RecordLine({
       <span aria-hidden className="hidden min-w-8 flex-1 -translate-y-[3px] border-b border-dotted border-rule sm:block" />
       <span className="flex w-full min-w-0 flex-wrap items-baseline gap-x-3 gap-y-0.5 sm:w-auto sm:justify-end sm:text-right">
         {url && !isJson ? (
-          <a href={url} target="_blank" rel="noreferrer" className="link inline-flex items-baseline gap-1.5" title="Opens the official notice">
+          <a href={url} target="_blank" rel="noreferrer" className="link inline-flex items-baseline gap-1.5 pointer-coarse:-my-2 pointer-coarse:min-h-10 pointer-coarse:items-center" title="Opens the official notice">
             {body}
           </a>
         ) : (
@@ -82,17 +82,17 @@ export function RecordLine({
         )}
         {isJson && (
           <>
-            <a href={FDA_PAGE} target="_blank" rel="noreferrer" className="link">
+            <a href={FDA_PAGE} target="_blank" rel="noreferrer" className="link pointer-coarse:-my-2 pointer-coarse:inline-flex pointer-coarse:min-h-10 pointer-coarse:items-center">
               FDA recalls page
             </a>
-            <a href={url} target="_blank" rel="noreferrer" title="Opens this record in the openFDA API (JSON)" className="link font-normal">
+            <a href={url} target="_blank" rel="noreferrer" title="Opens this record in the openFDA API (JSON)" className="link font-normal pointer-coarse:-my-2 pointer-coarse:inline-flex pointer-coarse:min-h-10 pointer-coarse:items-center">
               raw record (JSON)
             </a>
           </>
         )}
         {extras?.map((x) =>
           x.url ? (
-            <a key={x.label} href={x.url} target="_blank" rel="noreferrer" className="link">
+            <a key={x.label} href={x.url} target="_blank" rel="noreferrer" className="link pointer-coarse:-my-2 pointer-coarse:inline-flex pointer-coarse:min-h-10 pointer-coarse:items-center">
               {x.label}
             </a>
           ) : (

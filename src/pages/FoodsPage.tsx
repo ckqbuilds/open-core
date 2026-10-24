@@ -130,7 +130,7 @@ export function FoodsPage() {
                 {geo && stats.reach != null ? (
                   stats.reach > 0 ? (
                     <>
-                      <span className="tnum">{stats.reach}</span> {stats.reach === 1 ? "recall reaches" : "recalls reach"}{" "}
+                      <span className="tnum">{stats.reach}</span> recall {stats.reach === 1 ? "notice reaches" : "notices reach"}{" "}
                       {geo.state} right now.
                     </>
                   ) : (
@@ -260,7 +260,7 @@ function TiedFoodCapsule({ entry, state }: { entry: FoodEntry; state?: string })
   const reach = state ? reachCount(entry, state) : null;
   const facts = [
     cases != null && `${cases.toLocaleString()} ${cases === 1 ? "case" : "cases"}`,
-    `${entry.recallCount} ${entry.recallCount === 1 ? "recall" : "recalls"}`,
+    `${entry.recallCount} ${entry.recallCount === 1 ? "notice" : "notices"}`,
     state && `${reach} reach ${state}`,
   ].filter(Boolean);
   return (

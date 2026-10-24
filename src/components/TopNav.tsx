@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { MapPin, Loader2, Moon, Sun, Menu, X } from "lucide-react";
 import { useZipContext } from "@/hooks/ZipContext";
 import { useTheme } from "@/hooks/useTheme";
@@ -85,6 +85,8 @@ export function TopNav() {
 function NavZip() {
   const { zip, setZip, geo, geoLoading, geoError } = useZipContext();
   const place = geo ? `${geo.place}, ${geo.stateAbbr}` : "";
+  // Home's front door announces ZIP errors inline; announce here only elsewhere.
+  const onHome = useLocation().pathname === "/";
   return (
     <div className="relative flex shrink-0 items-center">
       <label
@@ -111,8 +113,8 @@ function NavZip() {
           place && <span className="hidden max-w-[7rem] truncate text-xs font-semibold lg:inline">{place}</span>
         )}
       </label>
-      <div role="status" aria-live="polite" className="contents">
-        {geoError && (
+      <div role={onHome ? undefined : "status"} aria-live={onHome ? undefined : "polite"} className="contents">
+        {geoError && !onHome && (
           <span id="nav-zip-note" className="sheet absolute right-0 top-full z-50 mt-2 max-w-[18rem] px-3 py-1.5 text-xs font-semibold">
             {geoError}
           </span>
