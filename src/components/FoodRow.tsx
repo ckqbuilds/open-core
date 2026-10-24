@@ -4,7 +4,8 @@ import { Chip } from "@/components/ui/chip";
 import { foodIcon } from "@/lib/icons";
 import { reachCount, type FoodEntry } from "@/data/foods";
 import type { Recall } from "@/data/types";
-import { cn } from "@/lib/utils";
+import { cn, formatIsoShort } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
 /** The column grid every food row shares, in every state. */
 export const FOOD_GRID = "md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_7rem_8.5rem]";
@@ -56,6 +57,7 @@ export function FoodRow({
         {outbreaks.length > 0 && (
           <Chip color="coral">
             {outbreaks.length === 1 ? "Active outbreak" : `${outbreaks.length} active outbreaks`}
+            {outbreaks.some((o) => o.curated) && ` as of ${formatIsoShort(CURATED_CHECKED_AT)}`}
           </Chip>
         )}
         {pathogens.slice(0, 2).map((p) => (
@@ -78,7 +80,7 @@ export function FoodRow({
             <span className="text-ink-2">{state} not listed</span>
           )
         ) : (
-          <span className="text-ink-2">add a ZIP</span>
+          <span className="sr-only">add a ZIP to see reach</span>
         )}
         <ArrowRight aria-hidden className="ml-2 hidden size-4 align-[-2px] text-ink-2 transition-transform ease-over group-hover:translate-x-1 md:inline" />
       </span>

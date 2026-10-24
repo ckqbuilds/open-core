@@ -149,7 +149,7 @@ export function OutbreakDetail({
               href={ob.advisoryUrl}
               target="_blank"
               rel="noreferrer"
-              className="link inline-flex items-center gap-1"
+              className="link inline-flex items-center gap-1 pointer-coarse:-my-2 pointer-coarse:min-h-10"
             >
               <ExternalLink className="size-3" /> FDA advisory
             </a>

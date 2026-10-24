@@ -114,7 +114,11 @@
   :focus-visible {
     outline: 3px solid var(--ink);
     outline-offset: 2px;
-    box-shadow: 0 0 0 2px var(--ground);
+    /* A ground gap inside the ring and a ground edge outside it, so the ring
+       reads on cream, paper, the green lobe and ink fills in both themes. */
+    box-shadow:
+      0 0 0 2px var(--ground),
+      0 0 0 7px var(--ground);
   }
   .tnum {
     font-variant-numeric: tabular-nums;

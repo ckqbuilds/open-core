@@ -281,7 +281,7 @@ A cream map ground, ink for every word, one green land, and four legend colours 
 ### Secondary
 - **Coral** (`coral`): most serious or active. `chip-coral` is Class I, "Active outbreak", "Get medical care now"; `capsule-coral` is the ZIP capsule when the ZIP fails to resolve, `lobe-coral` the barcode verdict on an exact recall match; `field-invalid` turns the field outline coral. Never a region on its own and never prose.
 - **Sun** (`sun`): moderate or an alert. `chip-sun` is Class II and an FSIS Public Health Alert, plus the feed-freshness notice; `capsule-sun` is the ZIP capsule in the nav and the one primary action on a page ("Check a barcode"); `lobe-sun` is the barcode verdict on a partial match. Text selection is sun with ink text.
-- **Pond** (`pond`): the USDA FSIS feed (`chip-pond`), the focus ring, the caret, the local-source spotlight lobe (`lobe-pond`), and the first data-viz series.
+- **Pond** (`pond`): the USDA FSIS feed (`chip-pond`), the caret, the local-source spotlight lobe (`lobe-pond`), and the first data-viz series.
 - **Pond Ink** (`pond-ink`): the only coloured text in the system: underlined links at 5.7:1 on cream, lightened in dark theme. Prose stays ink.
 - **Lilac** (`lilac`): category or hazard type (`chip-lilac`: Bacteria, Parasite, Virus; "Biological · inferred"). Hazard type is never coral; severity alone owns coral.
 
@@ -360,7 +360,7 @@ Every button, tab, nav link, toggle and select is a capsule: confident and tacti
 - **Ink:** ink fill, ground text: the one primary action on a page, shared with sun.
 - **Sun / Coral / Pond / Lilac / Land:** the fill is also the border; text and chip are on-fill ink.
 - **Ghost:** transparent fill and border; hover fills paper. Nav links and back links.
-- **Hover / Active / Disabled:** translateY(-1px) with the overshoot; scale(0.97) on press; 45% opacity, no transform when disabled. Focus is the global 3px pond outline at 2px offset.
+- **Hover / Active / Disabled:** translateY(-1px) with the overshoot; scale(0.97) on press; 45% opacity, no transform when disabled. Focus is the global 3px ink outline at 2px offset, with a 2px ground gap inside the ring and a 2px ground edge outside it.
 - **The chip:** an optional 0.9rem round ink dot rides the trailing edge; when the capsule is live (`aria-current="page"`, `aria-pressed="true"`, `data-state="active"`, or `is-live`) the row reverses, the capsule turns ink, the chip turns ground and pops in from 0.2 scale with the overshoot. Toggles and tabs need no conditional classes.
 
 ### Chips
@@ -380,7 +380,7 @@ The signature. One flat fill (land by default; pond, sun, lilac, coral variants)
 
 ### Inputs / Fields
 - **Style:** pill paper strip, 2px ink outline, 3rem min height, 1rem text; the select is the same strip with a chevron, kept native so phones open the OS picker.
-- **Focus:** the global 3px pond outline, offset 3px; the caret is pond.
+- **Focus:** the global 3px ink outline, offset 2px, carried by a ground gap inside and a ground edge outside (both drawn with `box-shadow` spreads in the ground colour, the one place a box-shadow appears; it is a drawn edge, not a lit one); the caret is pond.
 - **Error / Disabled:** `aria-invalid` turns the outline coral and the message below is critical text; disabled is 50% opacity.
 
 ### Navigation

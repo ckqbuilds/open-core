@@ -13,12 +13,15 @@ import { FrontDoor } from "@/components/FrontDoor";
 import { FeaturedLocal } from "@/components/FeaturedLocal";
 import { useZipContext } from "@/hooks/ZipContext";
 import { EmptyState, Loading, Lobe, SectionHeading } from "@/components/common";
-import { cn } from "@/lib/utils";
+import { cn, formatIsoShort } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
 interface FoodsData {
   foods: FoodEntry[];
   unidentified: Outbreak[];
   recalls: Recall[];
+  /** True when the live FDA feed was unavailable and the curated list stands in. */
+  curated: boolean;
 }
 
 /** The one standing sentence under the headline: a product rule, not a hedge. */
@@ -81,6 +84,7 @@ export function FoodsPage() {
       unidentified: outbreaks.filter(
         (o) => o.status === "active" && o.vehicle === NOT_YET_IDENTIFIED
       ),
+      curated: live.stale,
     };
   }, []);
 
@@ -148,7 +152,8 @@ export function FoodsPage() {
               <Loading className="h-12 justify-start">Loading FDA, CDC &amp; FSIS activity…</Loading>
             ) : (
               <p className="prose-measure text-base text-ink-2">
-                <span className="tnum">{stats.outbreaks}</span> active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
+                <span className="tnum">{stats.outbreaks}</span> active outbreak{stats.outbreaks === 1 ? "" : "s"}
+                {data.data?.curated && ` as of ${formatIsoShort(CURATED_CHECKED_AT)} (live FDA feed unavailable)`} ·{" "}
                 <span className="tnum">{stats.recalls}</span> recent recall notice{stats.recalls === 1 ? "" : "s"} on record.{" "}
                 {RECORD_RULE}
               </p>
@@ -162,7 +167,10 @@ export function FoodsPage() {
           <Lobe ref={setLobeEl} coast className={cn(LOBE_BLEED, listInFocus && "is-focused")}>
             {tied.length > 0 ? (
               <>
-                <h2 className="display-md text-2xl">Tied to an active outbreak</h2>
+                <h2 className="display-md text-2xl">
+                  Tied to an active outbreak
+                  {data.data?.curated && <span className="font-medium"> as of {formatIsoShort(CURATED_CHECKED_AT)}</span>}
+                </h2>
                 <ul className="mt-5 flex flex-col items-start gap-3">
                   {tied.map((f) => (
                     <li key={f.category.id} className="max-w-[30rem]">
@@ -219,6 +227,7 @@ export function FoodsPage() {
                 <SectionHeading count={foods.length}>
                   {searching ? "Matching foods" : "All foods named in the record"}
                 </SectionHeading>
+                {!geo && <p className="text-sm text-ink-2">Add a ZIP above to see how many notices reach your state.</p>}
                 <div>
                   <FoodRowHeader />
                   {foods.map((f) => (
