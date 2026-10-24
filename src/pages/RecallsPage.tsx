@@ -298,7 +298,11 @@ export function RecallsPage() {
                 {unscoped.length > filtered.length && (
                   <>
                     {" · "}
-                    <button type="button" className="link" onClick={() => setScopeFilter("all")}>
+                    <button
+                      type="button"
+                      className="link pointer-coarse:-my-2 pointer-coarse:inline-flex pointer-coarse:min-h-10 pointer-coarse:items-center"
+                      onClick={() => setScopeFilter("all")}
+                    >
                       Show all {unscoped.length}
                     </button>
                   </>

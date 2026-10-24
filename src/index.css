@@ -120,6 +120,15 @@
       0 0 0 2px var(--ground),
       0 0 0 7px var(--ground);
   }
+  /* A capsule that wraps a text field (the nav ZIP) draws the ring itself,
+     so focus circles the whole control instead of boxing the digits. */
+  .capsule:has(> input:focus-visible) {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 2px var(--ground),
+      0 0 0 7px var(--ground);
+  }
   .tnum {
     font-variant-numeric: tabular-nums;
   }

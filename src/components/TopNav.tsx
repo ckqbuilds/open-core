@@ -104,7 +104,7 @@ function NavZip() {
           aria-describedby={geoError ? "nav-zip-note" : undefined}
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-          className="tnum w-[3.6rem] bg-transparent sm:w-[4.2rem] text-base font-bold text-on-fill placeholder:text-on-fill/70 focus:outline-none sm:text-sm"
+          className="tnum w-[3.6rem] bg-transparent sm:w-[4.2rem] text-base font-bold text-on-fill placeholder:text-on-fill/70 focus:outline-none focus-visible:shadow-none sm:text-sm"
           style={{ color: "var(--on-fill)" }}
         />
         {geoLoading ? (
