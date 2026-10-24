@@ -100,7 +100,7 @@ export function SymptomsSection() {
         ))}
       </div>
 
-      <p className="text-xs text-muted-foreground">
+      <p className="max-w-[52ch] text-xs text-muted-foreground">
         Reference information only: not a diagnosis and not a prescription. Where CDC states a
         treatment fact, it is quoted with a citation; the decision to test or treat belongs to a
         healthcare provider. Your selected conditions stay in this browser and are never sent
