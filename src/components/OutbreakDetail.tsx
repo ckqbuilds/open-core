@@ -53,7 +53,7 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
             {ob.pathogen}
           </Chip>
           {ob.refId && (
-            <Chip key="ref" color="default" variant="soft" size="sm">
+            <Chip key="ref" color="default" variant="soft" size="sm" className="font-mono tabular-nums">
               FDA #{ob.refId}
             </Chip>
           )}
@@ -136,7 +136,7 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+        <div className="flex min-w-0 flex-1 basis-64 flex-wrap items-center gap-x-3 gap-y-1 text-xs">
           {ob.sources?.map((s) => <SourceLink key={s.url} source={s} />)}
           {ob.advisoryUrl && (
             <a

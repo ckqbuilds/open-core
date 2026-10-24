@@ -41,7 +41,7 @@ export function StatCard({
       <div className={cn("mt-2 text-3xl font-semibold tabular-nums leading-none tracking-tight", toneAccent[tone])}>
         {value}
       </div>
-      {hint && <div className="mt-1.5 text-xs text-muted-foreground">{hint}</div>}
+      {hint && <div className="mt-1.5 text-xs tabular-nums text-muted-foreground">{hint}</div>}
     </Card>
   );
 }

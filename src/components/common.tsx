@@ -1,21 +1,11 @@
 import { Card } from "@heroui/react";
-import { ExternalLink } from "lucide-react";
+import { RecordLine } from "@/components/RecordLine";
 import type { SourceCitation } from "@/data/types";
 import { formatIso } from "@/lib/utils";
 
 /** A citation link — every claim about a named entity must carry one. */
 export function SourceLink({ source }: { source: SourceCitation }) {
-  return (
-    <a
-      href={source.url}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-    >
-      <ExternalLink className="size-3" />
-      {source.agency} source ({formatIso(source.date)})
-    </a>
-  );
+  return <RecordLine agency={`${source.agency} source`} url={source.url} date={formatIso(source.date)} />;
 }
 
 export function EmptyState({ children }: { children: React.ReactNode }) {

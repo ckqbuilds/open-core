@@ -52,13 +52,13 @@ export function OutbreakTile({ outbreak: ob }: { outbreak: Outbreak }) {
             </span>
           )}
         </div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs tabular-nums text-muted-foreground">
           {ob.detailed
             ? `Onset ${formatIso(ob.firstIllnessDate)}–${formatIso(ob.lastIllnessDate)}`
             : `FDA #${ob.refId} · posted ${formatIso(ob.datePosted)}`}
         </div>
         {ob.detailed && ob.datePosted && (
-          <div className="text-xs text-muted-foreground">Posted {formatIso(ob.datePosted)}</div>
+          <div className="text-xs tabular-nums text-muted-foreground">Posted {formatIso(ob.datePosted)}</div>
         )}
       </div>
     </Card>

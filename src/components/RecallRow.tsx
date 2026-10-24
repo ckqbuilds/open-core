@@ -6,6 +6,7 @@ import { classifyRecall } from "@/data/contaminants";
 import { ContaminantBadge } from "@/components/ContaminantBadge";
 import { cleanFirmName, repairEncoding } from "@/data/avoidance";
 import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
+import { RecordLine, recordRule } from "@/components/RecordLine";
 import { cn, formatFdaDate } from "@/lib/utils";
 
 /** One recall record card — used by the recall feed and the outbreak detail page. */
@@ -42,7 +43,6 @@ export function RecallRow({ recall }: { recall: Recall }) {
               {s}
             </Chip>
           ))}
-        {date && <span className="ml-auto text-xs text-muted-foreground">{date}</span>}
       </div>
       <p className="mt-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">Product record</p>
       <p className={cn("mt-0.5 text-sm text-muted-foreground", isLong && !expanded && "line-clamp-3")}>
@@ -58,37 +58,15 @@ export function RecallRow({ recall }: { recall: Recall }) {
           {expanded ? "Show less" : "Show more"}
         </button>
       )}
-      <p className="mt-1.5 text-xs text-muted-foreground">
-        Recalling firm: {cleanFirmName(recall.recallingFirm)}
-        {recall.url ? (
-          <>
-            {" · "}
-            <a
-              href={recall.url}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-primary hover:underline"
-            >
-              {hasNumber ? `#${recall.recallNumber}` : "Official notice"}
-            </a>
-          </>
-        ) : (
-          hasNumber && <> · #{recall.recallNumber}</>
-        )}
-        {recall.retailListUrl && (
-          <>
-            {" · "}
-            <a
-              href={recall.retailListUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-primary hover:underline"
-            >
-              Retail list (PDF)
-            </a>
-          </>
-        )}
-      </p>
+      <p className="mt-1.5 text-xs text-muted-foreground">Recalling firm: {cleanFirmName(recall.recallingFirm)}</p>
+      <RecordLine
+        className={cn("mt-3 pt-3", recordRule)}
+        agency={hasNumber || !recall.url ? agencyLabel(recall.agency) : "Official notice"}
+        reference={hasNumber ? `#${recall.recallNumber}` : undefined}
+        date={date || undefined}
+        url={recall.url || undefined}
+        extras={recall.retailListUrl ? [{ label: "Retail list (PDF)", url: recall.retailListUrl }] : undefined}
+      />
     </Card>
   );
 }

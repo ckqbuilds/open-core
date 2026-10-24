@@ -155,7 +155,7 @@ export function OutbreakGrounding({
         )}
 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-accent/20 pt-3 text-xs">
-          <span className="text-muted-foreground">Read the official FDA/CDC investigation:</span>
+          <span className="w-full text-muted-foreground">Read the official FDA/CDC investigation:</span>
           {outbreak.sources?.map((s: SourceCitation) => (
             <SourceLink key={s.url} source={s} />
           ))}

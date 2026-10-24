@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
-import { ChevronDown, ExternalLink, MapPin, ShoppingCart } from "lucide-react";
+import { ChevronDown, MapPin, ShoppingCart } from "lucide-react";
 import type { AvoidanceDigest as Digest, AvoidanceEvent, AvoidanceLine, NamedRetailerItem } from "@/data/avoidance";
 import type { GeoZip } from "@/data/types";
 import { classificationChip, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { SourceLink } from "./common";
+import { RecordLine, recordRule } from "./RecordLine";
 import { PATHOGENS } from "@/data/symptoms";
 import { formatFdaDate, formatIso, cn } from "@/lib/utils";
 
@@ -86,7 +87,6 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
             {ev.status}
           </Chip>
         )}
-        {date !== "—" && <span className="ml-auto text-xs text-muted-foreground">{date}</span>}
       </div>
 
       <h3 className="mt-2.5 text-base font-semibold leading-snug">{ev.firm}</h3>
@@ -179,33 +179,16 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
         </p>
       )}
 
-      {(ev.recordCount > 1 || ev.url || ev.retailListUrl) && (
-        <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          {ev.recordCount > 1 && <span>{ev.recordCount} agency notices merged</span>}
-          {ev.url && (
-            <a
-              href={ev.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" />
-              {ev.agency === "FSIS" ? "USDA FSIS notice" : "FDA notice"}
-            </a>
-          )}
-          {ev.retailListUrl && (
-            <a
-              href={ev.retailListUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" />
-              Stores that received it (FSIS PDF)
-            </a>
-          )}
-        </p>
-      )}
+      <RecordLine
+        className={cn("mt-3 pt-3", recordRule)}
+        agency={agencyLabel(ev.agency)}
+        date={date !== "—" ? date : undefined}
+        url={ev.url || undefined}
+        extras={[
+          ...(ev.recordCount > 1 ? [{ label: `${ev.recordCount} notices merged` }] : []),
+          ...(ev.retailListUrl ? [{ label: "Stores that received it (FSIS PDF)", url: ev.retailListUrl }] : []),
+        ]}
+      />
     </Card>
   );
 }
