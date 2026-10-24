@@ -45,7 +45,7 @@ export function TopNav() {
         <div className="flex-1 md:hidden" />
 
         {!onHome && <NavZip />}
-        <ThemeToggle />
+        <ThemeToggle className="hidden md:inline-flex" />
 
         <button
           type="button"
@@ -75,6 +75,7 @@ export function TopNav() {
                 <span aria-hidden className="capsule__chip" />
               </NavLink>
             ))}
+            <ThemeToggle className="justify-between border-transparent" withLabel onToggle={() => setMenuOpen(false)} />
           </div>
         </>
       )}
@@ -90,7 +91,7 @@ function NavZip() {
     <div className="relative flex shrink-0 items-center">
       <label
         htmlFor="nav-zip"
-        className={cn("capsule capsule--sm cursor-text gap-1.5 pl-3 pr-2", geoError ? "capsule--coral" : "capsule--sun")}
+        className={cn("capsule capsule--sm cursor-text gap-1 pl-2.5 pr-1.5 sm:gap-1.5 sm:pl-3 sm:pr-2", geoError ? "capsule--coral" : "capsule--sun")}
       >
         <MapPin className="size-4" aria-hidden />
         <span className="sr-only">Your ZIP code</span>
@@ -103,7 +104,7 @@ function NavZip() {
           aria-describedby={geoError ? "nav-zip-note" : undefined}
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-          className="tnum w-[4.2rem] bg-transparent text-base font-bold text-on-fill placeholder:text-on-fill/70 focus:outline-none sm:text-sm"
+          className="tnum w-[3.6rem] bg-transparent sm:w-[4.2rem] text-base font-bold text-on-fill placeholder:text-on-fill/70 focus:outline-none sm:text-sm"
           style={{ color: "var(--on-fill)" }}
         />
         {geoLoading ? (
@@ -123,16 +124,29 @@ function NavZip() {
   );
 }
 
-function ThemeToggle() {
+function ThemeToggle({
+  className,
+  withLabel = false,
+  onToggle,
+}: {
+  className?: string;
+  withLabel?: boolean;
+  onToggle?: () => void;
+}) {
   const { theme, toggle } = useTheme();
+  const dark = theme === "dark";
   return (
     <button
-      onClick={toggle}
-      aria-label="Dark mode"
-      aria-pressed={theme === "dark"}
-      className="capsule capsule--sm capsule--ghost min-h-11 px-3 [&[aria-pressed=true]]:flex-row"
+      onClick={() => {
+        toggle();
+        onToggle?.();
+      }}
+      aria-label={withLabel ? undefined : "Dark mode"}
+      aria-pressed={dark}
+      className={cn("capsule capsule--sm capsule--ghost min-h-11 px-3 [&[aria-pressed=true]]:flex-row", withLabel && "capsule--sm px-4", className)}
     >
-      {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+      {withLabel && <span>{dark ? "Light mode" : "Dark mode"}</span>}
+      {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
     </button>
   );
 }

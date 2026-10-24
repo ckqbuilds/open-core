@@ -36,7 +36,7 @@ export function Disclosure({
           aria-controls={panelId}
           aria-describedby={description ? descId : undefined}
           onClick={() => (onOpenChange ? onOpenChange(!open) : setInner(!open))}
-          className={cn("capsule [&_svg]:size-4", open && "capsule--ink", buttonClassName)}
+          className={cn("capsule max-w-full whitespace-normal text-left [&_svg]:size-4", open && "capsule--ink", buttonClassName)}
         >
           {icon}
           {label}

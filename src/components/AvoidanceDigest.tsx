@@ -46,7 +46,7 @@ export function AvoidanceDigest({
   const otherLabel =
     group?.kind === "pathogen"
       ? `Same pathogen, other recalls (${other.length})`
-      : `Other recalls that mention a ${group?.label ?? "food"} term (${other.length})`;
+      : `Other recalls that mention ${group?.label ?? "this food"} (${other.length})`;
   return (
     <section className="space-y-4">
       <div>

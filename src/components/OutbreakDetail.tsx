@@ -88,7 +88,7 @@ export function OutbreakDetail({
             : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
         </p>
         {ob.detailed && ob.guidance && symptomsHref && (
-          <a href={symptomsHref} className="capsule capsule--sun mt-4">
+          <a href={symptomsHref} className="capsule capsule--sun mt-4 max-w-full whitespace-normal text-left">
             If you have eaten this: see the symptoms and what to do
           </a>
         )}

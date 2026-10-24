@@ -27,7 +27,7 @@ const RECORD_RULE =
 
 /** The lobe that bleeds past the right and top edges of the page on wide screens. */
 const LOBE_BLEED =
-  "lobe--soft p-6 sm:p-8 lg:pl-12 lg:pt-14 lg:-mt-10 lg:[border-radius:48%_0_0_55%/55%_0_0_45%] lg:-mr-[max(1.25rem,calc((100vw-1240px)/2+1.25rem))] lg:pr-[max(2rem,calc((100vw-1240px)/2+2rem))]";
+  "lobe--soft p-6 sm:p-8 lg:pl-28 lg:pt-16 lg:-mt-10 lg:[border-radius:48%_0_0_55%/55%_0_0_45%] lg:-mr-[max(1.25rem,calc((100vw-1240px)/2+1.25rem))] lg:pr-[max(2rem,calc((100vw-1240px)/2+2rem))]";
 
 /** Home: one answer line, the foods tied to active outbreaks in the lobe, then every food on the record. */
 export function FoodsPage() {
