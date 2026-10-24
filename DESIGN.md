@@ -275,7 +275,7 @@ The world rejects the KPI row over a card grid, the stat tile (big number in a b
 A cream map ground, ink for every word, one green land, and four legend colours that only ever fill a capsule or a chip.
 
 ### Primary
-- **Land Green** (`land`): the lobe fill. The focused region of a page (the active-outbreak foods on home, the barcode verdict, the local spotlight) lives inside one lobe; nothing else on a page gets this fill. Also the `chip-land` fill for a CDC/FDA named-source label ("Hand-verified detail") and the wordmark's mark.
+- **Land Green** (`land`): the lobe fill. The focused region of a page (the barcode verdict, the local spotlight) lives inside one lobe; nothing else on a page gets this fill. Also the `chip-land` fill for a CDC/FDA named-source label ("Hand-verified detail") and the wordmark's mark.
 - **Land Deep** (`land-deep`): the food icons on the cream ground, where the lighter land green would wash out. Icons only, never text; in dark theme it collapses to plain land green.
 
 ### Secondary
@@ -336,7 +336,7 @@ Tokens swap at `.dark` or `[data-theme="dark"]` with nothing else changing: grou
 
 A single centred container (1240px at `2xl`, 1.25rem side padding) under a sticky 4rem nav band on 95% ground with a light blur. Pages open with `PageHeader` (display h1, a 62ch description, actions to the right) and then stack sections at 40px (`space-y-10`), with 16–24px inside a section and 6–12px between a row's own lines; the footer sits 64px below under a 2px ink rule.
 
-Home is the one two-part first viewport: the answer column on the left (headline, sub, search field and ZIP field, "Check a barcode"), and the land lobe on the right bleeding off the top and right edges at `lg` (negative margins out to the viewport edge, 12% left padding so every line stays inside the coast). Under it the full list of foods runs in one ruled list on a fixed four-column grid (food 1.3fr, named-with 1fr, recalls 7rem, reaches-you 8.5rem).
+Home is the one two-part first viewport: the answer column on the left (headline, sub, search field and ZIP field, "Check a barcode"), and on the right, on the plain ground with no fill, the foods tied to an active outbreak as capsules under a display heading. Home has no lobe. Under both the full list of foods runs in one ruled list on a fixed four-column grid (food 1.3fr, named-with 1fr, recalls 7rem, reaches-you 8.5rem).
 
 Lists are ruled rows on a fixed `md:` column grid declared once per list (`FOOD_GRID`, the outbreak row grid, the recall row's 6.5rem date margin + body) and kept in every state; a column header row shares the same grid and hides on phones. Below `md` every grid collapses to one column, text wraps, and nothing overflows. Tap targets are at least 40px on touch screens: capsules are 2.75rem; small capsules are 2.25rem on pointer screens and grow to 2.5rem under `(pointer: coarse)`, with `min-h-11` where they stand alone; the wordmark link is `min-h-10`; text and record links take the same 2.5rem via `pointer-coarse:min-h-10`. Dialogs are a sheet centred at `max-w-lg`, `calc(100% - 2rem)` wide, 90vh tall.
 

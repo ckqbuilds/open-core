@@ -12,8 +12,8 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { FrontDoor } from "@/components/FrontDoor";
 import { FeaturedLocal } from "@/components/FeaturedLocal";
 import { useZipContext } from "@/hooks/ZipContext";
-import { EmptyState, Loading, Lobe, SectionHeading } from "@/components/common";
-import { cn, formatIsoShort } from "@/lib/utils";
+import { EmptyState, Loading, SectionHeading } from "@/components/common";
+import { formatIsoShort } from "@/lib/utils";
 import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
 interface FoodsData {
@@ -28,46 +28,7 @@ interface FoodsData {
 const RECORD_RULE =
   "Foods appear only because an FDA, CDC, or USDA FSIS record names them; categories are for browsing, not a judgment on a whole category.";
 
-/**
- * The lobe that bleeds past the right and top edges of the page on wide
- * screens. Its coast swells at most ~7% in from the left, so the content
- * padding (2rem+ on phones; 12% of the grid cell on lg, which is ~9-10% of the bled lobe) keeps every line inside the land.
- */
-const LOBE_BLEED =
-  "p-6 pb-10 pl-8 sm:p-8 sm:pb-12 sm:pl-10 lg:self-start lg:min-h-[24rem] lg:pb-16 lg:pl-[12%] lg:pt-16 lg:-mt-10 lg:-mr-[max(1.25rem,calc((100vw-1240px)/2+1.25rem))] lg:pr-[max(2rem,calc((100vw-1240px)/2+2rem))]";
-
-/**
- * The lobe's coast morphs when the focused section changes on scroll: the food
- * list below takes focus once it is more than 40% in view (of itself, or of the
- * viewport when it is taller than one) and shows more of itself than the lobe.
- */
-function useListInFocus(list: HTMLElement | null, lobe: HTMLElement | null) {
-  const [inFocus, setInFocus] = useState(false);
-  useEffect(() => {
-    if (!list || typeof IntersectionObserver === "undefined") return;
-    const shown = new Map<Element, { px: number; share: number }>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          const viewport = e.rootBounds?.height ?? window.innerHeight;
-          const px = e.isIntersecting ? e.intersectionRect.height : 0;
-          shown.set(e.target, { px, share: px / Math.max(1, Math.min(e.boundingClientRect.height, viewport)) });
-        }
-        const l = shown.get(list);
-        const lb = lobe ? shown.get(lobe) : undefined;
-        setInFocus(!!l && l.share > 0.4 && l.px > (lb?.px ?? 0));
-      },
-      // The sticky band covers the top 4rem of the viewport.
-      { rootMargin: "-64px 0px 0px 0px", threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
-    );
-    io.observe(list);
-    if (lobe) io.observe(lobe);
-    return () => io.disconnect();
-  }, [list, lobe]);
-  return inFocus;
-}
-
-/** Home: one answer line, the foods tied to active outbreaks in the lobe, then every food on the record. */
+/** Home: one answer line, the foods tied to active outbreaks beside it, then every food on the record. */
 export function FoodsPage() {
   useDocumentTitle("OpenCORE — What's affected right now");
   const { geo } = useZipContext();
@@ -118,9 +79,6 @@ export function FoodsPage() {
   const unidentified = data.data?.unidentified ?? [];
   const tied = allFoods.filter((f) => f.outbreaks.length > 0);
   const nothingNamed = !data.loading && foods.length === 0 && unidentified.length === 0;
-  const [listEl, setListEl] = useState<HTMLElement | null>(null);
-  const [lobeEl, setLobeEl] = useState<HTMLDivElement | null>(null);
-  const listInFocus = useListInFocus(listEl, lobeEl);
 
   return (
     <div className="space-y-12">
@@ -164,7 +122,7 @@ export function FoodsPage() {
         </div>
 
         {!data.loading && !searching && (
-          <Lobe ref={setLobeEl} coast className={cn(LOBE_BLEED, listInFocus && "is-focused")}>
+          <section className="lg:pt-2">
             {tied.length > 0 ? (
               <>
                 <h2 className="display-md text-2xl">
@@ -182,7 +140,7 @@ export function FoodsPage() {
             ) : (
               <>
                 <h2 className="display-md text-2xl">No active outbreak names a food right now</h2>
-                <p className="prose-measure mt-2 text-sm">
+                <p className="prose-measure mt-2 text-sm text-ink-2">
                   When FDA or CDC names a food in an active investigation, it appears here with its record.
                 </p>
               </>
@@ -191,7 +149,7 @@ export function FoodsPage() {
             {unidentified.length > 0 && (
               <div className={tied.length > 0 ? "mt-10" : "mt-8"}>
                 <h2 className="display-md text-2xl">Not yet tied to a food</h2>
-                <p className="prose-measure mt-2 text-sm">
+                <p className="prose-measure mt-2 text-sm text-ink-2">
                   These active investigations don't have a food pinned down yet. They're tracked by pathogen until
                   FDA names a vehicle.
                 </p>
@@ -202,7 +160,7 @@ export function FoodsPage() {
                 </div>
               </div>
             )}
-          </Lobe>
+          </section>
         )}
       </div>
 
@@ -223,7 +181,7 @@ export function FoodsPage() {
             <FeaturedLocal geo={geo} />
 
             {foods.length > 0 && (
-              <section ref={setListEl} className="space-y-4">
+              <section className="space-y-4">
                 <SectionHeading count={foods.length}>
                   {searching ? "Matching foods" : "All foods named in the record"}
                 </SectionHeading>
@@ -261,7 +219,7 @@ function tnumRuns(text: string): ReactNode {
   );
 }
 
-/** One food pinned to the lobe's coast: a cream capsule linking to its page. */
+/** One food tied to an active outbreak: a capsule linking to its page. */
 function TiedFoodCapsule({ entry, state }: { entry: FoodEntry; state?: string }) {
   const pathogens = [...new Set(entry.outbreaks.map((o) => o.pathogen))];
   const known = entry.outbreaks.filter((o) => o.caseCount != null);
