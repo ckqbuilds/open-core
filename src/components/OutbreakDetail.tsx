@@ -114,7 +114,7 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
                   </Chip>
                   {e.product && <Chip color="default" variant="soft" size="sm">{e.product}</Chip>}
                 </div>
-                <p className="mt-1.5 text-sm text-muted-foreground">{e.note}</p>
+                <p className="mt-1.5 max-w-prose text-sm text-muted-foreground">{e.note}</p>
                 <div className="mt-1.5">
                   <SourceLink source={e.source} />
                 </div>
