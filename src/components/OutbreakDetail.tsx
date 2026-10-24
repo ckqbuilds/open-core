@@ -1,5 +1,5 @@
 import { Chip } from "@/components/ui/chip";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Check, Copy, Share2, Loader2, ExternalLink } from "lucide-react";
 import type { Outbreak } from "@/data/types";
 import { shareOrCopy } from "@/lib/share";
@@ -8,6 +8,7 @@ import { formatIso, formatIsoShort, isStale, staleNotice } from "@/lib/utils";
 import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 import { Button } from "@/components/ui/button";
 import { SourceLink } from "@/components/common";
+import { Digits } from "@/components/RecordLine";
 
 function caseLabel(ob: Outbreak): string {
   return ob.caseCount != null ? ob.caseCount.toLocaleString() : ob.caseCountText ?? "See advisory";
@@ -20,15 +21,6 @@ function shareText(ob: Outbreak): string {
     : "";
   const src = ob.sources?.[0]?.url ?? ob.advisoryUrl ?? ob.sourceUrl ?? "";
   return `${ob.pathogen} outbreak linked to ${ob.vehicle.toLowerCase()}: ${cases}.${named} Source: ${src}`;
-}
-
-function Fact({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div className="border-l-2 border-ink pl-4 first:border-l-0 first:pl-0">
-      <dt className="text-xs font-bold text-ink-2">{label}</dt>
-      <dd className="display-md mt-1 text-3xl sm:text-4xl">{value}</dd>
-    </div>
-  );
 }
 
 /**
@@ -83,9 +75,11 @@ export function OutbreakDetail({
           {ob.vehicle !== "Not yet identified" ? ` linked to ${ob.vehicle.toLowerCase()}` : ""}
         </h1>
         <p className="mt-3 text-base text-ink-2">
-          {ob.detailed
-            ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
-            : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
+          <Digits>
+            {ob.detailed
+              ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
+              : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
+          </Digits>
         </p>
         {ob.detailed && ob.guidance && symptomsHref && (
           <a href={symptomsHref} className="capsule capsule--sun mt-4 max-w-full whitespace-normal text-left">
@@ -94,21 +88,35 @@ export function OutbreakDetail({
         )}
       </div>
 
-      <dl className="flex flex-wrap gap-x-5 gap-y-4 sm:gap-x-8">
+      <p className="border-y-2 border-ink py-3 text-base">
         {ob.detailed ? (
           <>
-            <Fact label="Reported cases" value={caseLabel(ob)} />
-            <Fact label="Hospitalizations" value={ob.hospitalizations ?? "—"} />
-            <Fact label="Deaths" value={ob.deaths ?? "—"} />
-            <Fact label="States affected" value={ob.statesAffectedCount ?? "—"} />
+            <b className="font-extrabold">
+              <Digits>{caseLabel(ob)}</Digits>
+            </b>{" "}
+            reported cases ·{" "}
+            <b className="font-extrabold">
+              <Digits>{String(ob.hospitalizations ?? "—")}</Digits>
+            </b>{" "}
+            hospitalized ·{" "}
+            <b className="font-extrabold">
+              <Digits>{String(ob.deaths ?? "—")}</Digits>
+            </b>{" "}
+            deaths ·{" "}
+            <b className="font-extrabold">
+              <Digits>{String(ob.statesAffectedCount ?? "—")}</Digits>
+            </b>{" "}
+            states
           </>
         ) : (
           <>
-            <Fact label="Reported cases" value={caseLabel(ob)} />
-            <Fact label="Suspected food" value={<span className="text-2xl sm:text-3xl">{ob.vehicle}</span>} />
+            <b className="font-extrabold">
+              <Digits>{caseLabel(ob)}</Digits>
+            </b>{" "}
+            reported cases · suspected food: <b className="font-extrabold">{ob.vehicle}</b>
           </>
         )}
-      </dl>
+      </p>
 
       {ob.detailed && ob.guidance && (
         <div>
@@ -186,7 +194,7 @@ export function NamedInRecord({ outbreak: ob }: { outbreak: Outbreak }) {
           </div>
         </div>
       ) : (
-        <div className="rounded-lg border-2 border-dashed border-rule p-4 text-sm text-ink-2">
+        <div className="sheet sheet--quiet p-4 text-sm text-ink-2">
           This outbreak is tracked live from the FDA CORE table. Detailed named entities and guidance
           haven't been compiled for it yet — open the FDA investigation for the latest official
           information, including any advice and recalls.

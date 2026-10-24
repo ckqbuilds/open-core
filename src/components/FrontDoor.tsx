@@ -83,6 +83,7 @@ export function FrontDoor({
         {!(result && result.foods === 0 && result.recalls === 0) && (
           <Link to="/recalls#check" className="capsule capsule--sun shrink-0 self-start">
             <ScanBarcode className="size-4" aria-hidden /> Check a barcode
+            <span aria-hidden className="capsule__chip" />
           </Link>
         )}
       </div>

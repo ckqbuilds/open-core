@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import { useAsync } from "@/hooks/useAsync";
-import { OutbreakTile } from "@/components/OutbreakTile";
+import { OutbreakRow, OutbreakRowHeader } from "@/components/OutbreakTile";
 import { FreshnessBadge } from "@/components/FreshnessBadge";
 import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { KeyButton } from "@/components/KeyButton";
 import { EmptyState, Loading } from "@/components/common";
 
-/** Every active FDA CORE outbreak as an outlined sheet, each linking to its page. */
+/** Every active FDA CORE outbreak as a ruled row, each linking to its page. */
 export function OutbreaksPage() {
   useDocumentTitle("Active outbreaks · OpenCORE");
   const outbreaks = useAsync<LiveOutbreaks>((signal) => loadOutbreaks(signal), []);
@@ -57,9 +57,10 @@ export function OutbreaksPage() {
             <span className="tnum">{stats.withRecall}</span> with a recall
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div>
+            <OutbreakRowHeader />
             {active.map((ob) => (
-              <OutbreakTile key={ob.id} outbreak={ob} />
+              <OutbreakRow key={ob.id} outbreak={ob} />
             ))}
           </div>
         </>

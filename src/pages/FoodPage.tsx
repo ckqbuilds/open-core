@@ -17,7 +17,7 @@ import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
-import { OutbreakTile } from "@/components/OutbreakTile";
+import { OutbreakRow, OutbreakRowHeader } from "@/components/OutbreakTile";
 import { RecallRow } from "@/components/RecallRow";
 import { AvoidanceDigest } from "@/components/AvoidanceDigest";
 import { buildAvoidanceDigest } from "@/data/avoidance";
@@ -174,9 +174,10 @@ export function FoodPage() {
           {entry && entry.outbreaks.length > 0 && (
             <section className="space-y-4">
               <SectionHeading count={entry.outbreaks.length}>Active outbreaks</SectionHeading>
-              <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <OutbreakRowHeader />
                 {entry.outbreaks.map((ob) => (
-                  <OutbreakTile key={ob.id} outbreak={ob} />
+                  <OutbreakRow key={ob.id} outbreak={ob} />
                 ))}
               </div>
             </section>

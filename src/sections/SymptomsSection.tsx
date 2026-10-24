@@ -28,7 +28,7 @@ import type { Outbreak } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { Button } from "@/components/ui/button";
-import { Lobe, Sheet, SourceLink } from "@/components/common";
+import { Sheet, SourceLink } from "@/components/common";
 import { cn, formatIsoShort } from "@/lib/utils";
 import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
@@ -88,7 +88,7 @@ export function SymptomsSection() {
         urgentCount={urgentCount}
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div>
         {ordered.map((p) => (
           <PathogenCard
             key={p.id}
@@ -111,14 +111,17 @@ export function SymptomsSection() {
 
 /* ------------------------------------------------------------------ */
 
-/** The one coral region on the page: urgent care. */
+/** Urgent care: an ink-outlined sheet with a coral label chip. */
 function RedFlagCard() {
   return (
-    <Lobe tone="coral" soft className="p-5 sm:p-6">
+    <Sheet className="p-5 sm:p-6">
       <div className="flex items-start gap-3">
         <AlertTriangle className="mt-1 size-6 shrink-0" aria-hidden />
         <div className="min-w-0 flex-1 space-y-4">
-          <h2 className="display-md text-2xl">Get medical care now if any of these apply</h2>
+          <h2 className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <Chip color="coral">Get medical care now</Chip>
+            <span className="display-md text-2xl">if any of these apply</span>
+          </h2>
           <ul className="grid gap-2 sm:grid-cols-2">
             {RED_FLAGS.map((f) => (
               <li key={f} className="flex gap-3 text-sm">
@@ -128,10 +131,10 @@ function RedFlagCard() {
             ))}
           </ul>
           <p className="text-sm">These apply to any of the illnesses below, whatever you think you have.</p>
-          <SourceLink source={RED_FLAG_SOURCE} className="text-ink" />
+          <SourceLink source={RED_FLAG_SOURCE} />
         </div>
       </div>
-    </Lobe>
+    </Sheet>
   );
 }
 
@@ -209,30 +212,33 @@ export function PathogenCard({
   const urgent = notes.some((n) => n.severity === "urgent");
 
   return (
-    <Sheet className={cn("space-y-4 p-5", urgent && "border-coral")}>
-      <div>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="display-md text-xl">{p.name}</h3>
-            {p.aka && <div className="mt-1 text-sm text-ink-2">{p.aka}</div>}
-          </div>
-          <Chip color="lilac">{p.category}</Chip>
+    <article className="row-rule space-y-4 py-5">
+      <div className="grid items-start gap-3 md:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)_auto] md:gap-5">
+        <div className="min-w-0">
+          <h3 className="text-lg font-extrabold">{p.name}</h3>
+          {p.aka && <div className="text-sm text-ink-2">{p.aka}</div>}
         </div>
 
-        {activeOutbreaks.length > 0 && (
-          <div className="mt-3 flex items-start gap-1.5 text-sm font-bold">
-            <RadioTower className="mt-0.5 size-4 shrink-0" aria-hidden />
-            <span>
-              {activeOutbreaks.length === 1
-                ? `${activeOutbreaks[0].curated ? `Active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})` : "Active outbreak in the current FDA data"}: ${activeOutbreaks[0].vehicle}`
-                : activeOutbreaks.some((o) => o.curated)
-                  ? `${activeOutbreaks.length} active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})`
-                  : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
-            </span>
-          </div>
-        )}
+        <div className="min-w-0 space-y-2">
+          {activeOutbreaks.length > 0 && (
+            <div className="flex items-start gap-1.5 text-sm font-bold">
+              <RadioTower className="mt-0.5 size-4 shrink-0" aria-hidden />
+              <span>
+                {activeOutbreaks.length === 1
+                  ? `${activeOutbreaks[0].curated ? `Active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})` : "Active outbreak in the current FDA data"}: ${activeOutbreaks[0].vehicle}`
+                  : activeOutbreaks.some((o) => o.curated)
+                    ? `${activeOutbreaks.length} active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})`
+                    : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
+              </span>
+            </div>
+          )}
+          <p className="text-sm text-ink-2">{p.summary}</p>
+        </div>
 
-        <p className="mt-3 text-sm text-ink-2">{p.summary}</p>
+        <div className="flex flex-wrap items-start gap-2">
+          {urgent && <Chip color="coral">Urgent for your selection</Chip>}
+          <Chip color="lilac">{p.category}</Chip>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
@@ -246,7 +252,7 @@ export function PathogenCard({
 
       <button
         type="button"
-        className="capsule w-full justify-between"
+        className="capsule capsule--sm"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
@@ -293,7 +299,7 @@ export function PathogenCard({
       )}
 
       <SourceLink source={p.source} />
-    </Sheet>
+    </article>
   );
 }
 

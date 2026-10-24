@@ -5,7 +5,7 @@ import { classifyRecall } from "@/data/contaminants";
 import { ContaminantBadge } from "@/components/ContaminantBadge";
 import { cleanFirmName, repairEncoding } from "@/data/avoidance";
 import { classificationChip, classificationTitle, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
-import { RecordLine, recordRule } from "@/components/RecordLine";
+import { Digits, RecordLine, recordRule } from "@/components/RecordLine";
 import { ReachLine } from "@/components/ReachLine";
 import { useZipContext } from "@/hooks/ZipContext";
 import { cn, formatFdaDate } from "@/lib/utils";
@@ -42,7 +42,9 @@ export function RecallRow({
 
   return (
     <article className="row-rule grid gap-x-6 gap-y-2 px-1 py-5 md:grid-cols-[6.5rem_minmax(0,1fr)]">
-      <div className="tnum text-sm text-ink-2 md:pt-1">{date}</div>
+      <div className="text-sm text-ink-2 md:pt-1">
+        <Digits>{date}</Digits>
+      </div>
 
       <div className="min-w-0">
         <h3 className="text-lg font-extrabold leading-tight">{firm}</h3>

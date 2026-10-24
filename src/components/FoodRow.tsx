@@ -11,7 +11,7 @@ export const FOOD_GRID = "md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_7rem_8.5re
 
 export function FoodRowHeader() {
   return (
-    <div className={cn("row-rule hidden gap-4 px-3 pb-2 text-xs font-bold uppercase tracking-wide text-ink-2 md:grid", FOOD_GRID)}>
+    <div className={cn("row-rule hidden gap-4 px-3 pb-2 text-xs font-bold text-ink-2 md:grid", FOOD_GRID)}>
       <span>Food</span>
       <span>Named with</span>
       <span className="text-right">Recalls</span>

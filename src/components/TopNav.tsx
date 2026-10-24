@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { MapPin, Loader2, Moon, Sun, Menu, X } from "lucide-react";
 import { useZipContext } from "@/hooks/ZipContext";
 import { useTheme } from "@/hooks/useTheme";
@@ -17,8 +17,6 @@ const LINKS = [
 /** The thin band across the top of the map: wordmark, five places, your ZIP. */
 export function TopNav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  // The home front door carries its own ZIP field.
-  const onHome = useLocation().pathname === "/";
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -44,7 +42,7 @@ export function TopNav() {
         </div>
         <div className="flex-1 md:hidden" />
 
-        {!onHome && <NavZip />}
+        <NavZip />
         <ThemeToggle className="hidden md:inline-flex" />
 
         <button

@@ -125,40 +125,59 @@
   .display {
     font-weight: 800;
     line-height: 0.95;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.06em;
   }
   .display-md {
     font-weight: 800;
     line-height: 1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
   }
 
   /* ---- The lobe: one flat colour swelling past its box ---- */
   .lobe {
+    --lobe-fill: var(--land);
     position: relative;
-    background: var(--land);
+    background: var(--lobe-fill);
     color: var(--on-fill);
     border-radius: 48% 52% 45% 55% / 55% 45% 55% 45%;
-    transition: border-radius var(--dur) var(--ease-over);
-  }
-  .lobe.is-focused,
-  .lobe:focus-within {
-    border-radius: 52% 48% 55% 45% / 45% 55% 45% 55%;
   }
   .lobe--soft {
     border-radius: 2.5rem 3.5rem 3rem 2.75rem / 3rem 2.5rem 3.5rem 3rem;
   }
   .lobe--pond {
-    background: var(--pond);
+    --lobe-fill: var(--pond);
   }
   .lobe--sun {
-    background: var(--sun);
+    --lobe-fill: var(--sun);
   }
   .lobe--lilac {
-    background: var(--lilac);
+    --lobe-fill: var(--lilac);
   }
   .lobe--coral {
-    background: var(--coral);
+    --lobe-fill: var(--coral);
+  }
+  /* The coast: the lobe's edge is one SVG path, not a box. Its swells shift
+     with a 0.4s overshoot when the focused section changes on scroll
+     (Chromium morphs `d`; other browsers keep the static coast). The two
+     paths mirror COAST in src/components/common.tsx. */
+  .lobe--coast {
+    background: transparent;
+    border-radius: 0;
+  }
+  .lobe__coast {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .lobe__coast path {
+    fill: var(--lobe-fill);
+    d: path("M100,0 L7,0 C3,7 1,13 3,21 C5,29 6,33 5,40 C4,50 0,56 1,66 C2,76 5,80 4,87 C3,95 9,99 20,99 L90,99 C97,99 100,97 100,91 Z");
+    transition: d var(--dur) var(--ease-over);
+  }
+  .lobe--coast.is-focused .lobe__coast path {
+    d: path("M100,0 L6,0 C2,9 0,16 2,25 C4,33 6,37 5,45 C4,55 1,60 2,70 C3,79 6,83 5,89 C4,96 10,99 22,99 L90,99 C97,99 100,97 100,91 Z");
   }
   /* A lobe that opens in its middle, letting the ground show through as water. */
   .lobe__water {
@@ -256,15 +275,27 @@
     background: var(--paper);
   }
   /* The round chip rides the trailing edge; when live it crosses to the lead. */
+  /* A committed ink device on outlined and ghost capsules; on a fill it takes
+     the fill's text colour. */
   .capsule__chip {
     flex: none;
     width: 0.9rem;
     height: 0.9rem;
     border-radius: 999px;
-    background: currentColor;
-    opacity: 0.35;
+    background: var(--ink);
+    opacity: 1;
     order: 2;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s;
+  }
+  .capsule--ink .capsule__chip {
+    background: var(--ground);
+  }
+  .capsule--sun .capsule__chip,
+  .capsule--coral .capsule__chip,
+  .capsule--pond .capsule__chip,
+  .capsule--lilac .capsule__chip,
+  .capsule--land .capsule__chip {
+    background: var(--on-fill);
   }
   /* Live = selected tab, pressed toggle, current nav item. */
   .capsule[data-state="active"],
@@ -284,8 +315,13 @@
   .capsule[data-state="active"] .capsule__chip,
   .capsule[aria-pressed="true"] .capsule__chip,
   .capsule[aria-current="page"] .capsule__chip {
-    opacity: 1;
     animation: chip-pop var(--dur) var(--ease-over);
+  }
+  /* Live capsules turn ink, so their chip turns ground. */
+  .capsule[data-state="active"] .capsule__chip,
+  .capsule[aria-pressed="true"] .capsule__chip,
+  .capsule[aria-current="page"] .capsule__chip {
+    background: var(--ground);
   }
   @keyframes chip-pop {
     from {

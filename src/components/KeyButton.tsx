@@ -13,7 +13,7 @@ export function KeyButton({ variant = "button" }: { variant?: "button" | "link" 
             <Info className="size-4" /> What do these chips mean?
           </button>
         ) : (
-          <Button size="sm">
+          <Button size="sm" chip>
             <Info /> Key
           </Button>
         )}

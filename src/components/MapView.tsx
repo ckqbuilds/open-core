@@ -125,7 +125,7 @@ export function MapView({
   if (!token) {
     return (
       <div
-        className="flex items-center justify-center rounded-lg border-2 border-dashed border-rule text-center text-sm text-ink-2"
+        className="flex items-center justify-center sheet sheet--quiet text-center text-sm text-ink-2"
         style={{ height }}
       >
         <div className="max-w-xs p-4">

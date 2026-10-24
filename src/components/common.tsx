@@ -29,12 +29,23 @@ export function OutLink({ href, children, className }: { href: string; children:
 }
 
 /**
+ * The coast in a 0-100 box: top and right edges run off the box, the left edge
+ * swells unevenly, the bottom-right corner rounds softly. The second path
+ * shifts the swells for the focus morph. Mirrored as CSS `d` in index.css so
+ * Chromium can transition between them; the attribute is the static fallback.
+ */
+const COAST =
+  "M100,0 L7,0 C3,7 1,13 3,21 C5,29 6,33 5,40 C4,50 0,56 1,66 C2,76 5,80 4,87 C3,95 9,99 20,99 L90,99 C97,99 100,97 100,91 Z";
+
+/**
  * A lobe: one flat colour swelling past its box. The focused region of a page
- * lives inside one; nothing else on the page gets a fill.
+ * lives inside one; nothing else on the page gets a fill. With `coast`, the
+ * edge is one SVG path drawn behind the content; add `is-focused` to morph it.
  */
 export function Lobe({
   tone = "land",
   soft,
+  coast,
   className,
   children,
   ...props
@@ -42,13 +53,31 @@ export function Lobe({
   tone?: "land" | "pond" | "sun" | "lilac" | "coral";
   /** Smaller, calmer corners for an in-flow block rather than a bleeding region. */
   soft?: boolean;
+  /** Draw the edge as an irregular SVG coast instead of rounded corners. */
+  coast?: boolean;
+  ref?: React.Ref<HTMLDivElement>;
 }) {
   return (
     <div
       {...props}
-      className={cn("lobe", tone !== "land" && `lobe--${tone}`, soft && "lobe--soft", className)}
+      className={cn(
+        "lobe",
+        tone !== "land" && `lobe--${tone}`,
+        soft && !coast && "lobe--soft",
+        coast && "lobe--coast",
+        className
+      )}
     >
-      {children}
+      {coast ? (
+        <>
+          <svg aria-hidden focusable="false" viewBox="0 0 100 100" preserveAspectRatio="none" className="lobe__coast">
+            <path d={COAST} />
+          </svg>
+          <div className="relative">{children}</div>
+        </>
+      ) : (
+        children
+      )}
     </div>
   );
 }
@@ -99,9 +128,9 @@ export function SectionHeading({
 
 export function EmptyState({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-lg border-2 border-dashed border-rule p-8 text-center text-sm text-ink-2", className)}>
+    <Sheet quiet className={cn("p-8 text-center text-sm text-ink-2", className)}>
       {children}
-    </div>
+    </Sheet>
   );
 }
 

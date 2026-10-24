@@ -1,6 +1,23 @@
 import { ScrollText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/** Tabular numerals on runs of two or more digits only: the face widens commas, spaces and a lone 1 under tnum. */
+export function Digits({ children }: { children: string }) {
+  return (
+    <>
+      {children.split(/(\d{2,})/).map((part, i) =>
+        i % 2 === 1 ? (
+          <span key={i} className="tnum">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+}
+
 const FDA_PAGE = "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts";
 
 /** The dotted hairline used to rule a record line off from the body above it. */
@@ -36,7 +53,9 @@ export function RecordLine({
   const body = (
     <>
       <span>{agency}</span>
-      {reference && <span className="tnum font-mono text-ink">{reference}</span>}
+      {reference && <span className="font-mono text-ink">
+          <Digits>{reference}</Digits>
+        </span>}
     </>
   );
   return (
@@ -56,7 +75,11 @@ export function RecordLine({
         ) : (
           <span className="inline-flex items-baseline gap-1.5">{body}</span>
         )}
-        {date && <span className="tnum">{date}</span>}
+        {date && (
+          <span>
+            <Digits>{date}</Digits>
+          </span>
+        )}
         {isJson && (
           <>
             <a href={FDA_PAGE} target="_blank" rel="noreferrer" className="link">
@@ -73,8 +96,8 @@ export function RecordLine({
               {x.label}
             </a>
           ) : (
-            <span key={x.label} className="tnum">
-              {x.label}
+            <span key={x.label}>
+              <Digits>{x.label}</Digits>
             </span>
           )
         )}

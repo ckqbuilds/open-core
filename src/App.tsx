@@ -56,13 +56,13 @@ export default function App() {
                 <p className="font-bold">Not sure what to do next?</p>
                 <ul className="flex flex-wrap gap-2">
                   <li>
-                    <Link to="/recalls#check" className="capsule capsule--sm">Check a product barcode</Link>
+                    <Link to="/recalls#check" className="capsule capsule--sm">Check a product barcode<span aria-hidden className="capsule__chip" /></Link>
                   </li>
                   <li>
-                    <Link to="/learn" className="capsule capsule--sm">Signs of illness</Link>
+                    <Link to="/learn" className="capsule capsule--sm">Signs of illness<span aria-hidden className="capsule__chip" /></Link>
                   </li>
                   <li>
-                    <Link to="/shop-local" className="capsule capsule--sm">Local food sources</Link>
+                    <Link to="/shop-local" className="capsule capsule--sm">Local food sources<span aria-hidden className="capsule__chip" /></Link>
                   </li>
                 </ul>
                 <p className="prose-measure text-xs text-ink-2">

@@ -151,7 +151,7 @@ export function ProductCheck({ recalls, feedNote }: { recalls: Recall[]; feedNot
 
           {/* Never dead-end: point back to the recall feed below to search by name. */}
           {(offMissed || (matches.exact.length === 0 && matches.possible.length === 0)) && (
-            <div className="rounded-lg border-2 border-dashed border-rule p-4 text-sm">
+            <div className="sheet sheet--quiet p-4 text-sm">
               <p className="font-bold">Want to double-check by name?</p>
               <p className="mt-1 text-ink-2">
                 Barcode coverage is uneven. Scroll down to the full recall feed and filter by
