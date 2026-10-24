@@ -42,7 +42,7 @@ export function MapsDisabledNote({ page = "default" }: { page?: "default" | "sho
             ? "Maps aren't available right now. The list still works from your ZIP."
             : "Maps and location search aren't available right now"}
         </div>
-        <p className="text-muted-foreground">
+        <p className="max-w-prose text-muted-foreground">
           {page === "shop-local"
             ? "To browse local food sources yourself, try the"
             : "The recalls and the companies named in the official record are still listed on each food and outbreak page. To find local food sources near you, try the"}{" "}
