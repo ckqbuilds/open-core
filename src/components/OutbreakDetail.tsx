@@ -79,6 +79,12 @@ export function OutbreakDetail({
             ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
             : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
         </p>
+        {ob.curated && (
+          <p className="mt-2 max-w-prose text-xs text-muted-foreground" role="status">
+            Live FDA feed unavailable · showing the curated list last checked{" "}
+            {formatIsoShort(CURATED_CHECKED_AT)}; this status may be out of date.
+          </p>
+        )}
         {ob.detailed && ob.guidance && symptomsHref && (
           <a
             href={symptomsHref}

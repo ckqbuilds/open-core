@@ -106,7 +106,7 @@ export function FoodsPage() {
             {!searching && (
               <p className="text-sm text-muted-foreground tabular-nums">
                 {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
-                {stats.recalls} recent recalls
+                {stats.recalls} recent recall notices
                 {geo && stats.reach != null ? ` · ${stats.reach} reach ${geo.stateAbbr}` : ""}
               </p>
             )}

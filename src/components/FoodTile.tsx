@@ -74,7 +74,7 @@ export function FoodTile({ entry, state, matched }: { entry: FoodEntry; state?: 
           return (
             <span className="flex items-center gap-1.5 tabular-nums">
               <FileWarning className="size-4" />
-              {searching ? `${total} match` : `${total} recent recall${total > 1 ? "s" : ""}`}
+              {searching ? `${total} match` : `${total} recent notice${total > 1 ? "s" : ""}`}
             </span>
           );
         })()}

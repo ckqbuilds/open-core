@@ -65,7 +65,7 @@ export function FrontDoor({
                 to={`/recalls?q=${encodeURIComponent(result.query)}&archive=1&scope=all`}
                 className="font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <span className="tabular-nums">{result.recalls}</span> recall{result.recalls === 1 ? "" : "s"}
+                <span className="tabular-nums">{result.recalls}</span> recall notice{result.recalls === 1 ? "" : "s"}
               </Link>{" "}
               match '{result.query}'
             </>

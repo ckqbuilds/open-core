@@ -45,7 +45,7 @@ export function ContaminantBadge({
       <Icon aria-hidden className="size-3.5 shrink-0" />
       <span>
         {classification.label}
-        {classification.type !== "other" && <span className="font-normal opacity-75"> · inferred</span>}
+        {classification.type !== "other" && <span className="font-normal"> · inferred</span>}
       </span>
     </span>
   );

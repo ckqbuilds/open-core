@@ -4,7 +4,7 @@
  * functions, so the legend cannot drift from what the rows show.
  */
 export type ChipColor = "danger" | "warning" | "default" | "success" | "accent";
-export type ChipVariant = "soft" | "tertiary";
+export type ChipVariant = "soft" | "tertiary" | "primary";
 
 interface ChipStyle {
   color: ChipColor;
@@ -21,7 +21,8 @@ export function classificationColor(c?: string): ChipColor {
 export function classificationChip(c?: string): ChipStyle {
   // No class assigned yet: neutral and quiet, neither reassuring nor alarming.
   if (c === "Not Yet Classified") return { color: "default", variant: "tertiary" };
-  return { color: classificationColor(c), variant: "soft" };
+  // Class I is the one chip that must out-weigh its neighbours: filled, not soft.
+  return { color: classificationColor(c), variant: c === "Class I" ? "primary" : "soft" };
 }
 
 /** Ongoing / Completed / Terminated: deliberately quiet, never severity-coloured. */

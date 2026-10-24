@@ -200,7 +200,7 @@ export function FoodPage() {
           {/* Coordinated recalls across FDA + USDA FSIS */}
           {recalls.length > 0 && (
             <Disclosure
-              label={`All recall records (${recalls.length})`}
+              label={`All recall notices (${recalls.length})`}
               icon={<Package className="size-4 text-muted-foreground" />}
               description="open + related-word + closed"
             >
