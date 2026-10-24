@@ -24,6 +24,7 @@ export default {
         "pond-ink": "var(--pond-ink)",
         lilac: "var(--lilac)",
         paper: "var(--paper)",
+        "on-fill": "var(--on-fill)",
         rule: "var(--rule)",
         border: "var(--rule)",
         input: "var(--ink)",

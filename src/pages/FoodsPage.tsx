@@ -1,21 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { Utensils, Search } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Spinner } from "@heroui/react";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRelevantRecalls } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
 import { buildFoodIndex, reachCount, foodsMatching, recallsMatching, NOT_YET_IDENTIFIED, type FoodEntry } from "@/data/foods";
 import type { Outbreak, Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
-import { FoodTile } from "@/components/FoodTile";
+import { FoodRow, FoodRowHeader } from "@/components/FoodRow";
 import { OutbreakTile } from "@/components/OutbreakTile";
-import { PageHeader } from "@/components/PageHeader";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { FrontDoor } from "@/components/FrontDoor";
 import { FeaturedLocal } from "@/components/FeaturedLocal";
 import { useZipContext } from "@/hooks/ZipContext";
-import { EmptyState } from "@/components/common";
+import { EmptyState, Loading, Lobe, SectionHeading } from "@/components/common";
 
 interface FoodsData {
   foods: FoodEntry[];
@@ -23,7 +21,15 @@ interface FoodsData {
   recalls: Recall[];
 }
 
-/** Home: affected foods, grouped into commodity categories, each tile linking out. */
+/** The one standing sentence under the headline: a product rule, not a hedge. */
+const RECORD_RULE =
+  "Foods appear only because an FDA, CDC, or USDA FSIS record names them; categories are for browsing, not a judgment on a whole category.";
+
+/** The lobe that bleeds past the right and top edges of the page on wide screens. */
+const LOBE_BLEED =
+  "lobe--soft p-6 sm:p-8 lg:pl-12 lg:pt-14 lg:-mt-10 lg:[border-radius:48%_0_0_55%/55%_0_0_45%] lg:-mr-[max(1.25rem,calc((100vw-1240px)/2+1.25rem))] lg:pr-[max(2rem,calc((100vw-1240px)/2+2rem))]";
+
+/** Home: one answer line, the foods tied to active outbreaks in the lobe, then every food on the record. */
 export function FoodsPage() {
   useDocumentTitle("OpenCORE — What's affected right now");
   const { geo } = useZipContext();
@@ -71,27 +77,96 @@ export function FoodsPage() {
     [searching, query, foods, data.data]
   );
   const unidentified = data.data?.unidentified ?? [];
+  const tied = allFoods.filter((f) => f.outbreaks.length > 0);
+  const nothingNamed = !data.loading && foods.length === 0 && unidentified.length === 0;
 
   return (
-    <div className="space-y-8">
-      <PageHeader
-        icon={<Utensils className="size-6 text-primary" />}
-        title="What's affected right now"
-        description="Foods named in current FDA, CDC, and USDA FSIS activity, grouped by commodity. Pick a food to see the active outbreaks, the recalls across all three agencies, the companies named in the record, locations near you, and what to do if you're sick."
-      />
+    <div className="space-y-12">
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <div className="space-y-6">
+          <div className="space-y-5">
+            {data.loading ? (
+              <h1 className="display text-4xl text-ink-2 sm:text-6xl">Checking FDA, CDC and USDA FSIS records…</h1>
+            ) : (
+              <h1 className="display text-4xl sm:text-6xl">
+                {geo && stats.reach != null ? (
+                  stats.reach > 0 ? (
+                    <>
+                      <span className="tnum">{stats.reach}</span> {stats.reach === 1 ? "recall reaches" : "recalls reach"}{" "}
+                      {geo.state} right now.
+                    </>
+                  ) : (
+                    <>No recalls on record list {geo.state} right now.</>
+                  )
+                ) : (
+                  <>
+                    <span className="tnum">{stats.foods}</span> {stats.foods === 1 ? "food is" : "foods are"} named in current US
+                    recalls and outbreaks.
+                  </>
+                )}
+              </h1>
+            )}
+            {data.loading ? (
+              <Loading className="h-12 justify-start">Loading FDA, CDC &amp; FSIS activity…</Loading>
+            ) : (
+              <p className="prose-measure text-base text-ink-2">
+                <span className="tnum">
+                  {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} · {stats.recalls} recent recall
+                  {stats.recalls === 1 ? "" : "s"} on record.
+                </span>{" "}
+                {RECORD_RULE}
+              </p>
+            )}
+          </div>
 
-      <FrontDoor value={input} onChange={setInput} result={result} reach={searching ? null : stats.reach} />
-
-      {data.loading ? (
-        <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
-          <Spinner size="lg" /> Loading FDA, CDC &amp; FSIS activity…
+          <FrontDoor value={input} onChange={setInput} result={result} />
         </div>
-      ) : foods.length === 0 && unidentified.length === 0 ? (
+
+        {!data.loading && !searching && (
+          <Lobe className={LOBE_BLEED}>
+            {tied.length > 0 ? (
+              <>
+                <h2 className="display-md text-2xl">Tied to an active outbreak</h2>
+                <ul className="mt-5 flex max-w-[28rem] flex-col gap-3">
+                  {tied.map((f) => (
+                    <li key={f.category.id}>
+                      <TiedFoodSheet entry={f} state={geo?.stateAbbr} />
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <>
+                <h2 className="display-md text-2xl">No active outbreak names a food right now</h2>
+                <p className="prose-measure mt-2 text-sm">
+                  When FDA or CDC names a food in an active investigation, it appears here with its record.
+                </p>
+              </>
+            )}
+
+            {unidentified.length > 0 && (
+              <div className={tied.length > 0 ? "mt-10" : "mt-8"}>
+                <h2 className="display-md text-2xl">Not yet tied to a food</h2>
+                <p className="prose-measure mt-2 text-sm">
+                  These active investigations don't have a food pinned down yet. They're tracked by pathogen until
+                  FDA names a vehicle.
+                </p>
+                <div className="mt-5 grid max-w-[28rem] gap-3">
+                  {unidentified.map((ob) => (
+                    <OutbreakTile key={ob.id} outbreak={ob} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </Lobe>
+        )}
+      </div>
+
+      {nothingNamed ? (
         searching ? (
           <EmptyState>
-            That is not a sign the food is unaffected: records name products and firms, not every
-            food.{" "}
-            <Link className="text-primary hover:underline" to="/recalls#check">
+            That is not a sign the food is unaffected: records name products and firms, not every food.{" "}
+            <Link className="link" to="/recalls#check">
               Check a product barcode
             </Link>
           </EmptyState>
@@ -99,58 +174,54 @@ export function FoodsPage() {
           <EmptyState>No foods are named in current outbreak or recall activity right now.</EmptyState>
         )
       ) : (
-        <>
-          <FeaturedLocal geo={geo} />
+        !data.loading && (
+          <>
+            <FeaturedLocal geo={geo} />
 
-          <div className="-mt-4 space-y-1">
-            {!searching && (
-              <p className="text-sm text-muted-foreground tabular-nums">
-                {stats.foods} foods · {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
-                {stats.recalls} recent recalls
-                {geo && stats.reach != null ? ` · ${stats.reach} reach ${geo.stateAbbr}` : ""}
-              </p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Foods appear only because an FDA, CDC, or USDA FSIS record names them; categories are for browsing, not a judgment on a whole category.
-            </p>
-          </div>
-
-          {foods.length > 0 && (
-            <section className="space-y-3">
-              <h2 className="text-lg font-semibold">{searching ? "Matching foods" : "Foods with current activity"}</h2>
-              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {foods.map((f) => (
-                  <li key={f.category.id} className="min-w-0">
-                    <FoodTile
+            {foods.length > 0 && (
+              <section className="space-y-4">
+                <SectionHeading count={foods.length}>
+                  {searching ? "Matching foods" : "All foods named in the record"}
+                </SectionHeading>
+                <div>
+                  <FoodRowHeader />
+                  {foods.map((f) => (
+                    <FoodRow
+                      key={f.category.id}
                       entry={f}
                       state={geo?.stateAbbr}
                       matched={searching ? recallsMatching([...f.fdaRecalls, ...f.fsisRecalls], query) : undefined}
                     />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {unidentified.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Search className="size-4 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">Food not yet identified</h2>
-              </div>
-              <p className="max-w-prose text-sm text-muted-foreground">
-                These active investigations don't have a food pinned down yet. They're tracked by
-                pathogen until FDA names a vehicle.
-              </p>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {unidentified.map((ob) => (
-                  <OutbreakTile key={ob.id} outbreak={ob} />
-                ))}
-              </div>
-            </section>
-          )}
-        </>
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        )
       )}
     </div>
+  );
+}
+
+/** One food pinned to the lobe's coast: the whole sheet links to its page. */
+function TiedFoodSheet({ entry, state }: { entry: FoodEntry; state?: string }) {
+  const pathogens = [...new Set(entry.outbreaks.map((o) => o.pathogen))];
+  const known = entry.outbreaks.filter((o) => o.caseCount != null);
+  const cases = known.length > 0 ? known.reduce((n, o) => n + (o.caseCount ?? 0), 0) : null;
+  const reach = state ? reachCount(entry, state) : null;
+  const facts = [
+    cases != null && `${cases.toLocaleString()} ${cases === 1 ? "case" : "cases"}`,
+    `${entry.recallCount} ${entry.recallCount === 1 ? "recall" : "recalls"}`,
+    state && `${reach} reach ${state}`,
+  ].filter(Boolean);
+  return (
+    <Link to={`/food/${entry.category.id}`} className="sheet group block p-4">
+      <span className="flex items-center justify-between gap-3">
+        <span className="display-md text-xl">{entry.category.label}</span>
+        <ArrowRight aria-hidden className="size-5 shrink-0 transition-transform ease-over group-hover:translate-x-1" />
+      </span>
+      <span className="mt-1.5 block text-sm">{pathogens.join(", ")}</span>
+      <span className="tnum mt-1 block text-sm text-ink-2">{facts.join(" · ")}</span>
+    </Link>
   );
 }
