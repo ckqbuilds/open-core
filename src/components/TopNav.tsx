@@ -133,6 +133,7 @@ function NavZip() {
           placeholder="ZIP"
           aria-label="Your ZIP code"
           aria-invalid={geoError ? true : undefined}
+          aria-describedby={geoError ? "nav-zip-note" : undefined}
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
           className={cn(
@@ -151,7 +152,7 @@ function NavZip() {
       )}
       <div role="status" aria-live="polite" className="contents">
         {geoError && (
-          <span className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-destructive/40 bg-card px-2 py-1 text-xs text-[color:var(--status-critical)] shadow-md">
+          <span id="nav-zip-note" className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-destructive/40 bg-card px-2 py-1 text-xs text-[color:var(--status-critical)] shadow-md">
             {geoError}
           </span>
         )}

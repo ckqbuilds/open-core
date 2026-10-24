@@ -3,7 +3,8 @@ import { ChevronRight, Users, MapPin } from "lucide-react";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import type { Outbreak } from "@/data/types";
-import { formatIso } from "@/lib/utils";
+import { formatIso, formatIsoShort } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
 /** Compact outbreak summary — the whole HeroUI card is the link to its page. */
 export function OutbreakTile({ outbreak: ob }: { outbreak: Outbreak }) {
@@ -24,7 +25,7 @@ export function OutbreakTile({ outbreak: ob }: { outbreak: Outbreak }) {
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1.5">
           <Chip color="danger" variant="soft" size="sm">
-            Active
+            {ob.curated ? `Active as of ${formatIsoShort(CURATED_CHECKED_AT)}` : "Active"}
           </Chip>
           {ob.detailed && (
             <Chip color="default" variant="soft" size="sm">

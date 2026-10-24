@@ -18,8 +18,8 @@ export function RecallRow({
   children,
 }: {
   recall: Recall;
-  /** The feed shows the "Have it?" line once at the top instead of on every card. */
-  showHaveIt?: boolean;
+  /** "expanded": show the "Have it?" line only once the card is expanded (short cards have nothing to expand, so they show it). */
+  showHaveIt?: boolean | "expanded";
   /** Extra content inside the card, below the record line (e.g. folded sibling notices). */
   children?: ReactNode;
 }) {
@@ -69,7 +69,7 @@ export function RecallRow({
           {expanded ? "Show less" : "Show more"}
         </button>
       )}
-      {showHaveIt && recall.status === "Ongoing" && (
+      {showHaveIt && (showHaveIt === true || expanded || !isLong) && recall.status === "Ongoing" && (
         <p className="mt-1.5 text-xs text-muted-foreground">
           Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
         </p>

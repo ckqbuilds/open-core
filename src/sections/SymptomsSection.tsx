@@ -31,7 +31,8 @@ import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { Button } from "@/components/ui/button";
 import { SourceLink } from "@/components/common";
-import { cn } from "@/lib/utils";
+import { cn, formatIsoShort } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
 export function SymptomsSection() {
   const { groups, selected, toggle, clear } = useRiskGroups();
@@ -239,8 +240,10 @@ export function PathogenCard({
           <div className="flex items-center gap-1.5 pt-2 text-xs font-medium text-[color:var(--status-critical)]">
             <RadioTower className="size-3.5" />
             {activeOutbreaks.length === 1
-              ? `Active outbreak in the current FDA data: ${activeOutbreaks[0].vehicle}`
-              : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
+              ? `${activeOutbreaks[0].curated ? `Active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})` : "Active outbreak in the current FDA data"}: ${activeOutbreaks[0].vehicle}`
+              : activeOutbreaks.some((o) => o.curated)
+                ? `${activeOutbreaks.length} active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})`
+                : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
           </div>
         )}
 

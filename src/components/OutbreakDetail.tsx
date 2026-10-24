@@ -4,7 +4,8 @@ import { Check, Copy, Share2, Loader2, ExternalLink } from "lucide-react";
 import type { Outbreak } from "@/data/types";
 import { shareOrCopy } from "@/lib/share";
 import { outbreakStatusChip } from "@/lib/classification";
-import { formatIso, isStale, staleNotice } from "@/lib/utils";
+import { formatIso, formatIsoShort, isStale, staleNotice } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/StatCard";
 import { SourceLink } from "@/components/common";
@@ -54,7 +55,11 @@ export function OutbreakDetail({
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <Chip key="status" {...outbreakStatusChip(ob.status === "active")} size="sm">
-            {ob.status === "active" ? "Active" : "Resolved"}
+            {ob.status === "active"
+              ? ob.curated
+                ? `Active as of ${formatIsoShort(CURATED_CHECKED_AT)}`
+                : "Active"
+              : "Resolved"}
           </Chip>
           <Chip key="pathogen" color="default" variant="tertiary" size="sm">
             {ob.pathogen}

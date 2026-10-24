@@ -149,7 +149,7 @@ export function ProductCheck({ recalls, feedNote }: { recalls: Recall[]; feedNot
                       </p>
                     )}
                     <p className="mt-0.5 text-xs tabular-nums text-muted-foreground">
-                      Barcode {off.code} · identified via Open Food Facts
+                      Barcode {code}{off.code !== code && ` (matched as ${off.code})`} · identified via Open Food Facts
                     </p>
                   </>
                 ) : (

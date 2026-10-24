@@ -1,6 +1,7 @@
 import { RadioTower, TriangleAlert } from "lucide-react";
 import { relativeTime } from "@/data/outbreaksLive";
-import { cn } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
+import { cn, formatIso } from "@/lib/utils";
 
 /** A feed older than this is flagged as possibly missing recent records. */
 const FSIS_STALE_DAYS = 14;
@@ -72,11 +73,8 @@ export function FreshnessBadge({
         <RadioTower
           className={cn("size-3.5", live.stale ? "text-muted-foreground" : "text-[var(--status-good)]")}
         />
-        {live.stale ? "Live FDA feed unavailable · showing curated outbreaks" : `Updated ${relativeTime(live.generatedAt)}`}
+        {live.stale ? `Live FDA feed unavailable · showing the curated list last checked ${formatIso(CURATED_CHECKED_AT)}; newer outbreaks may be missing` : `Updated ${relativeTime(live.generatedAt)}`}
       </span>
-      {live.stale && (
-        <span>These come from our last hand-checked list and may not include newer outbreaks.</span>
-      )}
     </span>
   );
 }

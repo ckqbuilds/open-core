@@ -18,6 +18,14 @@ export function formatIso(iso?: string | null): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+/** "Jul 27" — month and day only, for compact as-of labels. */
+export function formatIsoShort(iso?: string | null): string {
+  if (!iso) return "—";
+  const d = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
 /** Format an FDA YYYYMMDD string as a readable date. */
 export function formatFdaDate(raw?: string): string {
   if (!raw || raw.length !== 8) return "—";

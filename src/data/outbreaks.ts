@@ -152,6 +152,13 @@ const fdaCoreTable: SourceCitation = {
   date: "2026-07-27",
 };
 
+/** Latest date among the curated source citations: when the curated list was last checked. */
+export const CURATED_CHECKED_AT: string = [cdcCyclospora, fdaIceberg, fdaEggs, fdaCoreTable]
+  .map((s) => s.date)
+  .filter((d): d is string => !!d)
+  .sort()
+  .at(-1)!;
+
 function merge(scraped: import("./types").ScrapedOutbreak, detail?: CuratedDetail): Outbreak {
   const base: Outbreak = {
     id: scraped.refId,
@@ -196,8 +203,8 @@ export function mergeLiveOutbreaks(feed: OutbreakFeed): Outbreak[] {
  * curated layer alone so the rich, cited outbreaks never disappear.
  */
 export function curatedFallbackOutbreaks(): Outbreak[] {
-  return Object.entries(CURATED).map(([refId, detail]) =>
-    merge(
+  return Object.entries(CURATED).map(([refId, detail]) => ({
+    ...merge(
       {
         refId,
         pathogen: refId === "1378" ? "Salmonella" : "Cyclospora",
@@ -212,8 +219,9 @@ export function curatedFallbackOutbreaks(): Outbreak[] {
         sourceUrl: fdaCoreTable.url,
       },
       detail
-    )
-  );
+    ),
+    curated: true,
+  }));
 }
 
 /** All named entities across curated outbreaks (deduped) — for the map. */

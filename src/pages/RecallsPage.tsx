@@ -51,6 +51,15 @@ const TYPE_OPTIONS = [
   { value: "other", label: "Unclassified" },
 ];
 
+/** Feed order: how serious the agency says the recall is. */
+const SEVERITY_RANK: Record<string, number> = {
+  "Class I": 0,
+  "Public Health Alert": 1,
+  "Class II": 2,
+  "Not Yet Classified": 3,
+  "Class III": 4,
+};
+
 /** Default view: Ongoing recalls reported within this many days. */
 const CURRENT_DAYS = 90;
 
@@ -85,6 +94,7 @@ export function RecallsPage() {
 
   useDocumentTitle(archive ? "Recall archive · OpenCORE" : "Active recalls · OpenCORE");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const { geo } = useZipContext();
   const { hash, key: locationKey } = useLocation();
   const [checkOpen, setCheckOpen] = useState(hash === "#check");
@@ -129,14 +139,12 @@ export function RecallsPage() {
     ...(geo ? [{ value: "mystate", label: `Reaches ${geo.stateAbbr}` }] : []),
   ];
 
-  const filtered = useMemo(() => {
+  // Every filter except the distribution scope, so "Show all N" can name its target.
+  const unscoped = useMemo(() => {
     let list = scoped;
     if (agencyFilter !== "all") list = list.filter((r) => (r.agency ?? "FDA") === agencyFilter);
     if (classFilter !== "all") list = list.filter((r) => r.classification === classFilter);
     if (statusFilter !== "all") list = list.filter((r) => r.status === statusFilter);
-    if (scopeFilter === "nationwide") list = list.filter((r) => r.nationwide);
-    else if (scopeFilter === "mystate" && geo)
-      list = list.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr));
     if (typeFilter !== "all") list = list.filter((r) => classifyRecall(r).type === typeFilter);
     const q = query.trim().toLowerCase();
     if (q)
@@ -147,7 +155,14 @@ export function RecallsPage() {
           (r.recallingFirm ?? "").toLowerCase().includes(q)
       );
     return list;
-  }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, query, geo]);
+  }, [scoped, agencyFilter, classFilter, statusFilter, typeFilter, query]);
+
+  const filtered = useMemo(() => {
+    if (scopeFilter === "nationwide") return unscoped.filter((r) => r.nationwide);
+    if (scopeFilter === "mystate" && geo)
+      return unscoped.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr));
+    return unscoped;
+  }, [unscoped, scopeFilter, geo]);
 
   // One card per recall event (same key as the shelf digest); later records of
   // the same event fold into that card.
@@ -159,21 +174,14 @@ export function RecallsPage() {
       if (g) g.push(r);
       else map.set(k, [r]);
     }
-    return [...map.values()];
+    // Most serious first, then newest (the input is already newest-first and sort is stable).
+    const rank = (g: Recall[]) => Math.min(...g.map((r) => SEVERITY_RANK[r.classification] ?? 5));
+    return [...map.values()].sort((a, b) => rank(a) - rank(b));
   }, [filtered]);
 
   useEffect(() => setShown(40), [filtered]);
 
-  const summary = useMemo(() => {
-    const reach = geo
-      ? filtered.filter((r) => r.nationwide || r.distributionStates.includes(geo.stateAbbr)).length
-      : 0;
-    return {
-      reach,
-      fsis: filtered.filter((r) => r.agency === "FSIS").length,
-      nationwide: filtered.filter((r) => r.nationwide).length,
-    };
-  }, [filtered, geo]);
+  const nationwideCount = useMemo(() => filtered.filter((r) => r.nationwide).length, [filtered]);
   const fsisSince = fsis.data?.generatedAt ? new Date(fsis.data.generatedAt) : null;
   const fsisOld = !!fsisSince && !isNaN(+fsisSince) && Date.now() - +fsisSince > 14 * 86400000;
   const fsisUnavailable = !!fsis.error || (!fsis.loading && (!!fsis.data?.stale || fsisOld));
@@ -182,21 +190,6 @@ export function RecallsPage() {
       ? `Meat and poultry recalls after ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included (USDA FSIS feed incomplete)`
       : "Meat and poultry recalls after the last update are not included (USDA FSIS feed unavailable)"
     : null;
-  const stateListed = geo
-    ? filtered.filter((r) => !r.nationwide && r.distributionStates.includes(geo.stateAbbr)).length
-    : 0;
-  const summaryTail = [
-    geo && summary.reach > 0
-      ? summary.nationwide > 0
-        ? `${stateListed} listed for ${geo.stateAbbr} + ${summary.nationwide} nationwide`
-        : `${summary.reach} reach ${geo.stateAbbr}`
-      : null,
-    fsisUnavailable ? null : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
-    geo && summary.reach === 0 && summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
-  ]
-    .filter(Boolean)
-    .map((t) => ` · ${t}`)
-    .join("");
   const autoScoped = scopeFilter === "mystate" && !!geo;
   const filtersActive =
     classFilter !== "all" ||
@@ -221,6 +214,35 @@ export function RecallsPage() {
   const selectsNonDefault = activeCount > 0 || scopeFilter !== "mystate";
   const filterNote = filtersActive && !onlyArchive ? ", filtered" : "";
   const resetFilters = () => setParams(new URLSearchParams(), { replace: true });
+
+  const scopeToggle = (className: string) => (
+    <div
+      role="group"
+      aria-label="Recall scope"
+      className={cn("h-11 items-center rounded-md border border-input p-0.5", className)}
+    >
+      {[
+        { v: false, label: "Current" },
+        { v: true, label: "Archive" },
+      ].map((o) => (
+        <button
+          key={o.label}
+          type="button"
+          aria-pressed={archive === o.v}
+          onClick={() => setArchive(o.v)}
+          className={cn(
+            "h-10 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            archive === o.v
+              ? "bg-secondary text-secondary-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+  const mobileFilterCount = activeCount + (scopeFilter !== "mystate" ? 1 : 0) + (query !== "" ? 1 : 0);
 
   const linkBtn =
     "inline-flex h-10 items-center rounded-sm px-2 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -269,22 +291,30 @@ export function RecallsPage() {
       {!recalls.loading && !recalls.error && (
         <div className="-mt-4 space-y-2">
           <h2 className="sr-only">Recall records</h2>
-          <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
-            {filtered.length}{" "}
-            {archive || !defaultScope
-              ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
-              : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
-            {summaryTail}
-            {autoScoped && geo && (
+          <p
+            aria-live="polite"
+            title="Most serious first, then newest"
+            className="text-sm text-muted-foreground tabular-nums"
+          >
+            {autoScoped && geo ? (
               <>
-                {" · "}scoped to {geo.stateAbbr} ·{" "}
+                {filtered.length} {filtered.length === 1 ? "recall reaches" : "recalls reach"} {geo.stateAbbr}
+                {nationwideCount > 0 && ` (${nationwideCount} of them nationwide)`}
+                {" · "}
                 <button
                   type="button"
                   className="inline-flex h-10 items-center rounded-sm align-middle font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   onClick={() => setScopeFilter("all")}
                 >
-                  Show all
+                  Show all {unscoped.length}
                 </button>
+              </>
+            ) : (
+              <>
+                {filtered.length}{" "}
+                {archive || !defaultScope
+                  ? `${filtered.length === 1 ? "recall" : "recalls"} on record (3 years${filterNote})`
+                  : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               </>
             )}
           </p>
@@ -297,13 +327,26 @@ export function RecallsPage() {
         onOpenChange={setCheckOpen}
         icon={<ScanBarcode className="size-5 text-primary" />}
         label="Check a product barcode"
-        description="Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal."
         buttonClassName="text-base font-semibold"
       >
         <ProductCheck recalls={combined} feedNote={feedNote} />
       </Disclosure>
 
-      <Card className="gap-4 p-4">
+      <div className="flex items-center justify-between gap-2 md:hidden">
+        {scopeToggle("inline-flex")}
+        <button
+          type="button"
+          aria-expanded={mobileFiltersOpen}
+          aria-controls="recall-filter-card"
+          onClick={() => setMobileFiltersOpen((o) => !o)}
+          className="inline-flex h-10 items-center gap-1.5 rounded-md px-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Filters{mobileFilterCount > 0 ? ` (${mobileFilterCount} active)` : ""}
+          <ChevronDown className={cn("size-4 transition-transform", mobileFiltersOpen && "rotate-180")} />
+        </button>
+      </div>
+
+      <Card id="recall-filter-card" className={cn("gap-4 p-4", !mobileFiltersOpen && "hidden md:flex")}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <button
             type="button"
@@ -321,31 +364,7 @@ export function RecallsPage() {
                 <RotateCcw className="size-4" /> Reset
               </Button>
             )}
-            <div
-              role="group"
-              aria-label="Recall scope"
-              className="inline-flex h-11 items-center rounded-md border border-input p-0.5"
-            >
-              {[
-                { v: false, label: "Current" },
-                { v: true, label: "Archive" },
-              ].map((o) => (
-                <button
-                  key={o.label}
-                  type="button"
-                  aria-pressed={archive === o.v}
-                  onClick={() => setArchive(o.v)}
-                  className={cn(
-                    "h-10 rounded px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                    archive === o.v
-                      ? "bg-secondary text-secondary-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {o.label}
-                </button>
-              ))}
-            </div>
+            {scopeToggle("hidden md:inline-flex")}
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
@@ -443,7 +462,7 @@ export function RecallsPage() {
           ) : (
             <div className="space-y-3">
               {groups.slice(0, shown).map((g) => (
-                <RecallRow key={g[0].id} recall={g[0]} showHaveIt={false}>
+                <RecallRow key={g[0].id} recall={g[0]} showHaveIt="expanded">
                   {g.length > 1 && (
                     <div className={cn("mt-3 pt-1", recordRule)}>
                       <Disclosure label={`${g.length - 1} more notice${g.length - 1 === 1 ? "" : "s"} from this recall`}>
