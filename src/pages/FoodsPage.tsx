@@ -110,10 +110,8 @@ export function FoodsPage() {
               <Loading className="h-12 justify-start">Loading FDA, CDC &amp; FSIS activity…</Loading>
             ) : (
               <p className="prose-measure text-base text-ink-2">
-                <span className="tnum">
-                  {stats.outbreaks} active outbreak{stats.outbreaks === 1 ? "" : "s"} · {stats.recalls} recent recall
-                  {stats.recalls === 1 ? "" : "s"} on record.
-                </span>{" "}
+                <span className="tnum">{stats.outbreaks}</span> active outbreak{stats.outbreaks === 1 ? "" : "s"} ·{" "}
+                <span className="tnum">{stats.recalls}</span> recent recall{stats.recalls === 1 ? "" : "s"} on record.{" "}
                 {RECORD_RULE}
               </p>
             )}
@@ -221,7 +219,7 @@ function TiedFoodSheet({ entry, state }: { entry: FoodEntry; state?: string }) {
         <ArrowRight aria-hidden className="size-5 shrink-0 transition-transform ease-over group-hover:translate-x-1" />
       </span>
       <span className="mt-1.5 block text-sm">{pathogens.join(", ")}</span>
-      <span className="tnum mt-1 block text-sm text-ink-2">{facts.join(" · ")}</span>
+      <span className="mt-1 block text-sm text-ink-2">{facts.join(" · ")}</span>
     </Link>
   );
 }

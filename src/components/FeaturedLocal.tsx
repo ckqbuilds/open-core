@@ -95,7 +95,7 @@ export function FeaturedLocal({ geo }: { geo: GeoZip | null }) {
         })}
       </div>
 
-      <p className="tnum mt-3 flex flex-wrap items-center gap-x-2 text-sm">
+      <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm">
         <span className="inline-flex items-center gap-1 font-semibold">
           <MapPin className="size-3.5 shrink-0" aria-hidden />
           {(m.distanceMi ?? 0).toFixed(1)} mi away
