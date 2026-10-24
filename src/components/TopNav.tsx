@@ -136,7 +136,7 @@ function NavZip() {
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
           className={cn(
-            "h-8 w-28 rounded-md border bg-background pl-7 pr-6 text-base tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-24 sm:text-sm",
+            "h-10 w-28 rounded-md border bg-background pl-7 pr-6 text-base tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-24 sm:text-sm",
             geoError ? "border-destructive" : "border-input"
           )}
         />

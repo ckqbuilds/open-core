@@ -170,16 +170,19 @@ export function RecallsPage() {
       ? `Meat and poultry recalls after ${fsisSince.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included (USDA FSIS feed incomplete)`
       : "Meat and poultry recalls after the last update are not included (USDA FSIS feed unavailable)"
     : null;
+  const stateListed = geo
+    ? filtered.filter((r) => !r.nationwide && r.distributionStates.includes(geo.stateAbbr)).length
+    : 0;
   const summaryTail = [
     geo
-      ? summary.reach === filtered.length && filtered.length > 0
-        ? `all reach ${geo.stateAbbr}`
-        : summary.reach > 0
-          ? `${summary.reach} reach ${geo.stateAbbr}`
-          : null
+      ? summary.reach > 0
+        ? summary.nationwide > 0
+          ? `${stateListed} listed for ${geo.stateAbbr} + ${summary.nationwide} nationwide`
+          : `${summary.reach} reach ${geo.stateAbbr}`
+        : null
       : null,
     fsisUnavailable ? fsisSegment : summary.fsis > 0 ? `${summary.fsis} USDA FSIS` : null,
-    summary.nationwide > 0 ? `${summary.nationwide} nationwide` : null,
+    summary.nationwide > 0 && !(geo && summary.reach > 0) ? `${summary.nationwide} nationwide` : null,
   ]
     .filter(Boolean)
     .map((t) => ` · ${t}`)
@@ -365,7 +368,7 @@ export function RecallsPage() {
                 : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               {summaryTail}
             </p>
-            <KeyButton variant="link" />
+            {filtered.length > 0 && <KeyButton variant="link" />}
           </div>
 
           {filtered.length === 0 ? (
@@ -433,7 +436,7 @@ export function RecallsPage() {
               aria-expanded={trendOpen}
               aria-controls="recall-trend"
               onClick={() => setTrendOpen((o) => !o)}
-              className="inline-flex items-center gap-1.5 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex items-center gap-1.5 min-h-10 rounded-md py-1 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {defaultScope ? "Trend by month, current scope" : "Trend by month, archive"}
               <ChevronDown className={cn("size-4 transition-transform", trendOpen && "rotate-180")} />

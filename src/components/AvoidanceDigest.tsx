@@ -25,13 +25,17 @@ export function AvoidanceDigest({
   digest,
   geo,
   group,
+  hideRetailers = false,
 }: {
   digest: Digest;
   geo: GeoZip | null;
+  /** Skip the named-seller cards when the page already lists them elsewhere. */
+  hideRetailers?: boolean;
   /** What the non-tied events were grouped by: a food page's category or an outbreak's pathogen. */
   group?: { kind: "food" | "pathogen"; label: string };
 }) {
-  if (digest.events.length === 0 && digest.retailers.length === 0) return null;
+  const retailers = hideRetailers ? [] : digest.retailers;
+  if (digest.events.length === 0 && retailers.length === 0) return null;
   const isClosed = (e: AvoidanceEvent) => e.status === "Terminated" || e.status === "Completed";
   const openEvents = digest.events.filter((e) => !isClosed(e));
   const closed = digest.events.filter(isClosed);
@@ -63,6 +67,14 @@ export function AvoidanceDigest({
         {other.map((ev) => (
           <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
         ))}
+        {retailers.length > 0 && (
+          <>
+            <h3 className="pt-2 text-sm font-semibold text-muted-foreground">Named sellers</h3>
+            {retailers.map((r) => (
+              <RetailerCard key={r.id} item={r} />
+            ))}
+          </>
+        )}
         {closed.length > 0 && (
           <Disclosure label={`Closed recalls (${closed.length})`}>
             <div className="space-y-3 pt-2">
@@ -72,9 +84,6 @@ export function AvoidanceDigest({
             </div>
           </Disclosure>
         )}
-        {digest.retailers.map((r) => (
-          <RetailerCard key={r.id} item={r} />
-        ))}
       </div>
     </section>
   );
@@ -146,6 +155,7 @@ function EventCard({
             <button
               type="button"
               onClick={() => setAllRetail(true)}
+              aria-label={`Show all ${ev.retail.length} products: ${ev.firm}`}
               className="mt-1 inline-flex min-h-10 items-center text-sm font-medium text-primary hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Show all {ev.retail.length} products
@@ -160,6 +170,7 @@ function EventCard({
             type="button"
             onClick={() => setWholesaleOpen((v) => !v)}
             aria-expanded={wholesaleOpen}
+            aria-label={`${ev.wholesale.length} case-pack ${ev.wholesale.length === 1 ? "product" : "products"} for restaurants and food service: ${ev.firm}`}
             className="inline-flex min-h-10 items-center gap-1.5 text-left text-sm font-medium hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <ChevronDown
@@ -193,6 +204,7 @@ function EventCard({
             type="button"
             onClick={() => setCodesOpen((v) => !v)}
             aria-expanded={codesOpen}
+            aria-label={`Lot codes and dates as stated: ${ev.firm}`}
             className="inline-flex min-h-10 items-center gap-1.5 text-left text-sm font-medium hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <ChevronDown

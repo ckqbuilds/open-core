@@ -31,6 +31,16 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { EmptyState, InfoNote } from "@/components/common";
 
 const RECALL_WINDOW_YEARS = 3;
+/**
+ * openFDA's per-request maximum. Keep this high: a lower cap silently truncates
+ * the digest, so the same recall event would show fewer notices here than on
+ * its outbreak page. The page recomputes every count from this one fetched set
+ * (the "All recall records" total and the digest), so the page agrees with
+ * itself. The home tile counts a different query (the 250 most recent relevant
+ * records, bucketed by description), so before this page loads the tile can
+ * differ from the total shown here.
+ */
+const FOOD_RECALL_LIMIT = 100;
 const nextStepLink =
   "inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -56,7 +66,7 @@ export function FoodPage() {
       const cat = category!;
       const [live, fda, fsis] = await Promise.all([
         loadOutbreaks(signal),
-        fetchRecallsByFood(cat.matchTerms, 24, signal, recallSince).catch(() => [] as Recall[]),
+        fetchRecallsByFood(cat.matchTerms, FOOD_RECALL_LIMIT, signal, recallSince).catch(() => [] as Recall[]),
         loadFsisRecalls(signal).catch(() => ({ recalls: [] as Recall[], generatedAt: null, stale: true })),
       ]);
       const outbreaks = live.outbreaks.filter(
@@ -68,7 +78,10 @@ export function FoodPage() {
       const fsisRecalls = fsis.recalls.filter(
         (r) => (categorizeFood(r.productDescription) ?? OTHER_FOOD).id === cat.id
       );
-      return assembleFoodEntry(cat, outbreaks, fda, fsisRecalls);
+      // Same bucketing the home index uses (by product description), so a
+      // broad match-term hit that belongs to another food is not counted here.
+      const fdaRecalls = fda.filter((r) => (categorizeFood(r.productDescription) ?? OTHER_FOOD).id === cat.id);
+      return assembleFoodEntry(cat, outbreaks, fdaRecalls, fsisRecalls);
     },
     [category?.id, recallSince],
     Boolean(category)
@@ -133,7 +146,7 @@ export function FoodPage() {
       <PageHeader
         icon={<span aria-hidden className="flex size-9 items-center justify-center rounded-lg bg-accent/10 text-accent">{(() => { const Icon = foodIcon(category.id); return <Icon className="size-5" />; })()}</span>}
         title={category.label}
-        description="Everything the app is tracking for this food, across FDA, CDC, and USDA FSIS."
+        description="Everything on record for this food in the last 3 years, across FDA, CDC, and USDA FSIS. Home counts only the most recent records; this page lists them all."
         actions={<KeyButton />}
       />
 

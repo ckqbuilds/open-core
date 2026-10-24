@@ -18,9 +18,15 @@ export function RecallRow({ recall }: { recall: Recall }) {
   const date = formatFdaDate(recall.reportDate ?? recall.recallInitiationDate);
   // FSIS records carry "N/A" where FDA has a recall number; don't print a non-number.
   const hasNumber = Boolean(recall.recallNumber) && !/^(n\/a|—|-|unknown)$/i.test(recall.recallNumber.trim());
+  const firm = cleanFirmName(recall.recallingFirm);
+  const classDefinition =
+    recall.classification === "Class I" || recall.classification === "Not Yet Classified"
+      ? classificationTitle(recall.classification)
+      : undefined;
   return (
     <Card className="p-4">
-      <p className="text-sm font-medium">{repairEncoding(recall.reason)}</p>
+      <h3 className="text-sm font-semibold">{firm}</h3>
+      <p className="mt-0.5 text-sm font-medium">{repairEncoding(recall.reason)}</p>
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
         <Chip {...classificationChip(recall.classification)} title={classificationTitle(recall.classification)} size="sm">
           {recall.classification}
@@ -44,6 +50,7 @@ export function RecallRow({ recall }: { recall: Recall }) {
             </Chip>
           ))}
       </div>
+      {classDefinition && <p className="mt-1.5 text-xs text-muted-foreground">{classDefinition}</p>}
       <p className="mt-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">Product record</p>
       <p className={cn("mt-0.5 text-sm text-muted-foreground", isLong && !expanded && "line-clamp-3")}>
         {description}
@@ -53,6 +60,7 @@ export function RecallRow({ recall }: { recall: Recall }) {
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
+          aria-label={`${expanded ? "Show less" : "Show more"}: ${firm}`}
           className="-my-2 inline-flex min-h-10 items-center self-start rounded-sm text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {expanded ? "Show less" : "Show more"}
@@ -63,7 +71,6 @@ export function RecallRow({ recall }: { recall: Recall }) {
           Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
         </p>
       )}
-      <p className="mt-1.5 text-xs text-muted-foreground">Recalling firm: {cleanFirmName(recall.recallingFirm)}</p>
       <RecordLine
         className={cn("mt-3 pt-3", recordRule)}
         agency={hasNumber || !recall.url ? agencyLabel(recall.agency) : "Official notice"}

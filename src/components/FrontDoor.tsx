@@ -74,13 +74,13 @@ export function FrontDoor({
       )}
 
       {geoError && (
-        <p role="status" className="text-sm text-[color:var(--status-critical)]">
+        <p id="home-zip-note" role="status" className="text-sm text-[color:var(--status-critical)]">
           {geoError}
         </p>
       )}
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <p id="home-zip-note" className="text-sm text-muted-foreground">
+        <p id={geoError ? undefined : "home-zip-note"} className="text-sm text-muted-foreground">
           {geoError ? null : geo ? (
             <>Showing {geo.place}, {geo.stateAbbr}{reach != null && <> · {reach} recall{reach === 1 ? "" : "s"} reach your state</>}. Your ZIP stays in this browser.</>
           ) : (

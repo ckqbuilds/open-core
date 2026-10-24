@@ -125,6 +125,7 @@ export function OutbreakPage() {
         digest={digest}
         geo={geo}
         group={{ kind: "pathogen", label: matchedPathogen?.name ?? ob.pathogen }}
+        hideRetailers
       />
 
       <NamedInRecord outbreak={ob} />
