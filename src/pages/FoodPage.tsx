@@ -244,7 +244,7 @@ export function FoodPage() {
                   See risk-group guidance
                 </Link>
               </p>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div>
                 {entry.pathogens.map((p) => (
                   <PathogenCard
                     key={p.id}

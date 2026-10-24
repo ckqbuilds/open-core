@@ -31,7 +31,7 @@ const RECORD_RULE =
  * padding (2rem+ on phones; 12% of the grid cell on lg, which is ~9-10% of the bled lobe) keeps every line inside the land.
  */
 const LOBE_BLEED =
-  "p-6 pb-10 pl-8 sm:p-8 sm:pb-12 sm:pl-10 lg:pl-[12%] lg:pt-16 lg:-mt-10 lg:-mr-[max(1.25rem,calc((100vw-1240px)/2+1.25rem))] lg:pr-[max(2rem,calc((100vw-1240px)/2+2rem))]";
+  "p-6 pb-10 pl-8 sm:p-8 sm:pb-12 sm:pl-10 lg:self-start lg:min-h-[24rem] lg:pb-16 lg:pl-[12%] lg:pt-16 lg:-mt-10 lg:-mr-[max(1.25rem,calc((100vw-1240px)/2+1.25rem))] lg:pr-[max(2rem,calc((100vw-1240px)/2+2rem))]";
 
 /**
  * The lobe's coast morphs when the focused section changes on scroll: the food
