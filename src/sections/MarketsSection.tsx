@@ -204,7 +204,7 @@ export function MarketsSection({
                       </a>
                     )}
                   </div>
-                  {m.updatedAt && <div className="mt-1 text-[11px] text-ink-2">USDA listing updated {m.updatedAt}</div>}
+                  {m.updatedAt && <div className="mt-1 text-xs text-ink-2">USDA listing updated {m.updatedAt}</div>}
                 </div>
               ))}
             </div>

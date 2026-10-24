@@ -263,7 +263,7 @@ export function ChatWidget() {
                 {streaming ? <Loader2 className="animate-spin" /> : <Send />}
               </Button>
             </form>
-            <p className="mt-1.5 text-[11px] leading-tight text-ink-2">
+            <p className="mt-1.5 text-xs leading-tight text-ink-2">
               AI can be wrong. Confirm against the linked FDA/CDC sources. Not medical advice.
             </p>
           </div>
