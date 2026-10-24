@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import type { Recall } from "@/data/types";
@@ -12,7 +12,17 @@ import { useZipContext } from "@/hooks/ZipContext";
 import { cn, formatFdaDate } from "@/lib/utils";
 
 /** One recall record card — used by the recall feed and the outbreak detail page. */
-export function RecallRow({ recall }: { recall: Recall }) {
+export function RecallRow({
+  recall,
+  showHaveIt = true,
+  children,
+}: {
+  recall: Recall;
+  /** The feed shows the "Have it?" line once at the top instead of on every card. */
+  showHaveIt?: boolean;
+  /** Extra content inside the card, below the record line (e.g. folded sibling notices). */
+  children?: ReactNode;
+}) {
   const { geo } = useZipContext();
   const [expanded, setExpanded] = useState(false);
   const description = repairEncoding(recall.productDescription);
@@ -59,19 +69,20 @@ export function RecallRow({ recall }: { recall: Recall }) {
           {expanded ? "Show less" : "Show more"}
         </button>
       )}
-      {recall.status === "Ongoing" && (
+      {showHaveIt && recall.status === "Ongoing" && (
         <p className="mt-1.5 text-xs text-muted-foreground">
           Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
         </p>
       )}
       <RecordLine
         className={cn("mt-3 pt-3", recordRule)}
-        agency={hasNumber || !recall.url ? agencyLabel(recall.agency) : "Official notice"}
+        agency={hasNumber || !recall.url ? agencyLabel(recall.agency) : recall.agency === "FSIS" ? "Official notice" : "FDA notice"}
         reference={hasNumber ? `#${recall.recallNumber}` : undefined}
         date={date || undefined}
         url={recall.url || undefined}
         extras={recall.retailListUrl ? [{ label: "Retail list (PDF)", url: recall.retailListUrl }] : undefined}
       />
+      {children}
     </Card>
   );
 }

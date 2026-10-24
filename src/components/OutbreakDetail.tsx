@@ -74,18 +74,34 @@ export function OutbreakDetail({
             ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
             : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
         </p>
+        {ob.detailed && ob.guidance && symptomsHref && (
+          <a
+            href={symptomsHref}
+            className="mt-1 inline-flex min-h-10 items-center rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            If you have eaten this: see the symptoms and what to do
+          </a>
+        )}
       </div>
 
       {ob.detailed ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatCard label="Reported cases" value={caseLabel(ob)} tone="critical" />
-          <StatCard label="Hospitalizations" value={ob.hospitalizations ?? "—"} />
-          <StatCard label="Deaths" value={ob.deaths ?? "—"} />
-          <StatCard label="States affected" value={ob.statesAffectedCount ?? "—"} />
-        </div>
+        <>
+          {/* Phones: one quiet line, so the guidance below is not pushed off-screen. */}
+          <p className="text-sm tabular-nums text-muted-foreground sm:hidden">
+            <span className="font-semibold text-foreground">{caseLabel(ob)}</span> cases ·{" "}
+            {ob.hospitalizations ?? "—"} hospitalizations · {ob.deaths ?? "—"} deaths ·{" "}
+            {ob.statesAffectedCount ?? "—"} states
+          </p>
+          <div className="hidden grid-cols-4 gap-3 sm:grid">
+            <StatCard label="Reported cases" value={caseLabel(ob)} />
+            <StatCard label="Hospitalizations" value={ob.hospitalizations ?? "—"} />
+            <StatCard label="Deaths" value={ob.deaths ?? "—"} />
+            <StatCard label="States affected" value={ob.statesAffectedCount ?? "—"} />
+          </div>
+        </>
       ) : (
         <div className="grid grid-cols-2 gap-3">
-          <StatCard label="Reported cases" value={caseLabel(ob)} tone="critical" />
+          <StatCard label="Reported cases" value={caseLabel(ob)} />
           <StatCard label="Suspected food" value={<span className="text-xl">{ob.vehicle}</span>} />
         </div>
       )}
@@ -103,14 +119,6 @@ export function OutbreakDetail({
           </ul>
           {isStale(ob.lastIllnessDate) && (
             <p className="mt-2 text-xs text-muted-foreground">{staleNotice(ob.lastIllnessDate)}</p>
-          )}
-          {symptomsHref && (
-            <a
-              href={symptomsHref}
-              className="mt-3 inline-flex min-h-10 items-center rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              If you have eaten this: see the symptoms and what to do
-            </a>
           )}
         </div>
       )}
@@ -157,7 +165,11 @@ export function NamedInRecord({ outbreak: ob }: { outbreak: Outbreak }) {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-medium">{e.name}</span>
                   <Chip color="default" variant="tertiary" size="sm">
-                    {e.kind === "restaurant" ? "Restaurant" : "Retailer / supplier"}
+                    {e.kind === "restaurant"
+                      ? "Restaurant"
+                      : /^recalling firm/i.test(e.note)
+                        ? "Recalling firm"
+                        : "Retailer / supplier"}
                   </Chip>
                   {e.product && <Chip color="default" variant="soft" size="sm">{e.product}</Chip>}
                 </div>

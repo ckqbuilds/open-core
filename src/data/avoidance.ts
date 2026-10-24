@@ -303,6 +303,11 @@ const FIRM_NOISE = new Set([
   "de", "r", "c", "v", "cv", "rl", "sa", "the", "incorporated", "limited",
 ]);
 
+/** The key a recall event is grouped by: firm + initiation (else report) date. */
+export function recallEventKey(r: Recall): string {
+  return `${firmKey(cleanFirmName(r.recallingFirm))}|${r.recallInitiationDate ?? r.reportDate ?? ""}`;
+}
+
 /** Accent-free, suffix-free firm key so "Taylor Farms de México" matches FDA's spelling. */
 function firmKey(name: string): string {
   return name
@@ -360,7 +365,7 @@ export function buildAvoidanceDigest(
   for (const r of recalls) {
     const firm = cleanFirmName(r.recallingFirm);
     const date = r.recallInitiationDate ?? r.reportDate ?? "";
-    const key = `${firmKey(firm)}|${date}`;
+    const key = recallEventKey(r);
     const { lines, contents } = splitProductLines(r.productDescription);
     let ev = byKey.get(key);
     if (!ev) {

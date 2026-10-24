@@ -59,7 +59,7 @@ export function FoodTile({ entry, state, matched }: { entry: FoodEntry; state?: 
             return (
               <span className="flex items-center gap-1.5 font-medium tabular-nums text-foreground">
                 <FileWarning className="size-4" />
-                {searching ? `${total} match · ${n} of those reach ${state}` : `${n} reach ${state}`}
+                {searching ? `${total} match · ${n} of those reach ${state}` : `${n} of ${total} reach ${state}`}
               </span>
             );
           }
@@ -67,7 +67,7 @@ export function FoodTile({ entry, state, matched }: { entry: FoodEntry; state?: 
             return (
               <span className="flex items-center gap-1.5 tabular-nums">
                 <FileWarning className="size-4" />
-                {searching ? `${total} match · none listed for ${state}` : `None listed for ${state}`}
+                {searching ? `${total} match · none listed for ${state}` : `None of ${total} listed for ${state} in the records on file`}
               </span>
             );
           }

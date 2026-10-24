@@ -65,13 +65,18 @@ export function FreshnessBadge({
   if (!live) return null;
   return (
     <span
-      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"
+      className="inline-flex flex-col gap-0.5 text-xs text-muted-foreground"
       title={live.stale ? undefined : "From the scheduled FDA CORE scrape"}
     >
-      <RadioTower
-        className={cn("size-3.5", live.stale ? "text-muted-foreground" : "text-[var(--status-good)]")}
-      />
-      {live.stale ? "Live FDA feed unavailable · showing curated outbreaks" : `Updated ${relativeTime(live.generatedAt)}`}
+      <span className="inline-flex items-center gap-1.5">
+        <RadioTower
+          className={cn("size-3.5", live.stale ? "text-muted-foreground" : "text-[var(--status-good)]")}
+        />
+        {live.stale ? "Live FDA feed unavailable · showing curated outbreaks" : `Updated ${relativeTime(live.generatedAt)}`}
+      </span>
+      {live.stale && (
+        <span>These come from our last hand-checked list and may not include newer outbreaks.</span>
+      )}
     </span>
   );
 }

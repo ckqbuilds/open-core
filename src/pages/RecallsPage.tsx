@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { cn, formatFdaDate } from "@/lib/utils";
 import { Loader2, RotateCcw, Package, ChevronDown, ScanBarcode, Search } from "lucide-react";
 import { Card } from "@heroui/react";
 import { fetchRelevantRecalls } from "@/data/openfda";
@@ -15,6 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Disclosure } from "@/components/Disclosure";
 import { RecallTrendChart } from "@/components/RecallTrendChart";
 import { RecallRow } from "@/components/RecallRow";
+import { RecordLine, recordRule } from "@/components/RecordLine";
+import { recallEventKey, repairEncoding } from "@/data/avoidance";
+import { agencyLabel } from "@/lib/classification";
 import { ProductCheck } from "@/components/ProductCheck";
 import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
@@ -146,6 +149,20 @@ export function RecallsPage() {
     return list;
   }, [scoped, agencyFilter, classFilter, statusFilter, scopeFilter, typeFilter, query, geo]);
 
+  // One card per recall event (same key as the shelf digest); later records of
+  // the same event fold into that card.
+  const groups = useMemo(() => {
+    const map = new Map<string, Recall[]>();
+    for (const r of filtered) {
+      const k = recallEventKey(r);
+      const g = map.get(k);
+      if (g) g.push(r);
+      else map.set(k, [r]);
+    }
+    return [...map.values()];
+  }, [filtered]);
+  const anyOngoing = filtered.some((r) => r.status === "Ongoing");
+
   useEffect(() => setShown(40), [filtered]);
 
   const summary = useMemo(() => {
@@ -245,6 +262,11 @@ export function RecallsPage() {
                 : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               {summaryTail}
             </p>
+            {anyOngoing && (
+              <p className="text-xs text-muted-foreground">
+                Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
+              </p>
+            )}
           </div>
           {autoScoped && geo && (
             <p className="inline-flex flex-wrap items-center gap-x-1.5 rounded-md border border-input px-3 text-sm text-muted-foreground">
@@ -392,20 +414,12 @@ export function RecallsPage() {
                         Search the archive for &lsquo;{query.trim()}&rsquo;
                       </Button>
                     )}
-                    <Button variant="ghost" size="sm" onClick={resetFilters}>
-                      Reset filters
-                    </Button>
                   </div>
                 </>
               ) : (
                 <>
                   <p>No recalls match these filters.</p>
                   <div className="mt-3 flex flex-wrap justify-center gap-2">
-                    {filtersActive && (
-                      <Button variant="ghost" size="sm" onClick={resetFilters}>
-                        Reset filters
-                      </Button>
-                    )}
                     {!archive && (
                       <Button size="sm" onClick={() => setArchive(true)}>
                         Include the archive
@@ -417,21 +431,47 @@ export function RecallsPage() {
             </EmptyState>
           ) : (
             <div className="space-y-3">
-              {filtered.slice(0, shown).map((r) => (
-                <RecallRow key={r.id} recall={r} />
+              {groups.slice(0, shown).map((g) => (
+                <RecallRow key={g[0].id} recall={g[0]} showHaveIt={false}>
+                  {g.length > 1 && (
+                    <div className={cn("mt-3 pt-1", recordRule)}>
+                      <Disclosure label={`${g.length - 1} more notice${g.length - 1 === 1 ? "" : "s"} from this recall`}>
+                        <ul className="space-y-3">
+                          {g.slice(1).map((r) => {
+                            const hasNum = Boolean(r.recallNumber) && !/^(n\/a|—|-|unknown)$/i.test(r.recallNumber.trim());
+                            return (
+                              <li key={r.id}>
+                                <p className="line-clamp-3 text-sm text-muted-foreground">
+                                  {repairEncoding(r.productDescription)}
+                                </p>
+                                <RecordLine
+                                  className="mt-1.5"
+                                  agency={agencyLabel(r.agency)}
+                                  reference={hasNum ? `#${r.recallNumber}` : undefined}
+                                  date={formatFdaDate(r.reportDate ?? r.recallInitiationDate) || undefined}
+                                  url={r.url || undefined}
+                                />
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </Disclosure>
+                    </div>
+                  )}
+                </RecallRow>
               ))}
-              {filtered.length > 40 && (
+              {groups.length > 40 && (
                 <div className="flex flex-col items-center gap-2 pt-1">
                   <p aria-live="polite" className="text-xs text-muted-foreground tabular-nums">
-                    Showing {Math.min(shown, filtered.length)} of {filtered.length}
+                    Showing {Math.min(shown, groups.length)} of {groups.length} recall events ({filtered.length} records)
                   </p>
-                  {shown < filtered.length && (
+                  {shown < groups.length && (
                     <button
                       type="button"
                       onClick={() => setShown((n) => n + 40)}
                       className="inline-flex h-10 items-center rounded-md border border-input px-4 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      Show {Math.min(40, filtered.length - shown)} more
+                      Show {Math.min(40, groups.length - shown)} more
                     </button>
                   )}
                 </div>

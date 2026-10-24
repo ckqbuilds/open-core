@@ -26,11 +26,14 @@ export function AvoidanceDigest({
   geo,
   group,
   hideRetailers = false,
+  hideStale = false,
 }: {
   digest: Digest;
   geo: GeoZip | null;
   /** Skip the named-seller cards when the page already lists them elsewhere. */
   hideRetailers?: boolean;
+  /** Skip the per-card stale-date line when the page already shows one above. */
+  hideStale?: boolean;
   /** What the non-tied events were grouped by: a food page's category or an outbreak's pathogen. */
   group?: { kind: "food" | "pathogen"; label: string };
 }) {
@@ -60,7 +63,7 @@ export function AvoidanceDigest({
       <KeyButton variant="link" />
       <div className="space-y-3">
         {tied.map((ev) => (
-          <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
+          <EventCard key={ev.id} ev={ev} geo={geo} group={group} hideStale={hideStale} />
         ))}
         {retailers.length > 0 && (
           <>
@@ -74,7 +77,7 @@ export function AvoidanceDigest({
           <Disclosure label={otherLabel}>
             <div className="space-y-3 pt-2">
               {other.map((ev) => (
-                <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
+                <EventCard key={ev.id} ev={ev} geo={geo} group={group} hideStale={hideStale} />
               ))}
             </div>
           </Disclosure>
@@ -83,7 +86,7 @@ export function AvoidanceDigest({
           <Disclosure label={`Closed recalls (${closed.length})`}>
             <div className="space-y-3 pt-2">
               {closed.map((ev) => (
-                <EventCard key={ev.id} ev={{ ...ev, tiedPathogen: undefined }} geo={geo} group={group} />
+                <EventCard key={ev.id} ev={{ ...ev, tiedPathogen: undefined }} geo={geo} group={group} hideStale={hideStale} />
               ))}
             </div>
           </Disclosure>
@@ -97,10 +100,12 @@ function EventCard({
   ev,
   geo,
   group,
+  hideStale = false,
 }: {
   ev: AvoidanceEvent;
   geo: GeoZip | null;
   group?: { kind: "food" | "pathogen"; label: string };
+  hideStale?: boolean;
 }) {
   const [allRetail, setAllRetail] = useState(false);
   const [wholesaleOpen, setWholesaleOpen] = useState(false);
@@ -238,7 +243,7 @@ function EventCard({
         </div>
       )}
 
-      {isStale(ev.sourceDate) && (
+      {!hideStale && isStale(ev.sourceDate) && (
         <p className="mt-3 text-xs text-muted-foreground">{staleNotice(ev.sourceDate)}</p>
       )}
 
