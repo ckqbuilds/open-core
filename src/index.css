@@ -145,6 +145,18 @@
   }
 }
 
+/* Filled Class I chip: a darker red than the danger token so white text clears
+   4.5:1 in both themes (the soft chips keep the token). */
+.chip--danger.chip--primary {
+  background: oklch(0.47 0.2 24);
+  color: oklch(0.99 0.01 24);
+  border-color: oklch(0.47 0.2 24);
+}
+.dark .chip--danger.chip--primary {
+  background: oklch(0.45 0.19 24);
+  border-color: oklch(0.45 0.19 24);
+}
+
 /* Respect reduced-motion: neutralize transitions/animations, keep status spinners. */
 @media (prefers-reduced-motion: reduce) {
   *:not(.animate-spin),
