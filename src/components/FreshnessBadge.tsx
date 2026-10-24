@@ -1,7 +1,7 @@
 import { RadioTower, TriangleAlert } from "lucide-react";
 import { relativeTime } from "@/data/outbreaksLive";
 import { CURATED_CHECKED_AT } from "@/data/outbreaks";
-import { cn, formatIso } from "@/lib/utils";
+import { formatIso } from "@/lib/utils";
 
 /** A feed older than this is flagged as possibly missing recent records. */
 const FSIS_STALE_DAYS = 14;
@@ -13,8 +13,8 @@ interface FeedLike {
 
 /**
  * Shows how fresh a scraped feed is. `kind="outbreaks"` is the FDA outbreak
- * feed ("Curated" on fallback); `kind="fsis"` is the USDA FSIS recall feed,
- * which shows a visible warning when it is old or failed to load.
+ * feed (the curated list on fallback); `kind="fsis"` is the USDA FSIS recall
+ * feed, which shows a sun chip when it is old or failed to load.
  */
 export function FreshnessBadge({
   live,
@@ -38,43 +38,35 @@ export function FreshnessBadge({
     const old = !unavailable && ageDays > FSIS_STALE_DAYS;
     if (unavailable || old) {
       return (
-        <span
-          className="inline-flex items-start gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-300"
-          role="status"
-        >
-          <TriangleAlert className="mt-px size-3.5 shrink-0" aria-hidden />
+        <span className="chip chip--sun max-w-full whitespace-normal py-1 text-left" role="status">
+          <TriangleAlert className="size-3.5 shrink-0" aria-hidden />
           {unavailable
-            ? "FSIS feed unavailable — showing FDA only"
-            : `FSIS feed last updated ${validGen!.toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              })} — may be missing recent meat & poultry recalls`}
+            ? "FSIS feed unavailable, showing FDA only"
+            : `FSIS feed last updated ${validGen!.toLocaleDateString("en-US", { month: "short", day: "numeric" })}; may be missing recent meat and poultry recalls`}
         </span>
       );
     }
     return (
-      <span
-        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"
-        title="From the scheduled USDA FSIS scrape"
-      >
-        <RadioTower className="size-3.5 text-[var(--status-good)]" aria-hidden />
+      <span className="inline-flex items-center gap-1.5 text-xs text-ink-2" title="From the scheduled USDA FSIS scrape">
+        <RadioTower className="size-3.5 text-land-deep" aria-hidden />
         FSIS feed updated {relativeTime(live!.generatedAt)}
       </span>
     );
   }
 
   if (!live) return null;
-  return (
-    <span
-      className="inline-flex flex-col gap-0.5 text-xs text-muted-foreground"
-      title={live.stale ? undefined : "From the scheduled FDA CORE scrape"}
-    >
-      <span className="inline-flex items-center gap-1.5">
-        <RadioTower
-          className={cn("size-3.5", live.stale ? "text-muted-foreground" : "text-[var(--status-good)]")}
-        />
-        {live.stale ? `Live FDA feed unavailable · showing the curated list last checked ${formatIso(CURATED_CHECKED_AT)}; newer outbreaks may be missing` : `Updated ${relativeTime(live.generatedAt)}`}
+  if (live.stale) {
+    return (
+      <span className="chip chip--sun max-w-full whitespace-normal py-1 text-left" role="status">
+        <TriangleAlert className="size-3.5 shrink-0" aria-hidden />
+        Live FDA feed unavailable; showing the curated list last checked {formatIso(CURATED_CHECKED_AT)}. Newer outbreaks may be missing.
       </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs text-ink-2" title="From the scheduled FDA CORE scrape">
+      <RadioTower className="size-3.5 text-land-deep" aria-hidden />
+      Updated {relativeTime(live.generatedAt)}
     </span>
   );
 }

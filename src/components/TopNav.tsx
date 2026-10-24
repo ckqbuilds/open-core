@@ -9,17 +9,17 @@ import { Wordmark } from "@/components/Wordmark";
 const LINKS = [
   { to: "/", label: "Foods", end: true },
   { to: "/outbreaks", label: "Outbreaks" },
-  { to: "/recalls", label: "Active recalls" },
+  { to: "/recalls", label: "Recalls" },
   { to: "/shop-local", label: "Shop local" },
   { to: "/learn", label: "Learn" },
 ];
 
+/** The thin band across the top of the map: wordmark, five places, your ZIP. */
 export function TopNav() {
   const [menuOpen, setMenuOpen] = useState(false);
   // The home front door carries its own ZIP field.
   const onHome = useLocation().pathname === "/";
 
-  // Close on Escape.
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
@@ -28,76 +28,51 @@ export function TopNav() {
   }, [menuOpen]);
 
   return (
-    <header
-      className="sticky top-0 z-40 border-b bg-background/90 px-3 backdrop-blur"
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
-    >
-      <nav className="mx-auto flex h-[3.75rem] max-w-6xl items-center gap-2">
-        <Link
-          to="/"
-          className="inline-flex shrink-0 items-center rounded-md text-sm pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="OpenCORE home"
-        >
+    <header className="sticky top-0 z-40 bg-ground/95 backdrop-blur-sm" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+      <nav className="container flex h-16 items-center gap-3">
+        <Link to="/" className="shrink-0 rounded-md" aria-label="OpenCORE home">
           <Wordmark />
         </Link>
 
-        {/* Desktop: inline links */}
-        <div className="hidden min-w-0 flex-1 items-stretch gap-1 self-stretch md:flex">
+        <div className="hidden min-w-0 flex-1 items-center gap-1 pl-4 md:flex">
           {LINKS.map((l) => (
-            <NavLink key={l.to} to={l.to} end={l.end} className={navLinkClass}>
+            <NavLink key={l.to} to={l.to} end={l.end} className="capsule capsule--sm capsule--ghost">
               {l.label}
+              <span aria-hidden className="capsule__chip" />
             </NavLink>
           ))}
         </div>
-
-        {/* Mobile: spacer pushes the right cluster over */}
         <div className="flex-1 md:hidden" />
 
         {!onHome && <NavZip />}
         <ThemeToggle />
 
-        {/* Mobile: hamburger */}
         <button
           type="button"
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+          className="capsule capsule--sm min-h-11 px-3 md:hidden"
         >
           {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </nav>
 
-      {/* Mobile: dropdown menu */}
       {menuOpen && (
         <>
-          <button
-            aria-hidden
-            tabIndex={-1}
-            onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 z-30 cursor-default md:hidden"
-          />
-          <div
-            id="mobile-nav"
-            className="relative z-40 mx-auto mt-2 max-w-6xl rounded-xl border bg-card p-2 shadow-lg md:hidden"
-          >
+          <button aria-hidden tabIndex={-1} onClick={() => setMenuOpen(false)} className="fixed inset-0 z-30 cursor-default md:hidden" />
+          <div id="mobile-nav" className="sheet relative z-40 mx-5 mb-3 flex flex-col gap-1 p-2 md:hidden">
             {LINKS.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 end={l.end}
                 onClick={() => setMenuOpen(false)}
-                className={({ isActive }) =>
-                  cn(
-                    "block rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-secondary text-foreground"
-                      : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
-                  )
-                }
+                className="capsule justify-between border-transparent"
               >
                 {l.label}
+                <span aria-hidden className="capsule__chip" />
               </NavLink>
             ))}
           </div>
@@ -107,52 +82,39 @@ export function TopNav() {
   );
 }
 
-function navLinkClass({ isActive }: { isActive: boolean }) {
-  return cn(
-    "-mb-px inline-flex shrink-0 items-center whitespace-nowrap border-b-2 px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-    isActive
-      ? "border-accent text-foreground"
-      : "border-transparent text-muted-foreground hover:text-foreground"
-  );
-}
-
+/** The ZIP capsule: sun fill, the place name beside it once it resolves. */
 function NavZip() {
   const { zip, setZip, geo, geoLoading, geoError } = useZipContext();
   const place = geo ? `${geo.place}, ${geo.stateAbbr}` : "";
   return (
-    <div className="relative flex shrink-0 items-center gap-1.5">
-      <label htmlFor="nav-zip" className="hidden text-xs font-medium text-muted-foreground md:inline">
-        ZIP
-      </label>
-      <div className="relative">
-        <MapPin className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+    <div className="relative flex shrink-0 items-center">
+      <label
+        htmlFor="nav-zip"
+        className={cn("capsule capsule--sm cursor-text gap-1.5 pl-3 pr-2", geoError ? "capsule--coral" : "capsule--sun")}
+      >
+        <MapPin className="size-4" aria-hidden />
+        <span className="sr-only">Your ZIP code</span>
         <input
           id="nav-zip"
           inputMode="numeric"
           maxLength={5}
           placeholder="ZIP"
-          aria-label="Your ZIP code"
           aria-invalid={geoError ? true : undefined}
           aria-describedby={geoError ? "nav-zip-note" : undefined}
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-          className={cn(
-            "h-10 w-28 rounded-md border bg-background pl-7 pr-6 text-base tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-24 sm:text-sm",
-            geoError ? "border-destructive" : "border-input"
-          )}
+          className="tnum w-[4.2rem] bg-transparent text-base font-bold text-on-fill placeholder:text-on-fill/70 focus:outline-none sm:text-sm"
+          style={{ color: "var(--on-fill)" }}
         />
-        {geoLoading && (
-          <Loader2 className="absolute right-1.5 top-1/2 size-3.5 -translate-y-1/2 animate-spin text-muted-foreground" />
+        {geoLoading ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden />
+        ) : (
+          place && <span className="hidden max-w-[7rem] truncate text-xs font-semibold lg:inline">{place}</span>
         )}
-      </div>
-      {place && (
-        <span className="hidden max-w-[8rem] truncate text-xs text-muted-foreground lg:inline" title={place}>
-          {place}
-        </span>
-      )}
+      </label>
       <div role="status" aria-live="polite" className="contents">
         {geoError && (
-          <span id="nav-zip-note" className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-destructive/40 bg-card px-2 py-1 text-xs text-[color:var(--status-critical)] shadow-md">
+          <span id="nav-zip-note" className="sheet absolute right-0 top-full z-50 mt-2 max-w-[18rem] px-3 py-1.5 text-xs font-semibold">
             {geoError}
           </span>
         )}
@@ -168,7 +130,7 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label="Dark mode"
       aria-pressed={theme === "dark"}
-      className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="capsule capsule--sm capsule--ghost min-h-11 px-3 [&[aria-pressed=true]]:flex-row"
     >
       {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
     </button>

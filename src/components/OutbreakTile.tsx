@@ -1,67 +1,54 @@
 import { Link } from "react-router-dom";
-import { ChevronRight, Users, MapPin } from "lucide-react";
-import { Card } from "@heroui/react";
+import { ArrowRight } from "lucide-react";
 import { Chip } from "@/components/ui/chip";
 import type { Outbreak } from "@/data/types";
 import { formatIso, formatIsoShort } from "@/lib/utils";
 import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
-/** Compact outbreak summary — the whole HeroUI card is the link to its page. */
+/** One outbreak as an outlined sheet; the whole sheet is the link to its page. */
 export function OutbreakTile({ outbreak: ob }: { outbreak: Outbreak }) {
-  const cases =
-    ob.caseCount != null ? ob.caseCount.toLocaleString() : ob.caseCountText ?? "See advisory";
-  const to = `/outbreak/${ob.refId ?? ob.id}`;
-
+  const cases = ob.caseCount != null ? ob.caseCount.toLocaleString() : ob.caseCountText ?? "See advisory";
   return (
-    <Card
-      // Card defaults to a <div>; render its root as the router Link. The
-      // provided domProps are typed for a div, so cast when handing them to Link.
-      render={(domProps) => (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <Link {...(domProps as any)} to={to} />
-      )}
-      className="group flex h-full flex-col gap-3 p-5 transition-colors hover:bg-secondary/40"
+    <Link
+      to={`/outbreak/${ob.refId ?? ob.id}`}
+      className="sheet group flex h-full flex-col gap-4 p-5 transition-transform ease-over hover:-translate-y-0.5"
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1.5">
-          <Chip color="danger" variant="soft" size="sm">
-            {ob.curated ? `Active as of ${formatIsoShort(CURATED_CHECKED_AT)}` : "Active"}
-          </Chip>
-          {ob.detailed && (
-            <Chip color="default" variant="soft" size="sm">
-              Detailed
-            </Chip>
-          )}
+          <Chip color="coral">{ob.curated ? `Active as of ${formatIsoShort(CURATED_CHECKED_AT)}` : "Active"}</Chip>
+          {ob.detailed ? <Chip color="land">Hand-verified detail</Chip> : <Chip color="quiet">FDA table only</Chip>}
         </div>
-        <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+        <ArrowRight className="size-5 shrink-0 transition-transform ease-over group-hover:translate-x-1" aria-hidden />
       </div>
 
       <div>
-        <div className="font-semibold leading-tight">{ob.pathogen}</div>
-        <div className="text-sm text-muted-foreground">{ob.vehicle}</div>
+        <div className="display-md text-2xl">{ob.pathogen}</div>
+        <div className="mt-1 text-base text-ink-2">{ob.vehicle}</div>
       </div>
 
-      <div className="mt-auto space-y-1 pt-1">
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <Users className="size-4" />
-            <span className="font-medium tabular-nums text-foreground">{cases}</span> cases
-          </span>
-          {ob.detailed && ob.statesAffectedCount != null && (
-            <span className="flex items-center gap-1.5 tabular-nums">
-              <MapPin className="size-4" /> {ob.statesAffectedCount} states
-            </span>
-          )}
+      <dl className="mt-auto flex flex-wrap gap-x-6 gap-y-1 text-sm">
+        <div>
+          <dt className="sr-only">Reported cases</dt>
+          <dd>
+            <span className="tnum text-xl font-extrabold">{cases}</span> <span className="text-ink-2">cases</span>
+          </dd>
         </div>
-        <div className="text-xs tabular-nums text-muted-foreground">
-          {ob.detailed
-            ? `Onset ${formatIso(ob.firstIllnessDate)}–${formatIso(ob.lastIllnessDate)}`
-            : `FDA #${ob.refId} · posted ${formatIso(ob.datePosted)}`}
-        </div>
-        {ob.detailed && ob.datePosted && (
-          <div className="text-xs tabular-nums text-muted-foreground">Posted {formatIso(ob.datePosted)}</div>
+        {ob.detailed && ob.statesAffectedCount != null && (
+          <div>
+            <dt className="sr-only">States affected</dt>
+            <dd>
+              <span className="tnum text-xl font-extrabold">{ob.statesAffectedCount}</span>{" "}
+              <span className="text-ink-2">states</span>
+            </dd>
+          </div>
         )}
-      </div>
-    </Card>
+        <div className="tnum basis-full text-xs text-ink-2">
+          {ob.detailed
+            ? `Onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
+            : `FDA #${ob.refId} · posted ${formatIso(ob.datePosted)}`}
+          {ob.detailed && ob.datePosted && ` · posted ${formatIso(ob.datePosted)}`}
+        </div>
+      </dl>
+    </Link>
   );
 }

@@ -4,11 +4,11 @@ import { useZipContext } from "@/hooks/ZipContext";
 import { cn } from "@/lib/utils";
 
 /** The shared ZIP field, bound to the persisted ZIP context. */
-export function ZipInput({ id, describedBy }: { id: string; describedBy?: string }) {
+export function ZipInput({ id, describedBy, className }: { id: string; describedBy?: string; className?: string }) {
   const { zip, setZip, geoLoading, geoError } = useZipContext();
   return (
-    <div className="relative">
-      <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+    <div className={cn("relative", className)}>
+      <MapPin className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2" aria-hidden />
       <Input
         id={id}
         inputMode="numeric"
@@ -19,11 +19,9 @@ export function ZipInput({ id, describedBy }: { id: string; describedBy?: string
         aria-describedby={describedBy}
         value={zip}
         onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-        className={cn("pl-9 pr-9 text-base tabular-nums sm:text-sm", geoError && "border-destructive")}
+        className="tnum pl-11 pr-10 font-semibold"
       />
-      {geoLoading && (
-        <Loader2 className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
-      )}
+      {geoLoading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin" aria-hidden />}
     </div>
   );
 }

@@ -1,32 +1,32 @@
 /**
- * Single source of truth for recall chip styling. The feed rows, the shelf
+ * Single source of truth for recall chip colour. The feed rows, the shelf
  * digest, the barcode verdict, outbreak pages and the Key legend all call these
  * functions, so the legend cannot drift from what the rows show.
+ *
+ * Colour means one thing: coral = most serious or active, sun = moderate or an
+ * alert, pond = the USDA FSIS feed, outline/quiet = neutral.
  */
-export type ChipColor = "danger" | "warning" | "default" | "success" | "accent";
-export type ChipVariant = "soft" | "tertiary";
+import type { ChipColor } from "@/components/ui/chip";
 
 interface ChipStyle {
   color: ChipColor;
-  variant: ChipVariant;
 }
 
-/** Map an FDA/FSIS classification to a chip color by severity. */
+/** Map an FDA/FSIS classification to a chip colour by severity. */
 export function classificationColor(c?: string): ChipColor {
-  if (c === "Class I") return "danger";
-  if (c === "Class III" || c === "Not Yet Classified") return "default";
-  return "warning"; // Class II and FSIS Public Health Alert
+  if (c === "Class I") return "coral";
+  if (c === "Class III") return "outline";
+  if (c === "Not Yet Classified") return "quiet";
+  return "sun"; // Class II and FSIS Public Health Alert
 }
 
 export function classificationChip(c?: string): ChipStyle {
-  // No class assigned yet: neutral and quiet, neither reassuring nor alarming.
-  if (c === "Not Yet Classified") return { color: "default", variant: "tertiary" };
-  return { color: classificationColor(c), variant: "soft" };
+  return { color: classificationColor(c) };
 }
 
 /** Ongoing / Completed / Terminated: deliberately quiet, never severity-coloured. */
 export function statusChip(_status?: string): ChipStyle {
-  return { color: "default", variant: "tertiary" };
+  return { color: "quiet" };
 }
 
 export function agencyLabel(agency?: string): string {
@@ -34,12 +34,12 @@ export function agencyLabel(agency?: string): string {
 }
 
 export function agencyChip(agency?: string): ChipStyle {
-  return { color: agency === "FSIS" ? "accent" : "default", variant: "soft" };
+  return { color: agency === "FSIS" ? "pond" : "outline" };
 }
 
-/** Outbreak investigation status (Active / Resolved). */
+/** Outbreak investigation status (Active / Resolved). Resolved is quiet, never green. */
 export function outbreakStatusChip(active: boolean): ChipStyle {
-  return { color: active ? "danger" : "success", variant: "soft" };
+  return { color: active ? "coral" : "quiet" };
 }
 
 /** The issuing agency's own one-line definition of a classification, for a chip `title`. */

@@ -7,8 +7,8 @@ interface Option {
 }
 
 /**
- * Styled native <select>. Native is deliberate: on mobile it opens the OS
- * picker, which is faster and more accessible than a custom dropdown.
+ * Styled native <select> drawn as a capsule. Native is deliberate: on mobile it
+ * opens the OS picker, which is faster and more accessible than a custom menu.
  */
 export function Select({
   value,
@@ -29,7 +29,7 @@ export function Select({
         aria-label={label}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 w-full pointer-coarse:h-11 appearance-none rounded-md border border-input bg-background pl-3 pr-8 text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="field h-11 min-h-0 appearance-none pr-10 text-sm font-semibold"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -37,7 +37,7 @@ export function Select({
           </option>
         ))}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2" />
     </div>
   );
 }
