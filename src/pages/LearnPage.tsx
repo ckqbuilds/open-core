@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Stethoscope, Sprout, GraduationCap, Biohazard } from "lucide-react";
+import { Stethoscope, Sprout, Biohazard } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SymptomsSection } from "@/sections/SymptomsSection";
 import { GrowSection } from "@/sections/GrowSection";
@@ -23,9 +23,8 @@ export function LearnPage() {
     return () => clearTimeout(t);
   }, [hash]);
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHeader
-        icon={<GraduationCap className="size-6 text-primary" />}
         title="Learn"
         description="Recognize the illnesses these outbreaks cause, and grow your own produce to control what you eat."
       />

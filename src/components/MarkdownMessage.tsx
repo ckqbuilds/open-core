@@ -32,50 +32,50 @@ export function MarkdownMessage({ children }: { children: string }) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          strong: (props) => <strong className="font-semibold" {...props} />,
+          strong: (props) => <strong className="font-bold" {...props} />,
           em: (props) => <em className="italic" {...props} />,
           a: (props) => (
             <a
               {...props}
               target="_blank"
               rel="noreferrer"
-              className="font-medium text-primary underline underline-offset-2"
+              className="link"
             />
           ),
           ul: (props) => <ul className="my-1 list-disc space-y-1 pl-5" {...props} />,
           ol: (props) => <ol className="my-1 list-decimal space-y-1 pl-5" {...props} />,
-          li: (props) => <li className="marker:text-muted-foreground" {...props} />,
-          h1: (props) => <h3 className="mt-2 text-sm font-semibold" {...props} />,
-          h2: (props) => <h3 className="mt-2 text-sm font-semibold" {...props} />,
-          h3: (props) => <h3 className="mt-2 text-sm font-semibold" {...props} />,
-          h4: (props) => <h4 className="mt-2 text-sm font-semibold" {...props} />,
+          li: (props) => <li className="marker:text-ink-2" {...props} />,
+          h1: (props) => <h3 className="mt-2 text-sm font-bold" {...props} />,
+          h2: (props) => <h3 className="mt-2 text-sm font-bold" {...props} />,
+          h3: (props) => <h3 className="mt-2 text-sm font-bold" {...props} />,
+          h4: (props) => <h4 className="mt-2 text-sm font-bold" {...props} />,
           code: ({ className, children, ...props }) => {
             const isBlock = /\n/.test(String(children)) || (className ?? "").includes("language-");
             return isBlock ? (
               <code
-                className="block overflow-x-auto rounded-md bg-background/60 p-2 font-mono text-xs"
+                className="block overflow-x-auto rounded-md bg-ground p-2 font-mono text-xs"
                 {...props}
               >
                 {children}
               </code>
             ) : (
-              <code className="rounded bg-background/60 px-1 py-0.5 font-mono text-[0.8em]" {...props}>
+              <code className="rounded bg-ground px-1 py-0.5 font-mono text-[0.8em]" {...props}>
                 {children}
               </code>
             );
           },
           pre: (props) => <pre className="my-1" {...props} />,
           blockquote: (props) => (
-            <blockquote className="border-l-2 border-border pl-3 text-muted-foreground" {...props} />
+            <blockquote className="border-l-2 border-rule pl-3 text-ink-2" {...props} />
           ),
-          hr: () => <hr className="my-2 border-border" />,
+          hr: () => <hr className="my-2 border-rule" />,
           table: (props) => (
             <div className="overflow-x-auto">
               <table className="my-1 w-full border-collapse text-xs" {...props} />
             </div>
           ),
-          th: (props) => <th className="border border-border px-2 py-1 text-left font-medium" {...props} />,
-          td: (props) => <td className="border border-border px-2 py-1" {...props} />,
+          th: (props) => <th className="border border-rule px-2 py-1 text-left font-medium" {...props} />,
+          td: (props) => <td className="border border-rule px-2 py-1" {...props} />,
         }}
       >
         {children}

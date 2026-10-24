@@ -1,14 +1,14 @@
-import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import { useState } from "react";
 import { ChevronDown, Sprout } from "lucide-react";
 import { GROW_GUIDES, type GrowGuide } from "@/data/grow";
+import { Sheet } from "@/components/common";
 import { cn } from "@/lib/utils";
 
 export function GrowSection() {
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
+    <div className="space-y-6">
+      <p className="prose-measure text-sm text-ink-2">
         The surest way to know how your food was handled is to grow it. These guides go from a
         windowsill tray to a backyard bed. Pick where you have room and time.
       </p>
@@ -24,55 +24,47 @@ export function GrowSection() {
 function GuideCard({ guide }: { guide: GrowGuide }) {
   const [open, setOpen] = useState(false);
   return (
-    <Card>
-      <Card.Header>
-        <div className="flex items-center gap-2">
-          <Sprout className="size-5 text-accent" />
-          <Card.Title className="font-semibold text-base">{guide.title}</Card.Title>
+    <Sheet className="space-y-4 p-5">
+      <div>
+        <div className="flex items-center gap-2.5">
+          <Sprout className="size-5 shrink-0 text-land-deep" aria-hidden />
+          <h3 className="display-md text-xl">{guide.title}</h3>
         </div>
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Chip color="default" variant="soft" size="sm">{guide.difficulty}</Chip>
-          <Chip color="default" variant="tertiary" size="sm">{guide.timeToHarvest}</Chip>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <Chip color="quiet">{guide.difficulty}</Chip>
+          <Chip color="outline">{guide.timeToHarvest}</Chip>
         </div>
-        <p className="pt-2 text-sm text-muted-foreground">{guide.blurb}</p>
-      </Card.Header>
-      <Card.Content>
-        <button
-          className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm font-medium hover:bg-secondary"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-        >
-          {open ? "Hide steps" : `Show ${guide.steps.length} steps`}
-          <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
-        </button>
-        {open && (
-          <div className="mt-4 space-y-4">
-            <ol className="space-y-3">
-              {guide.steps.map((s, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <div className="text-sm font-medium">{s.heading}</div>
-                    <div className="text-sm text-muted-foreground">{s.body}</div>
-                  </div>
-                </li>
+        <p className="mt-3 text-sm text-ink-2">{guide.blurb}</p>
+      </div>
+      <button type="button" className="capsule w-full justify-between" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        {open ? "Hide steps" : `Show ${guide.steps.length} steps`}
+        <ChevronDown aria-hidden className={cn("size-4 shrink-0 transition-transform ease-over", open && "rotate-180")} />
+      </button>
+      {open && (
+        <div className="space-y-4">
+          <ol className="space-y-3">
+            {guide.steps.map((s, i) => (
+              <li key={i} className="flex gap-3">
+                <span className="tnum flex size-7 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-extrabold text-ground">
+                  {i + 1}
+                </span>
+                <div>
+                  <div className="text-sm font-bold">{s.heading}</div>
+                  <div className="text-sm text-ink-2">{s.body}</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="rounded-lg border border-rule bg-ground p-3">
+            <div className="mb-1 text-xs font-bold text-ink-2">Tips</div>
+            <ul className="list-inside list-disc space-y-1 text-sm marker:text-ink-2">
+              {guide.tips.map((t, i) => (
+                <li key={i}>{t}</li>
               ))}
-            </ol>
-            <div className="rounded-md bg-secondary/60 p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Tips
-              </div>
-              <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                {guide.tips.map((t, i) => (
-                  <li key={i}>{t}</li>
-                ))}
-              </ul>
-            </div>
+            </ul>
           </div>
-        )}
-      </Card.Content>
-    </Card>
+        </div>
+      )}
+    </Sheet>
   );
 }

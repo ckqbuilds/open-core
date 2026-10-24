@@ -1,4 +1,3 @@
-import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
 import { useMemo, useState } from "react";
 import {
@@ -9,7 +8,6 @@ import {
   Clock,
   RadioTower,
   ShieldAlert,
-  Stethoscope,
   Timer,
 } from "lucide-react";
 import {
@@ -30,7 +28,7 @@ import type { Outbreak } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { Button } from "@/components/ui/button";
-import { SourceLink } from "@/components/common";
+import { Lobe, Sheet, SourceLink } from "@/components/common";
 import { cn, formatIsoShort } from "@/lib/utils";
 import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 
@@ -69,13 +67,13 @@ export function SymptomsSection() {
   const urgentCount = ordered.filter((p) => hasUrgentNote(p, selected)).length;
 
   return (
-    <div className="space-y-6">
-      <div className="max-w-prose space-y-2">
-        <p className="text-sm text-muted-foreground">
+    <div className="space-y-8">
+      <div className="prose-measure space-y-2">
+        <p className="text-sm text-ink-2">
           What the signs of each foodborne illness look like, how long after eating they show up,
           and what CDC says to do. Every line is transcribed from the linked CDC page.
         </p>
-        <p className="text-sm font-medium text-foreground">
+        <p className="text-sm font-bold">
           This page cannot tell you what you have. Many of these illnesses share the same symptoms,
           and only a test can tell them apart. If you are ill, contact a healthcare provider.
         </p>
@@ -101,7 +99,7 @@ export function SymptomsSection() {
         ))}
       </div>
 
-      <p className="max-w-[52ch] text-xs text-muted-foreground">
+      <p className="max-w-[52ch] text-xs text-ink-2">
         Reference information only: not a diagnosis and not a prescription. Where CDC states a
         treatment fact, it is quoted with a citation; the decision to test or treat belongs to a
         healthcare provider. Your selected conditions stay in this browser and are never sent
@@ -113,33 +111,27 @@ export function SymptomsSection() {
 
 /* ------------------------------------------------------------------ */
 
+/** The one coral region on the page: urgent care. */
 function RedFlagCard() {
   return (
-    <Card className="border border-[color:var(--status-critical)]/40 bg-[color:var(--status-critical)]/5">
-      <Card.Header>
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="size-5 text-[color:var(--status-critical)]" />
-          <h2 className="card__title font-semibold text-base">Get medical care now if any of these apply</h2>
+    <Lobe tone="coral" soft className="p-5 sm:p-6">
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="mt-1 size-6 shrink-0" aria-hidden />
+        <div className="min-w-0 flex-1 space-y-4">
+          <h2 className="display-md text-2xl">Get medical care now if any of these apply</h2>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {RED_FLAGS.map((f) => (
+              <li key={f} className="flex gap-3 text-sm">
+                <span aria-hidden className="mt-1.5 size-2 shrink-0 rounded-full bg-ink" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-sm">These apply to any of the illnesses below, whatever you think you have.</p>
+          <SourceLink source={RED_FLAG_SOURCE} className="text-ink" />
         </div>
-      </Card.Header>
-      <Card.Content className="space-y-3">
-        <ul className="grid gap-2 sm:grid-cols-2">
-          {RED_FLAGS.map((f) => (
-            <li key={f} className="flex gap-2 text-sm">
-              <span
-                aria-hidden
-                className="mt-1.5 size-1.5 shrink-0 rounded-full bg-[color:var(--status-critical)]"
-              />
-              <span>{f}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="text-sm text-muted-foreground">
-          These apply to any of the illnesses below, whatever you think you have.
-        </p>
-        <SourceLink source={RED_FLAG_SOURCE} />
-      </Card.Content>
-    </Card>
+      </div>
+    </Lobe>
   );
 }
 
@@ -155,57 +147,51 @@ function RiskGroupPicker({
   urgentCount: number;
 }) {
   return (
-    <Card id="risk-groups" className="scroll-mt-24">
-      <Card.Content className="space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <div className="text-sm font-medium">Does any of this describe you or your household?</div>
-            <div className="text-xs text-muted-foreground">
-              CDC publishes different guidance for these groups. Selecting one adds that guidance to
-              the cards below; nothing is hidden either way.
-            </div>
+    <Sheet quiet id="risk-groups" className="scroll-mt-24 space-y-3 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <div className="text-sm font-bold">Does any of this describe you or your household?</div>
+          <div className="prose-measure text-xs text-ink-2">
+            CDC publishes different guidance for these groups. Selecting one adds that guidance to
+            the cards below; nothing is hidden either way.
           </div>
-          {groups.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={onClear}>
-              Clear
-            </Button>
-          )}
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          {RISK_GROUPS.map((g) => {
-            const on = groups.includes(g.id);
-            return (
-              <button
-                key={g.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() => onToggle(g.id)}
-                className={cn(
-                  "inline-flex min-h-10 items-center rounded-full border px-3 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  on
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "hover:bg-secondary"
-                )}
-              >
-                {g.short}
-              </button>
-            );
-          })}
-        </div>
-
-        {urgentCount > 0 && (
-          <div className="flex items-start gap-2 rounded-md bg-[color:var(--status-critical)]/10 p-3 text-sm">
-            <ShieldAlert className="mt-0.5 size-4 shrink-0 text-[color:var(--status-critical)]" />
-            <span>
-              {urgentCount === 1
-                ? "1 illness below has guidance specific to what you selected, and it is shown first."
-                : `${urgentCount} illnesses below have guidance specific to what you selected, and they are shown first.`}
-            </span>
-          </div>
+        {groups.length > 0 && (
+          <Button variant="ghost" size="sm" onClick={onClear}>
+            Clear
+          </Button>
         )}
-      </Card.Content>
-    </Card>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {RISK_GROUPS.map((g) => {
+          const on = groups.includes(g.id);
+          return (
+            <button
+              key={g.id}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onToggle(g.id)}
+              className="capsule capsule--sm"
+            >
+              {g.short}
+              <span aria-hidden className="capsule__chip" />
+            </button>
+          );
+        })}
+      </div>
+
+      {urgentCount > 0 && (
+        <div className="flex items-start gap-2 rounded-lg border-2 border-ink p-3 text-sm">
+          <ShieldAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
+          <span>
+            {urgentCount === 1
+              ? "1 illness below has guidance specific to what you selected, and it is shown first."
+              : `${urgentCount} illnesses below have guidance specific to what you selected, and they are shown first.`}
+          </span>
+        </div>
+      )}
+    </Sheet>
   );
 }
 
@@ -223,114 +209,100 @@ export function PathogenCard({
   const urgent = notes.some((n) => n.severity === "urgent");
 
   return (
-    <Card className={cn(urgent && "border border-[color:var(--status-critical)]/40")}>
-      <Card.Header>
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Stethoscope className="size-5 text-accent" />
-            <div>
-              <Card.Title className="font-semibold text-base">{p.name}</Card.Title>
-              {p.aka && <div className="text-xs text-muted-foreground">{p.aka}</div>}
-            </div>
+    <Sheet className={cn("space-y-4 p-5", urgent && "border-coral")}>
+      <div>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h3 className="display-md text-xl">{p.name}</h3>
+            {p.aka && <div className="mt-1 text-sm text-ink-2">{p.aka}</div>}
           </div>
-          <Chip color="default" variant="soft" size="sm">{p.category}</Chip>
+          <Chip color="lilac">{p.category}</Chip>
         </div>
 
         {activeOutbreaks.length > 0 && (
-          <div className="flex items-center gap-1.5 pt-2 text-xs font-medium text-[color:var(--status-critical)]">
-            <RadioTower className="size-3.5" />
-            {activeOutbreaks.length === 1
-              ? `${activeOutbreaks[0].curated ? `Active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})` : "Active outbreak in the current FDA data"}: ${activeOutbreaks[0].vehicle}`
-              : activeOutbreaks.some((o) => o.curated)
-                ? `${activeOutbreaks.length} active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})`
-                : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
+          <div className="mt-3 flex items-start gap-1.5 text-sm font-bold">
+            <RadioTower className="mt-0.5 size-4 shrink-0" aria-hidden />
+            <span>
+              {activeOutbreaks.length === 1
+                ? `${activeOutbreaks[0].curated ? `Active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})` : "Active outbreak in the current FDA data"}: ${activeOutbreaks[0].vehicle}`
+                : activeOutbreaks.some((o) => o.curated)
+                  ? `${activeOutbreaks.length} active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})`
+                  : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
+            </span>
           </div>
         )}
 
-        <p className="pt-2 text-sm text-muted-foreground">{p.summary}</p>
-      </Card.Header>
+        <p className="mt-3 text-sm text-ink-2">{p.summary}</p>
+      </div>
 
-      <Card.Content className="space-y-3">
-        <div className="grid gap-2 sm:grid-cols-2">
-          <Fact icon={<Clock className="size-3.5" />} label="Starts" value={p.onset} />
-          <Fact icon={<Timer className="size-3.5" />} label="Lasts" value={p.duration} />
-        </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Fact icon={<Clock className="size-3.5" aria-hidden />} label="Starts" value={p.onset} />
+        <Fact icon={<Timer className="size-3.5" aria-hidden />} label="Lasts" value={p.duration} />
+      </div>
 
-        {notes.map((n) => (
-          <RiskNoteBlock key={`${n.group}-${n.severity}`} note={n} />
-        ))}
+      {notes.map((n) => (
+        <RiskNoteBlock key={`${n.group}-${n.severity}`} note={n} />
+      ))}
 
-        <button
-          className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm font-medium hover:bg-secondary pointer-coarse:min-h-11"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-        >
-          {open ? "Hide details" : "Signs, spread & what to do"}
-          <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
-        </button>
+      <button
+        type="button"
+        className="capsule w-full justify-between"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        {open ? "Hide details" : "Signs, spread & what to do"}
+        <ChevronDown aria-hidden className={cn("size-4 shrink-0 transition-transform ease-over", open && "rotate-180")} />
+      </button>
 
-        {open && (
-          <div className="space-y-4">
-            <Block icon={<Activity className="size-3.5" />} title="Signs">
-              <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                {p.signs.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ul>
-            </Block>
+      {open && (
+        <div className="space-y-4">
+          <Block icon={<Activity className="size-3.5" aria-hidden />} title="Signs">
+            <ul className="list-inside list-disc space-y-1 text-sm marker:text-ink-2">
+              {p.signs.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          </Block>
 
-            <Block title="How it spreads">
-              <p className="text-sm text-muted-foreground">{p.spread}</p>
-            </Block>
+          <Block title="How it spreads">
+            <p className="text-sm">{p.spread}</p>
+          </Block>
 
-            <Block title="What to do">
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {p.care.map((c) => (
-                  <li key={c}>{c}</li>
-                ))}
-              </ul>
-            </Block>
+          <Block title="What to do">
+            <ul className="space-y-2 text-sm">
+              {p.care.map((c) => (
+                <li key={c}>{c}</li>
+              ))}
+            </ul>
+          </Block>
 
-            {p.doNot && (
-              <div className="rounded-md border border-[color:var(--status-critical)]/40 bg-[color:var(--status-critical)]/5 p-3">
-                <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[color:var(--status-critical)]">
-                  <Ban className="size-3.5" />
-                  Do not
-                </div>
-                <ul className="space-y-1 text-sm">
-                  {p.doNot.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
+          {p.doNot && (
+            <div className="rounded-lg border-2 border-coral p-3">
+              <div className="mb-1 flex items-center gap-1.5 text-sm font-bold">
+                <Ban className="size-4" aria-hidden />
+                Do not
               </div>
-            )}
-          </div>
-        )}
+              <ul className="space-y-1 text-sm">
+                {p.doNot.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
-        <SourceLink source={p.source} />
-      </Card.Content>
-    </Card>
+      <SourceLink source={p.source} />
+    </Sheet>
   );
 }
 
 function RiskNoteBlock({ note }: { note: RiskNote }) {
   const urgent = note.severity === "urgent";
   return (
-    <div
-      className={cn(
-        "rounded-md p-3",
-        urgent
-          ? "border border-[color:var(--status-critical)]/40 bg-[color:var(--status-critical)]/5"
-          : "bg-secondary/60"
-      )}
-    >
-      <div
-        className={cn(
-          "mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide",
-          urgent ? "text-[color:var(--status-critical)]" : "text-muted-foreground"
-        )}
-      >
-        {urgent && <ShieldAlert className="size-3.5" />}
+    <div className={cn("rounded-lg border-2 p-3", urgent ? "border-coral" : "border-rule")}>
+      <div className="mb-1 flex items-center gap-1.5 text-xs font-bold">
+        {urgent && <ShieldAlert className="size-3.5" aria-hidden />}
         {riskGroupLabel(note.group)}
       </div>
       <p className="text-sm">{note.text}</p>
@@ -351,8 +323,8 @@ function Fact({
   value: string;
 }) {
   return (
-    <div className="rounded-md bg-secondary/60 p-3">
-      <div className="mb-0.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+    <div className="border-l-2 border-ink pl-3">
+      <div className="mb-0.5 flex items-center gap-1.5 text-xs font-bold text-ink-2">
         {icon}
         {label}
       </div>
@@ -372,7 +344,7 @@ function Block({
 }) {
   return (
     <div>
-      <div className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <div className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-ink-2">
         {icon}
         {title}
       </div>
