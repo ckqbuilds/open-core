@@ -58,6 +58,11 @@ export function RecallRow({ recall }: { recall: Recall }) {
           {expanded ? "Show less" : "Show more"}
         </button>
       )}
+      {recall.status === "Ongoing" && (
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
+        </p>
+      )}
       <p className="mt-1.5 text-xs text-muted-foreground">Recalling firm: {cleanFirmName(recall.recallingFirm)}</p>
       <RecordLine
         className={cn("mt-3 pt-3", recordRule)}

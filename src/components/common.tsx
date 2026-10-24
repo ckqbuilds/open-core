@@ -33,14 +33,19 @@ export function InfoNote({ children }: { children: React.ReactNode }) {
  *  2. Copy .env.example to .env.local and set VITE_MAPBOX_TOKEN=pk.…
  *  3. Restart `npm run dev`.
  */
-export function MapsDisabledNote() {
+export function MapsDisabledNote({ page = "default" }: { page?: "default" | "shop-local" }) {
   return (
     <Card className="border border-dashed p-6">
       <Card.Content className="space-y-2 text-sm">
-        <div className="font-medium text-foreground">Maps and location search aren't available right now</div>
+        <div className="font-medium text-foreground">
+          {page === "shop-local"
+            ? "Maps aren't available right now. The list still works from your ZIP."
+            : "Maps and location search aren't available right now"}
+        </div>
         <p className="text-muted-foreground">
-          The recalls and the companies named in the official record are still listed on each food and outbreak page. To find local food
-          sources near you, try the{" "}
+          {page === "shop-local"
+            ? "To browse local food sources yourself, try the"
+            : "The recalls and the companies named in the official record are still listed on each food and outbreak page. To find local food sources near you, try the"}{" "}
           <a
             className="text-primary hover:underline"
             href="https://www.usdalocalfoodportal.com/"

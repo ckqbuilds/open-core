@@ -25,10 +25,11 @@ export function useZip() {
     try {
       if (!zip) localStorage.removeItem(KEY);
       else if (valid && geo.data?.zip === zip) localStorage.setItem(KEY, zip);
+      else if (valid && !geo.loading && geo.data?.zip !== zip) localStorage.removeItem(KEY);
     } catch {
       /* storage unavailable */
     }
-  }, [zip, valid, geo.data]);
+  }, [zip, valid, geo.data, geo.loading]);
 
   return {
     zip,

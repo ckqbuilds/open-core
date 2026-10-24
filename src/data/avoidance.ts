@@ -268,6 +268,8 @@ export interface AvoidanceEvent {
   recallDate?: string;
   /** Pathogen id shared with an active outbreak the caller passed in, if any. */
   tiedPathogen?: string;
+  /** First of the caller's category terms found in this event's product lines. */
+  matchedTerm?: string;
 }
 
 /** A curated retailer an FDA/CDC record names as selling a recalled product. */
@@ -338,7 +340,9 @@ export function buildAvoidanceDigest(
   /** Pathogen ids of the active outbreaks in scope; matching events sort first. */
   pathogenIds: string[] = [],
   /** ISO date the outbreak began; a recall dated earlier is not tied to it. */
-  outbreakStart?: string | null
+  outbreakStart?: string | null,
+  /** The food category's match terms; sets `matchedTerm` per event. */
+  matchTerms: string[] = []
 ): AvoidanceDigest {
   const startKey = outbreakStart ? outbreakStart.slice(0, 10).replace(/-/g, "") : null;
   const byKey = new Map<string, AvoidanceEvent & { lineKeys: Set<string> }>();
@@ -406,6 +410,10 @@ export function buildAvoidanceDigest(
       ev.states.sort();
       const onOrAfter = !startKey || (!!ev.recallDate && ev.recallDate >= startKey);
       ev.tiedPathogen = onOrAfter ? ev.pathogens.find((id) => pathogenIds.includes(id)) : undefined;
+      if (matchTerms.length > 0) {
+        const hay = [...ev.retail, ...ev.wholesale].map((l) => l.text).join(" \n ").toLowerCase();
+        ev.matchedTerm = matchTerms.find((t) => hay.includes(t.toLowerCase()));
+      }
       return ev;
     })
     .sort((a, b) => {

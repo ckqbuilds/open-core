@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@heroui/react";
 import { Chip } from "@/components/ui/chip";
-import { AlertTriangle, ShieldCheck, ExternalLink } from "lucide-react";
+import { AlertTriangle, SearchX, ExternalLink } from "lucide-react";
 import type { Recall } from "@/data/types";
 import type { RecallMatches } from "@/data/barcodeMatch";
 // Read-only reuse of the shared classification → chip-color mapping.
@@ -135,7 +135,7 @@ function NotFound({ feedNote }: { feedNote?: string | null }) {
   return (
     <Card className="p-4">
       <div className="flex items-start gap-3">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
+        <SearchX className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
         <div className="min-w-0">
           <p className="text-base font-semibold">Not named in any recall on record (last 3 years)</p>
           <p className="mt-0.5 text-sm text-muted-foreground">

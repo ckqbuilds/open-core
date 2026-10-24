@@ -32,7 +32,7 @@ import { EmptyState, InfoNote } from "@/components/common";
 
 const RECALL_WINDOW_YEARS = 3;
 const nextStepLink =
-  "rounded-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 function recallDate(r: Recall): string {
   return r.reportDate ?? r.recallInitiationDate ?? "";
@@ -100,9 +100,10 @@ export function FoodPage() {
         PATHOGENS.filter((p) => entry?.outbreaks.some((o) => matchesOutbreakPathogen(p, o.pathogen))).map(
           (p) => p.id
         ),
-        outbreakStart
+        outbreakStart,
+        category?.matchTerms ?? []
       ),
-    [entry, outbreakStart]
+    [entry, outbreakStart, category]
   );
 
   const backLink = (
@@ -136,12 +137,13 @@ export function FoodPage() {
         actions={<KeyButton />}
       />
 
-      <p className="-mt-4 max-w-prose text-sm text-muted-foreground">
-        If you have this food:{" "}
+      <div className="-mt-4 flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center">
+        <span>If you have this food:</span>
         <Link to="/recalls#check" className={nextStepLink}>
-          check the product barcode
-        </Link>{" "}
-        · if you feel sick,{" "}
+          Check the product barcode
+        </Link>
+        <span className="hidden sm:inline" aria-hidden>·</span>
+        <span className="sm:sr-only">If you feel sick:</span>
         <a
           href="#if-sick"
           onClick={(e) => {
@@ -150,9 +152,9 @@ export function FoodPage() {
           }}
           className={nextStepLink}
         >
-          see what to do
+          See what to do
         </a>
-      </p>
+      </div>
 
       {data.loading ? (
         <div role="status" className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
@@ -180,7 +182,7 @@ export function FoodPage() {
             </section>
           )}
           {/* What to avoid on the shelf — the shelf-recognition digest */}
-          <AvoidanceDigest digest={digest} geo={geo} foodLabel={category.label.toLowerCase()} />
+          <AvoidanceDigest digest={digest} geo={geo} group={{ kind: "food", label: category.label.toLowerCase() }} />
 
           {/* Coordinated recalls across FDA + USDA FSIS */}
           {recalls.length > 0 && (

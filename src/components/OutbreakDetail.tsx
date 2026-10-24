@@ -97,7 +97,36 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
         </div>
       )}
 
-      {ob.detailed && ob.namedEntities ? (
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+        <div className="flex min-w-0 flex-1 basis-64 flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          {ob.sources?.map((s) => <SourceLink key={s.url} source={s} />)}
+          {ob.advisoryUrl && (
+            <a
+              href={ob.advisoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+            >
+              <ExternalLink className="size-3" /> FDA advisory
+            </a>
+          )}
+        </div>
+        <Button size="sm" onClick={onShare} disabled={shareState === "busy"}>
+          {shareState === "busy" && <Loader2 className="size-4 animate-spin" />}
+          {shareState === "idle" && <Share2 className="size-4" />}
+          {shareState === "shared" && <Check className="size-4" />}
+          {shareState === "copied" && <Copy className="size-4" />}
+          {shareState === "copied" ? "Copied" : shareState === "shared" ? "Shared" : "Share"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/** Companies the official record names, or the honest "not compiled yet" note. */
+export function NamedInRecord({ outbreak: ob }: { outbreak: Outbreak }) {
+  return (
+    ob.detailed && ob.namedEntities ? (
         <div>
           <h2 className="mb-1 text-sm font-semibold">Named in the official record</h2>
           <p className="mb-2 text-xs text-muted-foreground">
@@ -133,30 +162,6 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
             </span>
           )}
         </div>
-      )}
-
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-        <div className="flex min-w-0 flex-1 basis-64 flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          {ob.sources?.map((s) => <SourceLink key={s.url} source={s} />)}
-          {ob.advisoryUrl && (
-            <a
-              href={ob.advisoryUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" /> FDA advisory
-            </a>
-          )}
-        </div>
-        <Button size="sm" onClick={onShare} disabled={shareState === "busy"}>
-          {shareState === "busy" && <Loader2 className="size-4 animate-spin" />}
-          {shareState === "idle" && <Share2 className="size-4" />}
-          {shareState === "shared" && <Check className="size-4" />}
-          {shareState === "copied" && <Copy className="size-4" />}
-          {shareState === "copied" ? "Copied" : shareState === "shared" ? "Shared" : "Share"}
-        </Button>
-      </div>
-    </div>
+      )
   );
 }

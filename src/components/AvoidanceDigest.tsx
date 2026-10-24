@@ -5,6 +5,7 @@ import { ChevronDown, MapPin, ShoppingCart } from "lucide-react";
 import type { AvoidanceDigest as Digest, AvoidanceEvent, AvoidanceLine, NamedRetailerItem } from "@/data/avoidance";
 import type { GeoZip } from "@/data/types";
 import { Disclosure } from "@/components/Disclosure";
+import { KeyButton } from "@/components/KeyButton";
 import { classificationChip, classificationTitle, statusChip, agencyChip, agencyLabel } from "@/lib/classification";
 import { SourceLink } from "./common";
 import { RecordLine, recordRule } from "./RecordLine";
@@ -23,12 +24,12 @@ const STATES_PREVIEW = 8;
 export function AvoidanceDigest({
   digest,
   geo,
-  foodLabel,
+  group,
 }: {
   digest: Digest;
   geo: GeoZip | null;
-  /** Lowercase food name for the "Other recalls naming …" sub-heading. */
-  foodLabel?: string;
+  /** What the non-tied events were grouped by: a food page's category or an outbreak's pathogen. */
+  group?: { kind: "food" | "pathogen"; label: string };
 }) {
   if (digest.events.length === 0 && digest.retailers.length === 0) return null;
   const isClosed = (e: AvoidanceEvent) => e.status === "Terminated" || e.status === "Completed";
@@ -47,23 +48,26 @@ export function AvoidanceDigest({
         listed means the product is under recall, not that a store is unsafe.
         {closed.length > 0 && " Closed recalls are listed separately."}
       </p>
+      <KeyButton variant="link" />
       <div className="space-y-3">
         {tied.map((ev) => (
-          <EventCard key={ev.id} ev={ev} geo={geo} />
+          <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
         ))}
         {tied.length > 0 && other.length > 0 && (
           <h3 className="pt-2 text-sm font-semibold text-muted-foreground">
-            Other recalls naming {foodLabel ?? "this food"}
+            {group?.kind === "pathogen"
+              ? "Same pathogen, other recalls"
+              : `Other recalls grouped under ${group?.label ?? "this food"}`}
           </h3>
         )}
         {other.map((ev) => (
-          <EventCard key={ev.id} ev={ev} geo={geo} />
+          <EventCard key={ev.id} ev={ev} geo={geo} group={group} />
         ))}
         {closed.length > 0 && (
           <Disclosure label={`Closed recalls (${closed.length})`}>
             <div className="space-y-3 pt-2">
               {closed.map((ev) => (
-                <EventCard key={ev.id} ev={{ ...ev, tiedPathogen: undefined }} geo={geo} />
+                <EventCard key={ev.id} ev={{ ...ev, tiedPathogen: undefined }} geo={geo} group={group} />
               ))}
             </div>
           </Disclosure>
@@ -76,7 +80,15 @@ export function AvoidanceDigest({
   );
 }
 
-function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
+function EventCard({
+  ev,
+  geo,
+  group,
+}: {
+  ev: AvoidanceEvent;
+  geo: GeoZip | null;
+  group?: { kind: "food" | "pathogen"; label: string };
+}) {
   const [allRetail, setAllRetail] = useState(false);
   const [wholesaleOpen, setWholesaleOpen] = useState(false);
   const [codesOpen, setCodesOpen] = useState(false);
@@ -111,6 +123,16 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
         </p>
       )}
       {ev.reasons[0] && <p className="mt-0.5 text-sm text-muted-foreground">{ev.reasons[0]}</p>}
+      {!ev.tiedPathogen && group?.kind === "food" && ev.matchedTerm && (
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          Grouped here because the record mentions &ldquo;{ev.matchedTerm}&rdquo;
+        </p>
+      )}
+      {!ev.tiedPathogen && group?.kind === "pathogen" && (
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          Grouped here because the record names {group.label}
+        </p>
+      )}
 
       <Reach ev={ev} geo={geo} />
 
@@ -184,6 +206,12 @@ function EventCard({ ev, geo }: { ev: AvoidanceEvent; geo: GeoZip | null }) {
             </pre>
           )}
         </div>
+      )}
+
+      {ev.status !== "Terminated" && ev.status !== "Completed" && (
+        <p className="mt-3 text-xs text-muted-foreground">
+          Have it? Compare its codes with the notice before eating it, and follow the notice for return or disposal.
+        </p>
       )}
 
       {ev.retailers.length > 0 && (

@@ -193,7 +193,7 @@ export function RecallTrendChart({
         </tbody>
       </table>
       <p className="mt-2 text-xs text-muted-foreground">
-        The current month is partial.
+        The first and last months of the window are partial.
         {fsisAsOf && !isNaN(+fsisAsOf) && (
           <> USDA FSIS records after {fsisAsOf.toLocaleDateString("en-US", { month: "short", day: "numeric" })} are not included.</>
         )}

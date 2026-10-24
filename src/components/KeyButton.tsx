@@ -11,13 +11,22 @@ import {
 import { ClassificationKey } from "@/components/ClassificationKey";
 
 /** "Key" button that opens the classification legend. Lives with the outbreaks. */
-export function KeyButton() {
+export function KeyButton({ variant = "button" }: { variant?: "button" | "link" }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="min-h-10">
-          <Info className="size-4" /> Key
-        </Button>
+        {variant === "link" ? (
+          <button
+            type="button"
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Info className="size-4" /> What do these chips mean?
+          </button>
+        ) : (
+          <Button variant="outline" size="sm" className="min-h-10">
+            <Info className="size-4" /> Key
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

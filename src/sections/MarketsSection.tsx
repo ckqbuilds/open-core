@@ -39,21 +39,16 @@ export function MarketsSection({
   const markets = useAsync<MergedMarket[]>(
     (signal) => findAllMarketsNear(geo!, 25, signal),
     [geo?.zip],
-    !!geo && mapsOn
+    !!geo
   );
 
   const listed = markets.data?.length ?? 0;
-  useEffect(() => onCount?.(geo && mapsOn ? listed : 0), [onCount, listed, geo, mapsOn]);
+  useEffect(() => onCount?.(geo ? listed : 0), [onCount, listed, geo]);
 
   // Back to page 1 whenever the filter, ZIP, or page size changes.
   useEffect(() => setPage(1), [filter, geo?.zip, pageSize]);
 
-  if (!mapsOn) return <MapsDisabledNote />;
-  if (!geo) {
-    return (
-      <EmptyState>Enter your ZIP code above to find local food sources near you.</EmptyState>
-    );
-  }
+  if (!geo) return mapsOn ? null : <MapsDisabledNote page="shop-local" />;
 
   const all = markets.data ?? [];
   const list =
@@ -81,6 +76,7 @@ export function MarketsSection({
 
   return (
     <div className="space-y-6">
+      {!mapsOn && <MapsDisabledNote page="shop-local" />}
       <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by directory type">
         <button
           aria-pressed={filter === "all"}
@@ -130,7 +126,7 @@ export function MarketsSection({
         </EmptyState>
       )}
 
-      {!markets.loading && !markets.error && (
+      {mapsOn && !markets.loading && !markets.error && (
         <MapView markers={mapMarkers} center={{ lat: geo.lat, lng: geo.lng }} />
       )}
 

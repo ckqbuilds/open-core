@@ -10,7 +10,7 @@ import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useZipContext } from "@/hooks/ZipContext";
-import { OutbreakDetail } from "@/components/OutbreakDetail";
+import { OutbreakDetail, NamedInRecord } from "@/components/OutbreakDetail";
 import { OutbreakGrounding } from "@/components/OutbreakGrounding";
 import { RecallRow } from "@/components/RecallRow";
 import { AvoidanceDigest } from "@/components/AvoidanceDigest";
@@ -120,10 +120,16 @@ export function OutbreakPage() {
 
       <OutbreakDetail outbreak={ob} />
 
-      <OutbreakGrounding outbreak={ob} pathogen={matchedPathogen} />
-
       {/* What to avoid on the shelf — the shelf-recognition digest */}
-      <AvoidanceDigest digest={digest} geo={geo} />
+      <AvoidanceDigest
+        digest={digest}
+        geo={geo}
+        group={{ kind: "pathogen", label: matchedPathogen?.name ?? ob.pathogen }}
+      />
+
+      <NamedInRecord outbreak={ob} />
+
+      <OutbreakGrounding outbreak={ob} pathogen={matchedPathogen} />
 
       {/* All related recall records (the digest above groups them by event) */}
       <Disclosure

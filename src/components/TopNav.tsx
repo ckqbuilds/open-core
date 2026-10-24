@@ -165,7 +165,8 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      aria-label="Toggle theme"
+      aria-label="Dark mode"
+      aria-pressed={theme === "dark"}
       className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}

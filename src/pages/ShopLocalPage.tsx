@@ -22,11 +22,14 @@ export function ShopLocalPage() {
       />
 
       {!geo && (
-        <div className="max-w-xs space-y-1.5">
+        <div className="max-w-sm space-y-1.5">
           <label htmlFor="shop-zip" className="text-sm font-medium">
             Your ZIP
           </label>
           <ZipInput id="shop-zip" />
+          <p className="text-sm text-muted-foreground">
+            Enter your ZIP to list the USDA local food directories near you
+          </p>
         </div>
       )}
 

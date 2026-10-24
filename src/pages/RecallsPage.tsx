@@ -83,7 +83,7 @@ export function RecallsPage() {
   useDocumentTitle(archive ? "Recall archive · OpenCORE" : "Active recalls · OpenCORE");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const { geo } = useZipContext();
-  const { hash } = useLocation();
+  const { hash, key: locationKey } = useLocation();
   const [checkOpen, setCheckOpen] = useState(hash === "#check");
   useEffect(() => {
     if (hash !== "#check") return;
@@ -93,7 +93,7 @@ export function RecallsPage() {
       document.getElementById("barcode")?.focus({ preventScroll: true });
     }, 120);
     return () => clearTimeout(t);
-  }, [hash]);
+  }, [hash, locationKey]);
 
   const recalls = useAsync<Recall[]>((signal) => fetchRelevantRecalls(250, signal), []);
   const fsis = useAsync<FsisFeed>((signal) => loadFsisRecalls(signal), []);
@@ -365,6 +365,7 @@ export function RecallsPage() {
                 : `ongoing ${filtered.length === 1 ? "recall" : "recalls"} (last 90 days${filterNote})`}
               {summaryTail}
             </p>
+            <KeyButton variant="link" />
           </div>
 
           {filtered.length === 0 ? (
@@ -419,7 +420,7 @@ export function RecallsPage() {
                       onClick={() => setShown((n) => n + 40)}
                       className="inline-flex h-10 items-center rounded-md border border-input px-4 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      Show 40 more
+                      Show {Math.min(40, filtered.length - shown)} more
                     </button>
                   )}
                 </div>
