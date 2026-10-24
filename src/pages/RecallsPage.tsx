@@ -249,7 +249,7 @@ export function RecallsPage() {
   );
   const mobileFilterCount = activeCount + (scopeFilter !== "mystate" ? 1 : 0) + (query !== "" ? 1 : 0);
 
-  const linkBtn = "link inline-flex min-h-9 items-center px-2 text-sm";
+  const linkBtn = "link inline-flex min-h-9 pointer-coarse:min-h-10 items-center px-2 text-sm";
   const emptyRecovery = (
     <>
       {filtersActive && (
@@ -521,7 +521,7 @@ export function RecallsPage() {
               aria-expanded={trendOpen}
               aria-controls="recall-trend"
               onClick={() => setTrendOpen((o) => !o)}
-              className="link inline-flex min-h-9 items-center gap-1.5 text-sm"
+              className="link inline-flex min-h-9 pointer-coarse:min-h-10 items-center gap-1.5 text-sm"
             >
               {defaultScope ? "Trend by month, current scope" : "Trend by month, archive"}
               <ChevronDown aria-hidden className={cn("size-4 transition-transform ease-over", trendOpen && "rotate-180")} />

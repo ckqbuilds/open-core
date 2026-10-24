@@ -76,7 +76,7 @@ export function RecallRow({
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
             aria-label={`${expanded ? "Show less" : "Show more"}: ${firm}`}
-            className="link mt-1 inline-flex min-h-9 items-center text-sm"
+            className="link mt-1 inline-flex min-h-9 pointer-coarse:min-h-10 items-center text-sm"
           >
             {expanded ? "Show less" : "Show the whole record"}
           </button>

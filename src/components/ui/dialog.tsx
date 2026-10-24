@@ -39,7 +39,7 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close
-        className="capsule capsule--sm absolute right-4 top-4 min-h-9 px-2"
+        className="capsule capsule--sm absolute right-4 top-4 min-h-9 pointer-coarse:min-h-10 px-2"
         aria-label="Close"
       >
         <X className="size-4" />

@@ -50,7 +50,7 @@ export function ReachLine({
         {more > 0 && (
           <>
             {" "}
-            <button type="button" onClick={() => setOpen(true)} className="link inline-flex min-h-9 items-center">
+            <button type="button" onClick={() => setOpen(true)} className="link inline-flex min-h-9 pointer-coarse:min-h-10 items-center">
               +{more} more
             </button>
           </>

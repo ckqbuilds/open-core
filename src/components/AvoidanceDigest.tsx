@@ -173,7 +173,7 @@ function EventCard({
               type="button"
               onClick={() => setAllRetail(true)}
               aria-label={`Show all ${ev.retail.length} products: ${ev.firm}`}
-              className="link mt-1 inline-flex min-h-9 items-center text-sm"
+              className="link mt-1 inline-flex min-h-9 pointer-coarse:min-h-10 items-center text-sm"
             >
               Show all {ev.retail.length} products
             </button>
@@ -188,7 +188,7 @@ function EventCard({
             onClick={() => setWholesaleOpen((v) => !v)}
             aria-expanded={wholesaleOpen}
             aria-label={`${ev.wholesale.length} case-pack ${ev.wholesale.length === 1 ? "product" : "products"} for restaurants and food service: ${ev.firm}`}
-            className="inline-flex min-h-9 items-center gap-1.5 text-left text-sm font-bold hover:underline"
+            className="inline-flex min-h-9 pointer-coarse:min-h-10 items-center gap-1.5 text-left text-sm font-bold hover:underline"
           >
             <ChevronDown
               aria-hidden
@@ -223,7 +223,7 @@ function EventCard({
             onClick={() => setCodesOpen((v) => !v)}
             aria-expanded={codesOpen}
             aria-label={`Lot codes and dates as stated: ${ev.firm}`}
-            className="inline-flex min-h-9 items-center gap-1.5 text-left text-sm font-bold hover:underline"
+            className="inline-flex min-h-9 pointer-coarse:min-h-10 items-center gap-1.5 text-left text-sm font-bold hover:underline"
           >
             <ChevronDown
               aria-hidden

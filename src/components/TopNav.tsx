@@ -28,7 +28,7 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-40 bg-ground/95 backdrop-blur-sm" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <nav className="container flex h-16 items-center gap-3">
-        <Link to="/" className="shrink-0 rounded-md" aria-label="OpenCORE home">
+        <Link to="/" className="inline-flex min-h-10 shrink-0 items-center rounded-md" aria-label="OpenCORE home">
           <Wordmark />
         </Link>
 

@@ -9,7 +9,7 @@ export function KeyButton({ variant = "button" }: { variant?: "button" | "link" 
     <Dialog>
       <DialogTrigger asChild>
         {variant === "link" ? (
-          <button type="button" className="link inline-flex min-h-9 items-center gap-1.5 text-sm">
+          <button type="button" className="link inline-flex min-h-9 pointer-coarse:min-h-10 items-center gap-1.5 text-sm">
             <Info className="size-4" /> What do these chips mean?
           </button>
         ) : (

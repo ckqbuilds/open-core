@@ -338,7 +338,7 @@ A single centred container (1240px at `2xl`, 1.25rem side padding) under a stick
 
 Home is the one two-part first viewport: the answer column on the left (headline, sub, search field and ZIP field, "Check a barcode"), and the land lobe on the right bleeding off the top and right edges at `lg` (negative margins out to the viewport edge, 12% left padding so every line stays inside the coast). Under it the full list of foods runs in one ruled list on a fixed four-column grid (food 1.3fr, named-with 1fr, recalls 7rem, reaches-you 8.5rem).
 
-Lists are ruled rows on a fixed `md:` column grid declared once per list (`FOOD_GRID`, the outbreak row grid, the recall row's 6.5rem date margin + body) and kept in every state; a column header row shares the same grid and hides on phones. Below `md` every grid collapses to one column, text wraps, and nothing overflows. Tap targets are at least 44px: capsules are 2.75rem, small capsules 2.25rem with `min-h-11` where they stand alone, text buttons `min-h-9`. Dialogs are a sheet centred at `max-w-lg`, `calc(100% - 2rem)` wide, 90vh tall.
+Lists are ruled rows on a fixed `md:` column grid declared once per list (`FOOD_GRID`, the outbreak row grid, the recall row's 6.5rem date margin + body) and kept in every state; a column header row shares the same grid and hides on phones. Below `md` every grid collapses to one column, text wraps, and nothing overflows. Tap targets are at least 40px on touch screens: capsules are 2.75rem; small capsules are 2.25rem on pointer screens and grow to 2.5rem under `(pointer: coarse)`, with `min-h-11` where they stand alone; the wordmark link is `min-h-10`; text and record links take the same 2.5rem via `pointer-coarse:min-h-10`. Dialogs are a sheet centred at `max-w-lg`, `calc(100% - 2rem)` wide, 90vh tall.
 
 ## Elevation & Depth
 
@@ -355,7 +355,7 @@ Two silhouettes. Controls are pills (999px): capsules, fields, chips, the ZIP ca
 
 ### Buttons (Capsules)
 Every button, tab, nav link, toggle and select is a capsule: confident and tactile, never flat text.
-- **Shape:** pill (999px), 2.75rem min height, 0.4rem 1.1rem padding, 0.6rem gap; small variant 2.25rem, 0.2rem 0.85rem, 0.875rem text.
+- **Shape:** pill (999px), 2.75rem min height, 0.4rem 1.1rem padding, 0.6rem gap; small variant 2.25rem (2.5rem on coarse pointers), 0.2rem 0.85rem, 0.875rem text.
 - **Default:** paper fill, 2px ink outline, ink text, 600 weight.
 - **Ink:** ink fill, ground text: the one primary action on a page, shared with sun.
 - **Sun / Coral / Pond / Lilac / Land:** the fill is also the border; text and chip are on-fill ink.
