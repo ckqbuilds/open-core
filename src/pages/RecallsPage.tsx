@@ -361,6 +361,7 @@ export function RecallsPage() {
             </p>
           )}
           <div className="space-y-2">
+            <h2 className="sr-only">Recall records</h2>
             <p aria-live="polite" className="text-sm text-muted-foreground tabular-nums">
               {filtered.length}{" "}
               {archive || !defaultScope
