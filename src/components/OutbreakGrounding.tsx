@@ -7,7 +7,7 @@ import { classifyOutbreak } from "@/data/contaminants";
 import { extractSerotype, fetchSerotypeContext } from "@/data/beam";
 import { fetchPathogenHistory } from "@/data/nors";
 import { useAsync } from "@/hooks/useAsync";
-import { Sparkline } from "@/components/Sparkline";
+import { YearBars } from "@/components/YearBars";
 import { Sheet } from "@/components/common";
 
 /**
@@ -127,11 +127,20 @@ export function OutbreakGrounding({
               <span className="font-bold">{history.data.avgIllnessesPerYear.toLocaleString()}</span>{" "}
               illnesses/year.
             </p>
-            <Sparkline
-              values={history.data.recent.map((r) => r.outbreaks)}
-              ariaLabel={`${pathogen?.name} foodborne outbreaks per year, ${history.data.firstYear}–${history.data.lastYear}`}
+            <p className="pt-1 text-xs font-bold">
+              {pathogen?.name} outbreaks reported to CDC each year
+            </p>
+            <YearBars
+              data={history.data.recent.map((r) => ({ year: r.year, value: r.outbreaks }))}
+              ariaLabel={`${pathogen?.name} foodborne outbreaks per year, ${history.data.recent
+                .map((r) => `${r.year}: ${r.outbreaks}`)
+                .join(", ")}. Average ${history.data.avgOutbreaksPerYear}.`}
             />
-            <p className="text-xs text-ink-2">reported outbreaks/yr · last 10 years</p>
+            <p className="flex items-center gap-1.5 text-xs text-ink-2">
+              <span aria-hidden className="inline-block w-4 border-t border-dashed border-ink-2" />
+              {history.data.firstYear}–{history.data.lastYear} average:{" "}
+              {history.data.avgOutbreaksPerYear} a year
+            </p>
             <a href={history.data.sourceUrl} target="_blank" rel="noreferrer" className="link inline-flex items-center gap-1 text-sm">
               <ExternalLink className="size-3" />
               CDC NORS (historical, finalized annual figures — not this outbreak’s counts)
