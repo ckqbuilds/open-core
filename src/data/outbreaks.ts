@@ -124,7 +124,6 @@ export const CURATED: Record<string, CuratedDetail> = {
       "Do not eat recalled Taylor Farms / Marketside iceberg lettuce with Best-If-Used-By dates 7/18/2026–8/3/2026; throw it out or return it.",
       "Cyclospora is a parasite spread by contaminated fresh produce — it is not passed person to person.",
       "Symptoms (watery diarrhea, cramps, fatigue) can start ~1 week after exposure and last weeks; it is treatable with antibiotics.",
-      "When in doubt, buy whole heads of lettuce from another source and wash thoroughly, or use the Farmers markets tab.",
     ],
   },
   "1378": {
@@ -152,6 +151,13 @@ const fdaCoreTable: SourceCitation = {
   url: "https://www.fda.gov/food/outbreaks-foodborne-illness/investigations-foodborne-illness-outbreaks",
   date: "2026-07-27",
 };
+
+/** Latest date among the curated source citations: when the curated list was last checked. */
+export const CURATED_CHECKED_AT: string = [cdcCyclospora, fdaIceberg, fdaEggs, fdaCoreTable]
+  .map((s) => s.date)
+  .filter((d): d is string => !!d)
+  .sort()
+  .at(-1)!;
 
 function merge(scraped: import("./types").ScrapedOutbreak, detail?: CuratedDetail): Outbreak {
   const base: Outbreak = {
@@ -197,8 +203,8 @@ export function mergeLiveOutbreaks(feed: OutbreakFeed): Outbreak[] {
  * curated layer alone so the rich, cited outbreaks never disappear.
  */
 export function curatedFallbackOutbreaks(): Outbreak[] {
-  return Object.entries(CURATED).map(([refId, detail]) =>
-    merge(
+  return Object.entries(CURATED).map(([refId, detail]) => ({
+    ...merge(
       {
         refId,
         pathogen: refId === "1378" ? "Salmonella" : "Cyclospora",
@@ -213,8 +219,9 @@ export function curatedFallbackOutbreaks(): Outbreak[] {
         sourceUrl: fdaCoreTable.url,
       },
       detail
-    )
-  );
+    ),
+    curated: true,
+  }));
 }
 
 /** All named entities across curated outbreaks (deduped) — for the map. */

@@ -1,11 +1,14 @@
+import { Chip } from "@/components/ui/chip";
 import { useState } from "react";
 import { Check, Copy, Share2, Loader2, ExternalLink } from "lucide-react";
 import type { Outbreak } from "@/data/types";
 import { shareOrCopy } from "@/lib/share";
-import { formatIso } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { outbreakStatusChip } from "@/lib/classification";
+import { formatIso, formatIsoShort, isStale, staleNotice } from "@/lib/utils";
+import { CURATED_CHECKED_AT } from "@/data/outbreaks";
 import { Button } from "@/components/ui/button";
-import { StatTile, SourceLink } from "@/components/common";
+import { SourceLink } from "@/components/common";
+import { Digits } from "@/components/RecordLine";
 
 function caseLabel(ob: Outbreak): string {
   return ob.caseCount != null ? ob.caseCount.toLocaleString() : ob.caseCountText ?? "See advisory";
@@ -24,7 +27,14 @@ function shareText(ob: Outbreak): string {
  * The core outbreak record — everything CORE + the curated layer holds for one
  * outbreak. Extracted from the old modal so it can headline a full page.
  */
-export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
+export function OutbreakDetail({
+  outbreak: ob,
+  symptomsHref,
+}: {
+  outbreak: Outbreak;
+  /** Set only when the page renders a symptoms section to jump to. */
+  symptomsHref?: string;
+}) {
   const [shareState, setShareState] = useState<"idle" | "busy" | "shared" | "copied">("idle");
 
   const onShare = async () => {
@@ -44,69 +54,144 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
     <div className="space-y-6">
       <div>
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant={ob.status === "active" ? "critical" : "good"}>
-            {ob.status === "active" ? "Active" : "Resolved"}
-          </Badge>
-          <Badge variant="outline">{ob.pathogen}</Badge>
-          {ob.refId && <Badge variant="secondary">FDA #{ob.refId}</Badge>}
+          <Chip key="status" {...outbreakStatusChip(ob.status === "active")}>
+            {ob.status === "active"
+              ? ob.curated
+                ? `Active as of ${formatIsoShort(CURATED_CHECKED_AT)}`
+                : "Active"
+              : "Resolved"}
+          </Chip>
+          <Chip key="pathogen" color="outline">
+            {ob.pathogen}
+          </Chip>
+          {ob.refId && (
+            <Chip key="ref" color="quiet" className="tnum font-mono">
+              FDA #{ob.refId}
+            </Chip>
+          )}
         </div>
-        <h1 className="mt-2 text-balance text-2xl font-semibold tracking-tight">
+        <h1 className="display mt-4 text-4xl sm:text-5xl">
           {ob.pathogen} outbreak
           {ob.vehicle !== "Not yet identified" ? ` linked to ${ob.vehicle.toLowerCase()}` : ""}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {ob.detailed
-            ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
-            : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
+        <p className="mt-3 text-base text-ink-2">
+          <Digits>
+            {ob.detailed
+              ? `Illness onset ${formatIso(ob.firstIllnessDate)} – ${formatIso(ob.lastIllnessDate)}`
+              : `Posted ${formatIso(ob.datePosted)} · ${ob.eventStatus ?? "Ongoing"}`}
+          </Digits>
         </p>
+        {ob.curated && (
+          <p className="prose-measure mt-2 text-xs text-ink-2" role="status">
+            Live FDA feed unavailable · showing the curated list last checked{" "}
+            {formatIsoShort(CURATED_CHECKED_AT)}; this status may be out of date.
+          </p>
+        )}
+        {ob.detailed && ob.guidance && symptomsHref && (
+          <a href={symptomsHref} className="capsule capsule--sun mt-4 max-w-full whitespace-normal text-left">
+            If you have eaten this: see the symptoms and what to do
+          </a>
+        )}
       </div>
 
-      {ob.detailed ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatTile value={caseLabel(ob)} label="Reported cases" tone="critical" />
-          <StatTile value={ob.hospitalizations ?? "—"} label="Hospitalizations" />
-          <StatTile value={ob.deaths ?? "—"} label="Deaths" />
-          <StatTile value={ob.statesAffectedCount ?? "—"} label="States affected" />
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-3">
-          <StatTile value={caseLabel(ob)} label="Reported cases" tone="critical" />
-          <StatTile value={ob.vehicle} label="Suspected food" />
-        </div>
-      )}
+      <p className="border-y-2 border-ink py-3 text-base">
+        {ob.detailed ? (
+          <>
+            <b className="font-extrabold">
+              <Digits>{caseLabel(ob)}</Digits>
+            </b>{" "}
+            reported cases ·{" "}
+            <b className="font-extrabold">
+              <Digits>{String(ob.hospitalizations ?? "—")}</Digits>
+            </b>{" "}
+            hospitalized ·{" "}
+            <b className="font-extrabold">
+              <Digits>{String(ob.deaths ?? "—")}</Digits>
+            </b>{" "}
+            deaths ·{" "}
+            <b className="font-extrabold">
+              <Digits>{String(ob.statesAffectedCount ?? "—")}</Digits>
+            </b>{" "}
+            states
+          </>
+        ) : (
+          <>
+            <b className="font-extrabold">
+              <Digits>{caseLabel(ob)}</Digits>
+            </b>{" "}
+            reported cases · suspected food: <b className="font-extrabold">{ob.vehicle}</b>
+          </>
+        )}
+      </p>
 
       {ob.detailed && ob.guidance && (
         <div>
-          <h2 className="mb-2 text-sm font-semibold">What to know</h2>
-          <ul className="space-y-1.5">
+          <h2 className="display-md mb-3 text-2xl">What to know</h2>
+          <ul className="prose-measure space-y-2">
             {ob.guidance.map((g, i) => (
-              <li key={i} className="flex gap-2 text-sm text-muted-foreground">
-                <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+              <li key={i} className="flex gap-3 text-base">
+                <span className="mt-2 size-2 shrink-0 rounded-full bg-ink" />
                 <span>{g}</span>
               </li>
             ))}
           </ul>
+          {isStale(ob.lastIllnessDate) && (
+            <p className="mt-3 text-xs text-ink-2">{staleNotice(ob.lastIllnessDate)}</p>
+          )}
         </div>
       )}
 
-      {ob.detailed && ob.namedEntities ? (
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-ink pt-4">
+        <div className="flex min-w-0 flex-1 basis-64 flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          {ob.sources?.map((s) => <SourceLink key={s.url} source={s} />)}
+          {ob.advisoryUrl && (
+            <a
+              href={ob.advisoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="link inline-flex items-center gap-1 pointer-coarse:-my-2 pointer-coarse:min-h-10"
+            >
+              <ExternalLink className="size-3" /> FDA advisory
+            </a>
+          )}
+        </div>
+        <Button size="sm" onClick={onShare} disabled={shareState === "busy"}>
+          {shareState === "busy" && <Loader2 className="animate-spin" />}
+          {shareState === "idle" && <Share2 />}
+          {shareState === "shared" && <Check />}
+          {shareState === "copied" && <Copy />}
+          {shareState === "copied" ? "Copied" : shareState === "shared" ? "Shared" : "Share"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/** Companies the official record names, or the honest "not compiled yet" note. */
+export function NamedInRecord({ outbreak: ob }: { outbreak: Outbreak }) {
+  return (
+    ob.detailed && ob.namedEntities ? (
         <div>
-          <h2 className="mb-1 text-sm font-semibold">Named in the official record</h2>
-          <p className="mb-2 text-xs text-muted-foreground">
+          <h2 className="display-md text-2xl">Named in the official record</h2>
+          <p className="prose-measure mt-2 text-sm text-ink-2">
             Only companies FDA or CDC named — or that sell a recalled branded product. Not a list of
             "unsafe stores."
           </p>
-          <div className="space-y-2">
+          <div className="mt-3">
             {ob.namedEntities.map((e) => (
-              <div key={e.id} className="rounded-md border p-3">
+              <div key={e.id} className="row-rule py-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm font-medium">{e.name}</span>
-                  <Badge variant="outline">
-                    {e.kind === "restaurant" ? "Restaurant" : "Retailer / supplier"}
-                  </Badge>
-                  {e.product && <Badge variant="secondary">{e.product}</Badge>}
+                  <span className="text-lg font-extrabold">{e.name}</span>
+                  <Chip color="outline">
+                    {e.kind === "restaurant"
+                      ? "Restaurant"
+                      : /^recalling firm/i.test(e.note)
+                        ? "Recalling firm"
+                        : "Retailer / supplier"}
+                  </Chip>
+                  {e.product && <Chip color="quiet">{e.product}</Chip>}
                 </div>
-                <p className="mt-1.5 text-sm text-muted-foreground">{e.note}</p>
+                <p className="prose-measure mt-1.5 text-sm text-ink-2">{e.note}</p>
                 <div className="mt-1.5">
                   <SourceLink source={e.source} />
                 </div>
@@ -115,40 +200,16 @@ export function OutbreakDetail({ outbreak: ob }: { outbreak: Outbreak }) {
           </div>
         </div>
       ) : (
-        <div className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
+        <div className="sheet sheet--quiet p-4 text-sm text-ink-2">
           This outbreak is tracked live from the FDA CORE table. Detailed named entities and guidance
           haven't been compiled for it yet — open the FDA investigation for the latest official
           information, including any advice and recalls.
           {ob.recallInitiated && (
-            <span className="mt-1 block font-medium text-foreground">
+            <span className="mt-1 block font-bold text-ink">
               A recall has been initiated for this investigation.
             </span>
           )}
         </div>
-      )}
-
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          {ob.sources?.map((s) => <SourceLink key={s.url} source={s} />)}
-          {ob.advisoryUrl && (
-            <a
-              href={ob.advisoryUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" /> FDA advisory
-            </a>
-          )}
-        </div>
-        <Button size="sm" onClick={onShare} disabled={shareState === "busy"}>
-          {shareState === "busy" && <Loader2 className="size-4 animate-spin" />}
-          {shareState === "idle" && <Share2 className="size-4" />}
-          {shareState === "shared" && <Check className="size-4" />}
-          {shareState === "copied" && <Copy className="size-4" />}
-          {shareState === "copied" ? "Copied" : shareState === "shared" ? "Shared" : "Share"}
-        </Button>
-      </div>
-    </div>
+      )
   );
 }

@@ -20,6 +20,24 @@ interface RawEnforcement {
   country?: string;
 }
 
+/**
+ * A citation for one openFDA record. Prefer the recall number; records that
+ * carry "N/A" fall back to a firm + report-date query, which still resolves to
+ * the record itself in the FDA's API.
+ */
+function openFdaRecordUrl(raw: RawEnforcement): string | undefined {
+  const base = "https://api.fda.gov/food/enforcement.json?search=";
+  const num = raw.recall_number?.trim();
+  if (num && !/^(n\/a|none|unknown|-+)$/i.test(num)) {
+    return `${base}recall_number:%22${encodeURIComponent(num)}%22`;
+  }
+  if (raw.recalling_firm && raw.report_date) {
+    const firm = encodeURIComponent(raw.recalling_firm.replace(/"/g, ""));
+    return `${base}recalling_firm:%22${firm}%22+AND+report_date:${raw.report_date}`;
+  }
+  return undefined;
+}
+
 function normalize(raw: RawEnforcement, idx: number): Recall {
   const pattern = raw.distribution_pattern ?? "";
   const { states, nationwide } = parseDistributionStates(pattern);
@@ -41,6 +59,9 @@ function normalize(raw: RawEnforcement, idx: number): Recall {
     city: raw.city,
     state: raw.state,
     country: raw.country,
+    // openFDA publishes no page per recall, so the citation points at the
+    // record itself in the FDA's own API. Every cited number must link.
+    url: openFdaRecordUrl(raw),
   };
 }
 
@@ -123,6 +144,13 @@ export function fetchRecallsByFood(
 
 /** Recent produce/leafy-green and pathogen recalls relevant to this tracker. */
 export function fetchRelevantRecalls(limit = 60, signal?: AbortSignal) {
+  // Floor to the last 3 years. Without a date range openFDA does not honor
+  // `sort=report_date:desc` on this OR query and hands back a 2012–2026 grab
+  // bag whose newest record is months old, so "newest first" was a lie and a
+  // "last 90 days" default found nothing.
+  const since = new Date();
+  since.setFullYear(since.getFullYear() - 3);
+  const sinceDate = since.toISOString().slice(0, 10).replace(/-/g, "");
   const clauses = [
     "reason_for_recall:cyclospora",
     "reason_for_recall:listeria",
@@ -132,5 +160,6 @@ export function fetchRelevantRecalls(limit = 60, signal?: AbortSignal) {
     'product_description:"leafy greens"',
     "product_description:spinach",
   ];
-  return fetchRecalls({ search: orClauses(clauses), limit, signal });
+  const search = `(${orClauses(clauses)}) AND report_date:[${sinceDate} TO 99991231]`;
+  return fetchRecalls({ search, limit, signal });
 }

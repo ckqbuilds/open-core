@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { ZipProvider } from "@/hooks/ZipContext";
 import { TopNav } from "@/components/TopNav";
+import { Wordmark } from "@/components/Wordmark";
 import { ChatWidget } from "@/components/ChatWidget";
 import { FoodsPage } from "@/pages/FoodsPage";
 import { FoodPage } from "@/pages/FoodPage";
@@ -14,10 +15,16 @@ export default function App() {
   return (
     <BrowserRouter>
       <ZipProvider>
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-ground">
+          <a
+            href="#main"
+            className="capsule capsule--sun sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-3 focus-visible:top-3 focus-visible:z-50"
+          >
+            Skip to content
+          </a>
           <TopNav />
 
-          <main className="container py-6">
+          <main id="main" className="container py-8 sm:py-10">
             <Routes>
               <Route path="/" element={<FoodsPage />} />
               <Route path="/food/:foodId" element={<FoodPage />} />
@@ -25,26 +32,45 @@ export default function App() {
               <Route path="/outbreak/:refId" element={<OutbreakPage />} />
               <Route path="/recalls" element={<RecallsPage />} />
               <Route path="/shop-local" element={<ShopLocalPage />} />
-              {/* Barcode check moved onto the Recalls page; keep old links working. */}
+              {/* Barcode check lives on the Recalls page; keep old links working. */}
               <Route path="/check" element={<Navigate to="/recalls" replace />} />
               <Route path="/learn" element={<LearnPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
 
-          <footer className="mt-8 border-t bg-card/30">
-            <div className="container space-y-2 py-6 text-xs text-muted-foreground">
-              <p>
-                <strong className="text-foreground">Not medical or official guidance.</strong> This
-                tool aggregates public FDA and CDC data for convenience. It does not determine that
-                any specific store location is unsafe, and it never infers risk from supplier
-                relationships — only companies explicitly named in the official record appear, each
-                with a citation. Always confirm details against the linked FDA/CDC sources.
-              </p>
-              <p>
-                Data: openFDA food enforcement API · FDA CORE outbreak table · CDC investigations ·
-                Mapbox (location search &amp; maps). If you are ill, contact a healthcare provider.
-              </p>
+          {/* The standing disclaimer appears once per page: here. */}
+          <footer className="mt-16 border-t-2 border-ink">
+            <div className="container grid gap-8 py-10 md:grid-cols-2">
+              <div className="space-y-3">
+                <Wordmark />
+                <p className="prose-measure text-sm text-ink-2">
+                  <strong className="text-ink">Not medical or official guidance.</strong> OpenCORE shows
+                  what public FDA, CDC and USDA FSIS records say, each with a citation. It never decides
+                  that a store is unsafe and never infers risk from supplier relationships; only
+                  companies named in the official record appear. Always confirm against the linked
+                  sources. If you are ill, contact a healthcare provider.
+                </p>
+              </div>
+              <div className="space-y-3 text-sm">
+                <p className="font-bold">Not sure what to do next?</p>
+                <ul className="flex flex-wrap gap-2">
+                  <li>
+                    <Link to="/recalls#check" className="capsule capsule--sm">Check a product barcode<span aria-hidden className="capsule__chip" /></Link>
+                  </li>
+                  <li>
+                    <Link to="/learn" className="capsule capsule--sm">Signs of illness<span aria-hidden className="capsule__chip" /></Link>
+                  </li>
+                  <li>
+                    <Link to="/shop-local" className="capsule capsule--sm">Local food sources<span aria-hidden className="capsule__chip" /></Link>
+                  </li>
+                </ul>
+                <p className="prose-measure text-xs text-ink-2">
+                  Data: openFDA food enforcement · USDA FSIS recalls · USDA Local Food Directories · FDA
+                  CORE outbreak table · CDC investigations
+                  {import.meta.env.VITE_MAPBOX_TOKEN ? " · Mapbox for location search and maps" : ""}.
+                </p>
+              </div>
             </div>
           </footer>
 

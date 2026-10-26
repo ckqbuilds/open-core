@@ -27,7 +27,7 @@ export const FOOD_CATEGORIES = [
   { id: "pork", label: "Pork", emoji: "🥓", matchTerms: ["pork", "bacon", "ham", "sausage"] },
   { id: "seafood", label: "Seafood", emoji: "🐟", matchTerms: ["fish", "salmon", "tuna", "shrimp", "oyster", "clam", "mussel", "scallop", "crab", "lobster", "seafood", "shellfish"] },
   { id: "dairy", label: "Dairy & cheese", emoji: "🧀", matchTerms: ["cheese", "ricotta", "queso", "requeson", "milk", "yogurt", "butter", "cream", "dairy"] },
-  { id: "leafy-greens", label: "Leafy greens", emoji: "🥬", matchTerms: ["lettuce", "romaine", "iceberg", "spinach", "leafy green", "arugula", "kale", "spring mix", "salad"] },
+  { id: "leafy-greens", label: "Leafy greens", emoji: "🥬", matchTerms: ["lettuce", "romaine", "iceberg", "spinach", "leafy green", "arugula", "kale", "spring mix", "salad mix", "salad kit", "garden salad", "chopped salad", "bagged salad", "salad greens"] },
   { id: "berries", label: "Berries", emoji: "🫐", matchTerms: ["blueberr", "strawberr", "raspberr", "blackberr", "berries", "berry"] },
   { id: "melons", label: "Melons", emoji: "🍈", matchTerms: ["cantaloupe", "honeydew", "watermelon", "melon"] },
   { id: "sprouts", label: "Sprouts", emoji: "🌱", matchTerms: ["sprout"] },

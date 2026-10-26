@@ -116,6 +116,8 @@ export interface OutbreakFeed {
  */
 export interface Outbreak {
   id: string;
+  /** True when this row comes from the curated fallback list (live feed unavailable). */
+  curated?: boolean;
   refId?: string; // FDA CORE reference #
   pathogen: string;
   vehicle: string;

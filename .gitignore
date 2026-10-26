@@ -9,7 +9,9 @@ public/outbreaks.json
 # Local tooling / personal — not for the public repo
 .neuver/
 .claude/
+.impeccable/
 CLAUDE.md
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+.playwright-mcp/

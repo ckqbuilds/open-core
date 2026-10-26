@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Activity, Package, Stethoscope, MapPin, Loader2, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Package } from "lucide-react";
 import { loadOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByFood } from "@/data/openfda";
 import { loadFsisRecalls } from "@/data/fsis";
@@ -12,26 +12,34 @@ import {
   NOT_YET_IDENTIFIED,
   type FoodEntry,
 } from "@/data/foods";
-import { matchesOutbreakPathogen } from "@/data/symptoms";
+import { matchesOutbreakPathogen, PATHOGENS } from "@/data/symptoms";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useZipContext } from "@/hooks/ZipContext";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
-import { OutbreakTile } from "@/components/OutbreakTile";
+import { OutbreakRow, OutbreakRowHeader } from "@/components/OutbreakTile";
 import { RecallRow } from "@/components/RecallRow";
-import { AvoidanceCard } from "@/components/AvoidanceCard";
-import {
-  toAvoidanceItem,
-  avoidanceFromEntities,
-  dedupeAvoidance,
-  sortAvoidance,
-} from "@/data/avoidance";
+import { AvoidanceDigest } from "@/components/AvoidanceDigest";
+import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
+import { Disclosure } from "@/components/Disclosure";
+import { KeyButton } from "@/components/KeyButton";
 import { PageHeader } from "@/components/PageHeader";
-import { EmptyState, InfoNote } from "@/components/common";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { EmptyState, InfoNote, Loading, SectionHeading } from "@/components/common";
 
 const RECALL_WINDOW_YEARS = 3;
+/**
+ * openFDA's per-request maximum. Keep this high: a lower cap silently truncates
+ * the digest, so the same recall event would show fewer notices here than on
+ * its outbreak page. The page recomputes every count from this one fetched set
+ * (the "All recall records" total and the digest), so the page agrees with
+ * itself. The home tile counts a different query (the 250 most recent relevant
+ * records, bucketed by description), so before this page loads the tile can
+ * differ from the total shown here.
+ */
+const FOOD_RECALL_LIMIT = 100;
 
 function recallDate(r: Recall): string {
   return r.reportDate ?? r.recallInitiationDate ?? "";
@@ -42,6 +50,7 @@ export function FoodPage() {
   const { geo } = useZipContext();
   const { selected } = useRiskGroups();
   const category = foodId ? foodById(foodId) : undefined;
+  useDocumentTitle(category ? `${category.label} · OpenCORE` : "Food · OpenCORE");
 
   const recallSince = useMemo(() => {
     const d = new Date();
@@ -54,7 +63,7 @@ export function FoodPage() {
       const cat = category!;
       const [live, fda, fsis] = await Promise.all([
         loadOutbreaks(signal),
-        fetchRecallsByFood(cat.matchTerms, 24, signal, recallSince).catch(() => [] as Recall[]),
+        fetchRecallsByFood(cat.matchTerms, FOOD_RECALL_LIMIT, signal, recallSince).catch(() => [] as Recall[]),
         loadFsisRecalls(signal).catch(() => ({ recalls: [] as Recall[], generatedAt: null, stale: true })),
       ]);
       const outbreaks = live.outbreaks.filter(
@@ -66,7 +75,10 @@ export function FoodPage() {
       const fsisRecalls = fsis.recalls.filter(
         (r) => (categorizeFood(r.productDescription) ?? OTHER_FOOD).id === cat.id
       );
-      return assembleFoodEntry(cat, outbreaks, fda, fsisRecalls);
+      // Same bucketing the home index uses (by product description), so a
+      // broad match-term hit that belongs to another food is not counted here.
+      const fdaRecalls = fda.filter((r) => (categorizeFood(r.productDescription) ?? OTHER_FOOD).id === cat.id);
+      return assembleFoodEntry(cat, outbreaks, fdaRecalls, fsisRecalls);
     },
     [category?.id, recallSince],
     Boolean(category)
@@ -82,20 +94,31 @@ export function FoodPage() {
 
   // Shelf-recognition digest: what to check for at the store, built from the
   // official recall records + the curated named entities for this food. Named
-  // sources only — nothing inferred.
-  const avoidance = useMemo(() => {
-    if (!entry) return [];
-    const fromRecalls = [...entry.fdaRecalls, ...entry.fsisRecalls].map(toAvoidanceItem);
-    const fromEntities = avoidanceFromEntities(entry.namedEntities);
-    return sortAvoidance(dedupeAvoidance([...fromRecalls, ...fromEntities]));
+  // sources only — nothing inferred. Grouped by recall event.
+  const outbreakStart = useMemo(() => {
+    const starts = (entry?.outbreaks ?? [])
+      .map((o) => o.firstIllnessDate ?? o.datePosted)
+      .filter((d): d is string => !!d)
+      .sort();
+    return starts[0] ?? null;
   }, [entry]);
+  const digest = useMemo(
+    () =>
+      buildAvoidanceDigest(
+        entry ? [...entry.fdaRecalls, ...entry.fsisRecalls] : [],
+        entry?.namedEntities ?? [],
+        PATHOGENS.filter((p) => entry?.outbreaks.some((o) => matchesOutbreakPathogen(p, o.pathogen))).map(
+          (p) => p.id
+        ),
+        outbreakStart,
+        category?.matchTerms ?? []
+      ),
+    [entry, outbreakStart, category]
+  );
 
   const backLink = (
-    <Link
-      to="/"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-    >
-      <ArrowLeft className="size-4" /> All foods
+    <Link to="/" className="capsule capsule--sm capsule--ghost">
+      <ArrowLeft className="size-4" aria-hidden /> All foods
     </Link>
   );
 
@@ -104,27 +127,42 @@ export function FoodPage() {
       <div className="space-y-4">
         {backLink}
         <EmptyState>
-          Unknown food category. <Link className="text-primary hover:underline" to="/">See all foods</Link>.
+          Unknown food category. <Link className="link" to="/">See all foods</Link>.
         </EmptyState>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {backLink}
 
       <PageHeader
-        icon={<span aria-hidden className="text-3xl leading-none">{category.emoji}</span>}
-        eyebrow="Food safety"
         title={category.label}
-        description="Everything the app is tracking for this food, across FDA, CDC, and USDA FSIS."
+        description="Everything on record for this food in the last 3 years, across FDA, CDC, and USDA FSIS. Home counts only the most recent records; this page lists them all."
+        actions={<KeyButton />}
       />
 
+      <div className="-mt-4 flex flex-col gap-3 text-sm text-ink-2 sm:flex-row sm:flex-wrap sm:items-center">
+        <span>If you have this food:</span>
+        <Link to="/recalls#check" className="capsule capsule--sun">
+          Check the product barcode
+        </Link>
+        <span className="sm:sr-only">If you feel sick:</span>
+        <a
+          href="#if-sick"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("if-sick")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          className="capsule"
+        >
+          See what to do
+        </a>
+      </div>
+
       {data.loading ? (
-        <div className="flex h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" /> Loading {category.label.toLowerCase()} activity…
-        </div>
+        <Loading className="h-32">Loading {category.label.toLowerCase()} activity…</Loading>
       ) : entry && entry.outbreaks.length === 0 && recalls.length === 0 ? (
         <EmptyState>
           No current outbreak or recall activity for {category.label.toLowerCase()} in the tracked
@@ -134,67 +172,53 @@ export function FoodPage() {
         <>
           {/* Active outbreaks for this food */}
           {entry && entry.outbreaks.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Activity className="size-4 text-[color:var(--status-critical)]" />
-                <h2 className="text-lg font-semibold">Active outbreaks</h2>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
+            <section className="space-y-4">
+              <SectionHeading count={entry.outbreaks.length}>Active outbreaks</SectionHeading>
+              <div>
+                <OutbreakRowHeader />
                 {entry.outbreaks.map((ob) => (
-                  <OutbreakTile key={ob.id} outbreak={ob} />
+                  <OutbreakRow key={ob.id} outbreak={ob} />
                 ))}
               </div>
             </section>
           )}
-
           {/* What to avoid on the shelf — the shelf-recognition digest */}
-          {avoidance.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <ShoppingCart className="size-4 text-[color:var(--status-critical)]" />
-                <h2 className="text-lg font-semibold">What to avoid on the shelf</h2>
-              </div>
-              <p className="max-w-2xl text-sm text-muted-foreground">
-                Pulled from the official recall notice — the brands and package codes to check.
-                Being listed means the product is under recall, not that a store is unsafe.
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {avoidance.map((item) => (
-                  <AvoidanceCard key={item.id} item={item} />
-                ))}
-              </div>
-            </section>
-          )}
+          <AvoidanceDigest digest={digest} geo={geo} group={{ kind: "food", label: category.label.toLowerCase() }} />
 
           {/* Coordinated recalls across FDA + USDA FSIS */}
           {recalls.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Package className="size-4 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">Recalls across FDA &amp; USDA FSIS</h2>
-              </div>
-              <p className="max-w-2xl text-sm text-muted-foreground">
+            <Disclosure
+              label={`All recall notices (${recalls.length})`}
+              icon={<Package aria-hidden />}
+              description="open + related-word + closed"
+            >
+              <p className="prose-measure mb-3 text-sm text-ink-2">
                 FDA (openFDA) and USDA FSIS regulate different foods, so a food's recalls can come
                 from either agency. CDC leads the outbreak investigations shown above — it does not
                 issue recalls.
               </p>
-              <div className="space-y-3">
+              <div>
                 {recalls.slice(0, 12).map((r) => (
                   <RecallRow key={r.id} recall={r} />
                 ))}
               </div>
-            </section>
+              {recalls.length > 12 && (
+                <p className="pt-3 text-sm text-ink-2">
+                  Showing the 12 most recent of {recalls.length}.{" "}
+                  <Link className="link" to="/recalls">
+                    Browse all recalls
+                  </Link>
+                </p>
+              )}
+            </Disclosure>
           )}
 
           {/* Named suppliers & locations near you */}
-          <section className="space-y-3">
-            <div className="flex items-center gap-2">
-              <MapPin className="size-4 text-muted-foreground" />
-              <h2 className="text-lg font-semibold">Named suppliers &amp; locations near you</h2>
-            </div>
+          <section className="space-y-4">
+            <SectionHeading>Named suppliers &amp; locations near you</SectionHeading>
             {entry && entry.namedEntities.length > 0 ? (
               <>
-                <p className="max-w-2xl text-sm text-muted-foreground">
+                <p className="prose-measure text-sm text-ink-2">
                   Companies FDA or CDC named in the record for this food. Being listed is not a
                   judgment that a location is unsafe — check the linked source and decide for
                   yourself.
@@ -212,12 +236,15 @@ export function FoodPage() {
 
           {/* What to do if infected */}
           {entry && entry.pathogens.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Stethoscope className="size-4 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">What to do if you're sick</h2>
-              </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+            <section id="if-sick" className="scroll-mt-24 space-y-4">
+              <SectionHeading>What to do if you're sick</SectionHeading>
+              <p className="prose-measure text-sm text-ink-2">
+                Pregnant, older, young, or immunocompromised?{" "}
+                <Link to="/learn#risk-groups" className="link inline-flex items-center pointer-coarse:min-h-11">
+                  See risk-group guidance
+                </Link>
+              </p>
+              <div>
                 {entry.pathogens.map((p) => (
                   <PathogenCard
                     key={p.id}

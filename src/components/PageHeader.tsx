@@ -1,40 +1,26 @@
 import type { ReactNode } from "react";
 
 /**
- * One header rhythm for every page: an optional eyebrow + icon, a strong title,
- * a constrained description, and a trailing actions slot. Consistency here is
- * what makes the pages feel like one product (predictable-behavior principle).
+ * One header rhythm for every page: a display title, a short measure of
+ * description, and a trailing actions slot. No icon, no eyebrow: the title
+ * carries its own weight.
  */
 export function PageHeader({
   title,
   description,
-  icon,
-  eyebrow,
   actions,
 }: {
   title: ReactNode;
   description?: ReactNode;
-  icon?: ReactNode;
-  eyebrow?: ReactNode;
   actions?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+    <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <div className="min-w-0">
-        {eyebrow && (
-          <div className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {eyebrow}
-          </div>
-        )}
-        <div className="flex items-center gap-2.5">
-          {icon}
-          <h1 className="text-2xl font-semibold tracking-tight text-balance">{title}</h1>
-        </div>
-        {description && (
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground text-pretty">{description}</p>
-        )}
+        <h1 className="display text-4xl sm:text-5xl">{title}</h1>
+        {description && <p className="prose-measure mt-4 text-base text-ink-2">{description}</p>}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {actions && <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">{actions}</div>}
     </div>
   );
 }

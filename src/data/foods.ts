@@ -1,5 +1,6 @@
 import type { Outbreak, Recall, NamedEntity } from "./types";
 import { PATHOGENS, matchesOutbreakPathogen, type Pathogen } from "./symptoms";
+import { currentCutoff, isCurrentNotice } from "./recallScope";
 
 /**
  * A derived food-commodity category. The app has no food field — the only food
@@ -32,7 +33,7 @@ export const FOOD_CATEGORIES: FoodCategory[] = [
   { id: "pork", label: "Pork", emoji: "🥓", matchTerms: ["pork", "bacon", "ham", "sausage"] },
   { id: "seafood", label: "Seafood", emoji: "🐟", matchTerms: ["fish", "salmon", "tuna", "shrimp", "oyster", "clam", "mussel", "scallop", "crab", "lobster", "seafood", "shellfish"] },
   { id: "dairy", label: "Dairy & cheese", emoji: "🧀", matchTerms: ["cheese", "ricotta", "queso", "requeson", "milk", "yogurt", "butter", "cream", "dairy"] },
-  { id: "leafy-greens", label: "Leafy greens", emoji: "🥬", matchTerms: ["lettuce", "romaine", "iceberg", "spinach", "leafy green", "arugula", "kale", "spring mix", "salad"] },
+  { id: "leafy-greens", label: "Leafy greens", emoji: "🥬", matchTerms: ["lettuce", "romaine", "iceberg", "spinach", "leafy green", "arugula", "kale", "spring mix", "salad mix", "salad kit", "garden salad", "chopped salad", "bagged salad", "salad greens"] },
   { id: "berries", label: "Berries", emoji: "🫐", matchTerms: ["blueberr", "strawberr", "raspberr", "blackberr", "berries", "berry"] },
   { id: "melons", label: "Melons", emoji: "🍈", matchTerms: ["cantaloupe", "honeydew", "watermelon", "melon"] },
   { id: "sprouts", label: "Sprouts", emoji: "🌱", matchTerms: ["sprout"] },
@@ -147,4 +148,40 @@ export function buildFoodIndex(
       if (b.recallCount !== a.recallCount) return b.recallCount - a.recallCount;
       return a.category.label.localeCompare(b.category.label);
     });
+}
+
+/** Recall records for a food that are nationwide or list `state`. */
+export function reachCount(entry: FoodEntry, state: string): number {
+  return [...entry.fdaRecalls, ...entry.fsisRecalls].filter(
+    (r) => r.nationwide || r.distributionStates.includes(state)
+  ).length;
+}
+
+/**
+ * Notices reaching `state` in the current view (Ongoing, last 90 days): the
+ * same rule the recalls page uses, so a "right now" count matches it.
+ */
+export function currentReachCount(entry: FoodEntry, state: string, cutoff = currentCutoff()): number {
+  return [...entry.fdaRecalls, ...entry.fsisRecalls].filter(
+    (r) => isCurrentNotice(r, cutoff) && (r.nationwide || r.distributionStates.includes(state))
+  ).length;
+}
+
+/** Recalls whose product description or recalling firm contains `q` (lowercase, trimmed). */
+export function recallsMatching(recalls: Recall[], q: string): Recall[] {
+  return recalls.filter(
+    (r) =>
+      (r.productDescription ?? "").toLowerCase().includes(q) ||
+      (r.recallingFirm ?? "").toLowerCase().includes(q)
+  );
+}
+
+/** Foods whose label or match terms contain `q`, or that hold a recall matching it. */
+export function foodsMatching(foods: FoodEntry[], q: string): FoodEntry[] {
+  return foods.filter(
+    (f) =>
+      f.category.label.toLowerCase().includes(q) ||
+      f.category.matchTerms.some((t) => t.includes(q) || q.includes(t)) ||
+      recallsMatching([...f.fdaRecalls, ...f.fsisRecalls], q).length > 0
+  );
 }

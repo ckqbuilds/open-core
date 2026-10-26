@@ -1,16 +1,16 @@
-import { Loader2, Store, Utensils } from "lucide-react";
+import { Chip } from "@/components/ui/chip";
+import { Store, Utensils } from "lucide-react";
 import { findNamedStoresNear } from "@/data/stores";
 import { isMapsEnabled } from "@/data/mapbox";
 import type { GeoZip, NamedEntity, StoreLocation } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { MapViewLazy as MapView, type MapMarker } from "@/components/MapViewLazy";
-import { EmptyState, SourceLink, MapsDisabledNote } from "@/components/common";
+import { EmptyState, Loading, SourceLink, MapsDisabledNote } from "@/components/common";
 
+/** Marker fills: the two map colours are the one place hex is allowed in a component. */
 const KIND_COLOR: Record<string, string> = {
-  restaurant: "#eb6834", // orange
-  retailer: "#e34948", // red
+  restaurant: "#f5e211", // sun
+  retailer: "#ff705d", // coral
 };
 
 /**
@@ -27,11 +27,7 @@ export function NamedLocationsMap({ entities, geo }: { entities: NamedEntity[]; 
   );
 
   if (entities.length === 0) {
-    return (
-      <p className="text-sm text-muted-foreground">
-        No named companies have been compiled for this outbreak yet.
-      </p>
-    );
+    return <p className="text-sm text-ink-2">No named companies have been compiled for this outbreak yet.</p>;
   }
   if (!mapsOn) return <MapsDisabledNote />;
   if (!geo) {
@@ -52,30 +48,23 @@ export function NamedLocationsMap({ entities, geo }: { entities: NamedEntity[]; 
     lng: s.lng,
     label: s.name,
     sublabel: s.address ?? `${s.distanceMi.toFixed(1)} mi away`,
-    color: KIND_COLOR[s.kind] ?? "#e34948",
+    color: KIND_COLOR[s.kind] ?? KIND_COLOR.retailer,
   }));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {stores.error && (
         <EmptyState>
           Couldn't load nearby locations ({stores.error}).{" "}
-          <button className="text-primary hover:underline" onClick={stores.reload}>
+          <button type="button" className="link" onClick={stores.reload}>
             Retry
           </button>
         </EmptyState>
       )}
 
-      {!stores.loading && !stores.error && (
-        <MapView markers={markers} center={{ lat: geo.lat, lng: geo.lng }} />
-      )}
+      {!stores.loading && !stores.error && <MapView markers={markers} center={{ lat: geo.lat, lng: geo.lng }} />}
 
-      {stores.loading && (
-        <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Finding locations within 25 miles of{" "}
-          {geo.place}…
-        </div>
-      )}
+      {stores.loading && <Loading>Finding locations within 25 miles of {geo.place}…</Loading>}
 
       {!stores.loading &&
         !stores.error &&
@@ -83,47 +72,39 @@ export function NamedLocationsMap({ entities, geo }: { entities: NamedEntity[]; 
           const list = (byEntity.get(e.id) ?? []).slice(0, 8);
           return (
             <div key={e.id}>
-              <div className="mb-2 flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {e.kind === "restaurant" ? (
-                  <Utensils className="size-4 text-muted-foreground" />
+                  <Utensils className="size-5 text-land-deep" aria-hidden />
                 ) : (
-                  <Store className="size-4 text-muted-foreground" />
+                  <Store className="size-5 text-land-deep" aria-hidden />
                 )}
-                <span className="font-medium">{e.name}</span>
-                {e.product && <Badge variant="secondary">{e.product}</Badge>}
+                <span className="text-lg font-extrabold">{e.name}</span>
+                {e.product && <Chip color="quiet">{e.product}</Chip>}
                 <SourceLink source={e.source} />
               </div>
-              <p className="mb-2 text-sm text-muted-foreground">{e.note}</p>
+              <p className="prose-measure mt-1 text-sm text-ink-2">{e.note}</p>
               {list.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  No {e.name} locations found within 25 miles.
-                </p>
+                <p className="mt-2 text-sm text-ink-2">No {e.name} locations found within 25 miles.</p>
               ) : (
-                <div className="grid gap-2 sm:grid-cols-2">
+                <div className="mt-2 grid gap-x-6 sm:grid-cols-2">
                   {list.map((loc) => (
-                    <Card key={loc.id}>
-                      <CardContent className="flex items-center justify-between gap-3 p-3">
-                        <div className="min-w-0">
-                          <div className="truncate text-sm font-medium">{loc.name}</div>
-                          {loc.address && (
-                            <div className="truncate text-xs text-muted-foreground">{loc.address}</div>
-                          )}
-                        </div>
-                        <div className="flex shrink-0 items-center gap-2">
-                          <span className="text-xs tabular-nums text-muted-foreground">
-                            {loc.distanceMi.toFixed(1)} mi
-                          </span>
-                          <a
-                            className="text-xs font-medium text-primary hover:underline"
-                            href={`https://maps.apple.com/?ll=${loc.lat},${loc.lng}&q=${encodeURIComponent(loc.name)}`}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            Map
-                          </a>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <div key={loc.id} className="row-rule flex items-center justify-between gap-3 py-2.5">
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-bold">{loc.name}</div>
+                        {loc.address && <div className="truncate text-xs text-ink-2">{loc.address}</div>}
+                      </div>
+                      <div className="flex shrink-0 items-center gap-3">
+                        <span className="text-xs text-ink-2">{loc.distanceMi.toFixed(1)} mi</span>
+                        <a
+                          className="link text-xs"
+                          href={`https://maps.apple.com/?ll=${loc.lat},${loc.lng}&q=${encodeURIComponent(loc.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Map
+                        </a>
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}

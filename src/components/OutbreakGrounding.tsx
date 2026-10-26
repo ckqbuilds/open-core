@@ -1,14 +1,14 @@
-import { Card, Chip } from "@heroui/react";
+import { Chip } from "@/components/ui/chip";
 import { Link } from "react-router-dom";
-import { ExternalLink, Lightbulb } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { Outbreak, SourceCitation } from "@/data/types";
 import type { Pathogen } from "@/data/symptoms";
 import { classifyOutbreak } from "@/data/contaminants";
 import { extractSerotype, fetchSerotypeContext } from "@/data/beam";
 import { fetchPathogenHistory } from "@/data/nors";
 import { useAsync } from "@/hooks/useAsync";
-import { SourceLink } from "@/components/common";
 import { Sparkline } from "@/components/Sparkline";
+import { Sheet } from "@/components/common";
 
 /**
  * Plain-English grounding block for an outbreak. It de-scares the cryptic
@@ -46,22 +46,29 @@ export function OutbreakGrounding({
     pathogen != null
   );
 
-  return (
-    <Card className="border-accent/30 bg-accent/5 p-5">
-      <div className="flex items-center gap-2">
-        <Lightbulb className="size-4 text-primary" />
-        <h2 className="text-lg font-semibold">Understanding this outbreak</h2>
-      </div>
+  // Each distinct source once, by URL. The per-entity record lines carry the
+  // full citations; this is only the pointer to the investigation itself.
+  const investigationLinks: { url: string; label: string }[] = [];
+  const addLink = (url: string | null | undefined, label: string) => {
+    if (url && !investigationLinks.some((l) => l.url === url)) investigationLinks.push({ url, label });
+  };
+  outbreak.sources?.forEach((x: SourceCitation) => addLink(x.url, `${x.agency} source`));
+  addLink(outbreak.advisoryUrl, "FDA advisory");
+  if (!outbreak.advisoryUrl && !outbreak.sources?.length) addLink(outbreak.sourceUrl, "FDA CORE table");
 
-      <div className="mt-3 space-y-3 text-sm text-muted-foreground">
+  const subBlock = "space-y-2 border-t border-dotted border-rule pt-4";
+
+  return (
+    <Sheet className="p-5 sm:p-6">
+      <h2 className="display-md text-2xl">Understanding this outbreak</h2>
+
+      <div className="prose-measure mt-4 space-y-3 text-base">
         {serotype ? (
           <p>
-            <span className="font-medium text-foreground">“{serotype}”</span> is the specific
+            <span className="font-bold">“{serotype}”</span> is the specific
             strain — a lab fingerprint scientists use to trace this outbreak to one source. It is
             not a different or more dangerous illness: it causes{" "}
-            <span className="font-medium text-foreground">
-              {pathogen?.aka ?? "the same illness"}
-            </span>
+            <span className="font-bold">{pathogen?.aka ?? "the same illness"}</span>
             , with the same symptoms and care as any {pathogen?.name ?? "case"}.
           </p>
         ) : (
@@ -71,23 +78,19 @@ export function OutbreakGrounding({
           </p>
         )}
 
-        {serotype && pathogen?.summary && (
-          <p>{pathogen.summary}</p>
-        )}
+        {serotype && pathogen?.summary && <p>{pathogen.summary}</p>}
 
         {pathogen && (
           <p>
-            This is a <span className="font-medium text-foreground">biological</span> contaminant
+            This is a <span className="font-bold">biological</span> contaminant
             {classifyOutbreak(pathogen).subtype && (
               <>
                 {" "}
-                — a{" "}
-                <span className="italic text-foreground">
-                  {classifyOutbreak(pathogen).subtype}
-                </span>
+                — a <span className="italic">{classifyOutbreak(pathogen).subtype}</span>
               </>
             )}
-            . <Link to="/learn" className="font-medium text-primary hover:underline">
+            .{" "}
+            <Link to="/learn" className="link">
               How contamination types work
             </Link>
             .
@@ -95,24 +98,19 @@ export function OutbreakGrounding({
         )}
 
         {context && (
-          <div className="space-y-2 border-t border-accent/20 pt-3">
-            <p className="text-xs font-medium text-foreground">
+          <div className={subBlock}>
+            <p className="text-sm font-bold">
               Where this strain usually shows up (CDC surveillance history — not this outbreak’s
               counts):
             </p>
             <div className="flex flex-wrap items-center gap-1.5">
               {context.topFoods.map((f) => (
-                <Chip key={f.food} color="default" variant="soft" size="sm">
+                <Chip key={f.food} color="quiet">
                   {f.food} · {f.illnesses.toLocaleString()} illnesses
                 </Chip>
               ))}
             </div>
-            <a
-              href={context.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-            >
+            <a href={context.sourceUrl} target="_blank" rel="noreferrer" className="link inline-flex items-center gap-1 text-sm">
               <ExternalLink className="size-3" />
               CDC BEAM Dashboard
             </a>
@@ -120,66 +118,44 @@ export function OutbreakGrounding({
         )}
 
         {history.data && (
-          <div className="space-y-2 border-t border-accent/20 pt-3">
-            <p className="text-xs font-medium text-foreground">How common is this?</p>
+          <div className={subBlock}>
+            <p className="text-sm font-bold">How common is this?</p>
             <p>
-              CDC records about{" "}
-              <span className="font-medium text-foreground">
-                {history.data.avgOutbreaksPerYear}
-              </span>{" "}
+              CDC records about <span className="font-bold">{history.data.avgOutbreaksPerYear}</span>{" "}
               {pathogen?.name} foodborne outbreaks a year on average (
               {history.data.firstYear}–{history.data.lastYear}), around{" "}
-              <span className="font-medium text-foreground">
-                {history.data.avgIllnessesPerYear.toLocaleString()}
-              </span>{" "}
+              <span className="font-bold">{history.data.avgIllnessesPerYear.toLocaleString()}</span>{" "}
               illnesses/year.
             </p>
             <Sparkline
               values={history.data.recent.map((r) => r.outbreaks)}
               ariaLabel={`${pathogen?.name} foodborne outbreaks per year, ${history.data.firstYear}–${history.data.lastYear}`}
             />
-            <p className="text-xs text-muted-foreground">
-              reported outbreaks/yr · last 10 years
-            </p>
-            <a
-              href={history.data.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-            >
+            <p className="text-xs text-ink-2">reported outbreaks/yr · last 10 years</p>
+            <a href={history.data.sourceUrl} target="_blank" rel="noreferrer" className="link inline-flex items-center gap-1 text-sm">
               <ExternalLink className="size-3" />
               CDC NORS (historical, finalized annual figures — not this outbreak’s counts)
             </a>
           </div>
         )}
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-accent/20 pt-3 text-xs">
-          <span className="text-muted-foreground">Read the official FDA/CDC investigation:</span>
-          {outbreak.sources?.map((s: SourceCitation) => (
-            <SourceLink key={s.url} source={s} />
+        <p className="border-t border-dotted border-rule pt-4 text-sm">
+          <span className="text-ink-2">Official investigation: </span>
+          {investigationLinks.map((l, i) => (
+            <span key={l.url}>
+              {i > 0 && <span className="text-ink-2"> · </span>}
+              <a
+                href={l.url}
+                target="_blank"
+                rel="noreferrer"
+                className="link inline-flex items-center gap-1 pointer-coarse:min-h-10"
+              >
+                <ExternalLink className="size-3" /> {l.label}
+              </a>
+            </span>
           ))}
-          {outbreak.advisoryUrl && (
-            <a
-              href={outbreak.advisoryUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" /> FDA advisory
-            </a>
-          )}
-          {!outbreak.advisoryUrl && !outbreak.sources?.length && outbreak.sourceUrl && (
-            <a
-              href={outbreak.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-            >
-              <ExternalLink className="size-3" /> FDA CORE table
-            </a>
-          )}
-        </div>
+        </p>
       </div>
-    </Card>
+    </Sheet>
   );
 }

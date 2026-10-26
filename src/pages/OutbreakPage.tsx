@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Loader2, MapPin, Stethoscope, Package, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Package } from "lucide-react";
 import { loadOutbreaks, type LiveOutbreaks } from "@/data/outbreaksLive";
 import { fetchRecallsByTerm } from "@/data/openfda";
 import { loadFsisRecalls, correlateFsisRecalls } from "@/data/fsis";
@@ -8,20 +8,18 @@ import { PATHOGENS, matchesOutbreakPathogen } from "@/data/symptoms";
 import type { Recall } from "@/data/types";
 import { useAsync } from "@/hooks/useAsync";
 import { useRiskGroups } from "@/hooks/useRiskGroups";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useZipContext } from "@/hooks/ZipContext";
-import { OutbreakDetail } from "@/components/OutbreakDetail";
+import { OutbreakDetail, NamedInRecord } from "@/components/OutbreakDetail";
 import { OutbreakGrounding } from "@/components/OutbreakGrounding";
 import { RecallRow } from "@/components/RecallRow";
-import { AvoidanceCard } from "@/components/AvoidanceCard";
-import {
-  toAvoidanceItem,
-  avoidanceFromEntities,
-  dedupeAvoidance,
-  sortAvoidance,
-} from "@/data/avoidance";
+import { AvoidanceDigest } from "@/components/AvoidanceDigest";
+import { buildAvoidanceDigest } from "@/data/avoidance";
 import { NamedLocationsMap } from "@/components/NamedLocationsMap";
 import { PathogenCard } from "@/sections/SymptomsSection";
-import { EmptyState } from "@/components/common";
+import { KeyButton } from "@/components/KeyButton";
+import { Disclosure } from "@/components/Disclosure";
+import { EmptyState, Loading, SectionHeading } from "@/components/common";
 
 /** How far back "Related recalls" reaches. Older recalls are treated as stale. */
 const RELATED_RECALL_WINDOW_YEARS = 3;
@@ -45,6 +43,7 @@ export function OutbreakPage() {
   const recallTerm = ob
     ? matchedPathogen?.matchTerms[0] ?? ob.pathogen.split(/[\s,]/)[0]
     : "";
+  useDocumentTitle(ob ? `${ob.pathogen} outbreak · OpenCORE` : "Outbreak · OpenCORE");
 
   // Only surface recalls from the last few years — an ongoing outbreak's
   // "related recalls" shouldn't dredge up terminated recalls from a decade ago.
@@ -54,8 +53,10 @@ export function OutbreakPage() {
     return d.toISOString().slice(0, 10).replace(/-/g, "");
   }, []);
 
+  // 40, not a dozen: one recall event is often filed as 20+ product records,
+  // and the shelf digest needs the whole event to group it honestly.
   const relatedRecalls = useAsync<Recall[]>(
-    (signal) => fetchRecallsByTerm(recallTerm, 12, signal, recallSince),
+    (signal) => fetchRecallsByTerm(recallTerm, 40, signal, recallSince),
     [recallTerm, recallSince],
     Boolean(recallTerm)
   );
@@ -73,18 +74,14 @@ export function OutbreakPage() {
 
   // Shelf-recognition digest for this outbreak: curated named-entity brands +
   // the related recall records. Named sources only — no supply-chain inference.
-  const avoidance = useMemo(() => {
-    const entityItems = avoidanceFromEntities(ob?.namedEntities ?? []);
-    const recallItems = [...(relatedRecalls.data ?? []), ...fsisRelated].map(toAvoidanceItem);
-    return sortAvoidance(dedupeAvoidance([...entityItems, ...recallItems]));
-  }, [ob?.namedEntities, relatedRecalls.data, fsisRelated]);
+  const digest = useMemo(
+    () => buildAvoidanceDigest([...(relatedRecalls.data ?? []), ...fsisRelated], ob?.namedEntities ?? [], matchedPathogen ? [matchedPathogen.id] : [], ob?.firstIllnessDate ?? ob?.datePosted),
+    [ob?.namedEntities, ob?.firstIllnessDate, ob?.datePosted, matchedPathogen, relatedRecalls.data, fsisRelated]
+  );
 
   const backLink = (
-    <Link
-      to="/"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-    >
-      <ArrowLeft className="size-4" /> All outbreaks
+    <Link to="/outbreaks" className="capsule capsule--sm capsule--ghost">
+      <ArrowLeft className="size-4" aria-hidden /> All outbreaks
     </Link>
   );
 
@@ -92,9 +89,7 @@ export function OutbreakPage() {
     return (
       <div className="space-y-4">
         {backLink}
-        <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 size-4 animate-spin" /> Loading outbreak…
-        </div>
+        <Loading>Loading outbreak…</Loading>
       </div>
     );
   }
@@ -105,56 +100,47 @@ export function OutbreakPage() {
         {backLink}
         <EmptyState>
           No outbreak found for reference #{refId}. It may have closed since you last opened this
-          link. <Link className="text-primary hover:underline" to="/">See active outbreaks</Link>.
+          link. <Link className="link" to="/">See active outbreaks</Link>.
         </EmptyState>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {backLink}
+    <div className="space-y-10">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {backLink}
+        <KeyButton />
+      </div>
+
+      <OutbreakDetail outbreak={ob} symptomsHref={matchedPathogen ? "#symptoms" : undefined} />
+
+      {/* What to avoid on the shelf — the shelf-recognition digest */}
+      <AvoidanceDigest
+        digest={digest}
+        geo={geo}
+        group={{ kind: "pathogen", label: matchedPathogen?.name ?? ob.pathogen }}
+        hideRetailers
+        hideStale
+      />
+
+      <NamedInRecord outbreak={ob} />
 
       <OutbreakGrounding outbreak={ob} pathogen={matchedPathogen} />
 
-      <OutbreakDetail outbreak={ob} />
-
-      {/* What to avoid on the shelf — the shelf-recognition digest */}
-      {avoidance.length > 0 && (
-        <section className="space-y-3">
-          <div className="flex items-center gap-2">
-            <ShoppingCart className="size-4 text-[color:var(--status-critical)]" />
-            <h2 className="text-lg font-semibold">What to avoid on the shelf</h2>
-          </div>
-          <p className="max-w-2xl text-sm text-muted-foreground">
-            Pulled from the official recall notice — the brands and package codes to check. Being
-            listed means the product is under recall, not that a store is unsafe.
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {avoidance.map((item) => (
-              <AvoidanceCard key={item.id} item={item} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <div className="grid gap-8 lg:grid-cols-3">
-      {/* Related recalls for this pathogen */}
-      <section className="lg:col-span-2">
-        <div className="mb-3 flex items-center gap-2">
-          <Package className="size-4 text-muted-foreground" />
-          <h2 className="text-lg font-semibold">Related recalls</h2>
-        </div>
+      {/* All related recall records (the digest above groups them by event) */}
+      <Disclosure
+        label={`All recall records (${(relatedRecalls.data ?? []).length + fsisRelated.length})`}
+        icon={<Package aria-hidden />}
+      >
         {relatedRecalls.loading ? (
-          <div className="flex h-24 items-center justify-center text-sm text-muted-foreground">
-            <Loader2 className="mr-2 size-4 animate-spin" /> Searching openFDA for "{recallTerm}"…
-          </div>
+          <Loading className="h-20">Searching openFDA for "{recallTerm}"…</Loading>
         ) : relatedRecalls.error ? (
           <EmptyState>Couldn't load related recalls ({relatedRecalls.error}).</EmptyState>
         ) : (relatedRecalls.data ?? []).length === 0 ? (
           <EmptyState>No recalls in the openFDA database mention "{recallTerm}" right now.</EmptyState>
         ) : (
-          <div className="space-y-3">
+          <div>
             {(relatedRecalls.data ?? []).slice(0, 8).map((r) => (
               <RecallRow key={r.id} recall={r} />
             ))}
@@ -162,45 +148,39 @@ export function OutbreakPage() {
         )}
 
         {fsisRelated.length > 0 && (
-          <div className="mt-6">
-            <h3 className="text-sm font-semibold">USDA FSIS — possibly related</h3>
-            <p className="mb-3 mt-1 text-xs text-muted-foreground">
+          <div className="mt-8">
+            <h3 className="text-base font-extrabold">USDA FSIS — possibly related</h3>
+            <p className="prose-measure mb-3 mt-1 text-sm text-ink-2">
               Meat, poultry, or egg recalls from USDA FSIS naming the same pathogen
               {matchedPathogen ? ` (${matchedPathogen.name})` : ""} within about six months of this
               investigation. Matched on pathogen and timeframe only — the agencies share no outbreak
               ID, so this is a possible connection, not a confirmed link.
             </p>
-            <div className="space-y-3">
+            <div>
               {fsisRelated.slice(0, 6).map((r) => (
                 <RecallRow key={r.id} recall={r} />
               ))}
             </div>
           </div>
         )}
-      </section>
+      </Disclosure>
 
-      {/* Recognize the illness — matched CDC symptom card */}
       {matchedPathogen && (
-        <section className="lg:col-span-1">
-          <div className="mb-3 flex items-center gap-2">
-            <Stethoscope className="size-4 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Recognize the illness</h2>
-          </div>
+        <section id="symptoms" className="scroll-mt-24 space-y-4">
+          <SectionHeading>Recognize the illness</SectionHeading>
           <PathogenCard pathogen={matchedPathogen} selected={selected} activeOutbreaks={[]} />
         </section>
       )}
-      </div>
 
       {/* Named locations near you — scoped to THIS outbreak's entities */}
-      <section>
-        <div className="mb-1 flex items-center gap-2">
-          <MapPin className="size-4 text-muted-foreground" />
-          <h2 className="text-lg font-semibold">Named locations near you</h2>
+      <section className="space-y-4">
+        <div className="space-y-2">
+          <SectionHeading>Named locations near you</SectionHeading>
+          <p className="prose-measure text-sm text-ink-2">
+            Locations of the companies FDA/CDC named for this outbreak. Being listed is not a judgment
+            that a location is unsafe — check the linked source and decide for yourself.
+          </p>
         </div>
-        <p className="mb-3 text-sm text-muted-foreground">
-          Locations of the companies FDA/CDC named for this outbreak. Being listed is not a judgment
-          that a location is unsafe — check the linked source and decide for yourself.
-        </p>
         <NamedLocationsMap entities={ob.namedEntities ?? []} geo={geo} />
       </section>
     </div>

@@ -144,11 +144,11 @@ export const CONTAMINANTS: ContaminantInfo[] = [
   },
   {
     id: "other",
-    label: "Quality / labeling",
-    emoji: "🏷️",
+    label: "Unclassified",
+    emoji: "",
     tone: "other",
     blurb:
-      "Not one of the four hazard types. These recalls cover quality, potency, and non-allergen labeling problems — subpotent or superpotent supplements, misbranding, or missing required label information. Grouped honestly rather than forced into a hazard bucket.",
+      "The recall's reason text did not name a hazard type we can recognize. It may be a quality or labeling issue, or a hazard the notice did not spell out. Read the full reason and the agency notice before drawing a conclusion.",
     subcategories: [],
   },
 ];

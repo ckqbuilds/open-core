@@ -2,7 +2,7 @@
  * Dependency-free sparkline — a minimal inline-SVG bar strip for a single
  * series (no chart library). Chartjunk-free by design: no axes, gridlines, or
  * labels, one accent color via `currentColor` (so it inherits the theme accent
- * in both light and dark). Set the color on a parent, e.g. `text-primary`.
+ * in both light and dark). The wrapper sets `text-land-deep`.
  *
  * Accessibility: the wrapper is `role="img"` carrying the caller's `ariaLabel`,
  * which should summarize the trend (the bars themselves are decorative).
@@ -31,7 +31,7 @@ export function Sparkline({ values, ariaLabel, className }: SparklineProps) {
     <div
       role="img"
       aria-label={ariaLabel}
-      className={`text-primary ${className ?? ""}`}
+      className={`text-land-deep ${className ?? ""}`}
     >
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}

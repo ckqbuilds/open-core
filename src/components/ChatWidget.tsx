@@ -16,9 +16,9 @@ const SUGGESTIONS = [
 
 /** Unobtrusive bottom-right popover (default) vs a large centered panel (maximized). */
 const DEFAULT_PANEL =
-  "fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden border bg-card shadow-2xl h-[80vh] rounded-t-xl sm:inset-x-auto sm:bottom-4 sm:right-4 sm:h-[560px] sm:w-[380px] sm:rounded-xl";
+  "sheet fixed inset-x-0 bottom-0 z-40 flex h-[80vh] flex-col overflow-hidden max-sm:rounded-b-none sm:inset-x-auto sm:bottom-4 sm:right-4 sm:h-[560px] sm:w-[380px]";
 const EXPANDED_PANEL =
-  "fixed inset-2 z-50 flex flex-col overflow-hidden border bg-card shadow-2xl rounded-xl sm:inset-y-8 sm:left-1/2 sm:right-auto sm:w-[min(760px,92vw)] sm:-translate-x-1/2";
+  "sheet fixed inset-2 z-50 flex flex-col overflow-hidden sm:inset-y-8 sm:left-1/2 sm:right-auto sm:w-[min(760px,92vw)] sm:-translate-x-1/2";
 
 export function ChatWidget() {
   const { geo } = useZipContext();
@@ -115,7 +115,8 @@ export function ChatWidget() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed right-4 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg transition-transform motion-safe:hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          type="button"
+          className="capsule capsule--ink fixed right-4 z-40"
           style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
           aria-label="Ask about recalls and outbreaks"
         >
@@ -129,31 +130,33 @@ export function ChatWidget() {
         <>
           {expanded && (
             <div
-              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              className="fixed inset-0 z-40 bg-ink/50"
               aria-hidden
               onClick={() => setExpanded(false)}
             />
           )}
           <div className={expanded ? EXPANDED_PANEL : DEFAULT_PANEL}>
-            <div className="flex items-center justify-between border-b bg-card px-4 py-3">
+            <div className="flex items-center justify-between border-b border-rule px-4 py-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="size-4 text-primary" />
-              <span className="text-sm font-semibold">Ask about recalls &amp; outbreaks</span>
+              <Sparkles className="size-4" aria-hidden />
+              <span className="text-sm font-bold">Ask about recalls &amp; outbreaks</span>
             </div>
-            <div className="flex items-center gap-0.5">
+            <div className="flex items-center gap-1">
               <button
+                type="button"
                 onClick={() => setExpanded((v) => !v)}
-                className="rounded-md p-1 text-muted-foreground hover:bg-secondary"
+                className="capsule capsule--sm px-2"
                 aria-label={expanded ? "Restore chat size" : "Maximize chat"}
               >
                 {expanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setOpen(false);
                   setExpanded(false);
                 }}
-                className="rounded-md p-1 text-muted-foreground hover:bg-secondary"
+                className="capsule capsule--sm px-2"
                 aria-label="Close chat"
               >
                 <X className="size-4" />
@@ -164,7 +167,7 @@ export function ChatWidget() {
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {messages.length === 0 ? (
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-ink-2">
                   I explain the recalls and outbreaks in this dashboard in plain language, grounded
                   in the FDA/CDC data{geo ? ` near ${geo.place}` : ""}. Try:
                 </p>
@@ -172,8 +175,9 @@ export function ChatWidget() {
                   {SUGGESTIONS.map((s) => (
                     <button
                       key={s}
+                      type="button"
                       onClick={() => send(s)}
-                      className="rounded-lg border px-3 py-2 text-left text-sm hover:border-primary/50 hover:bg-secondary/50"
+                      className="capsule justify-start whitespace-normal text-left text-sm"
                     >
                       {s}
                     </button>
@@ -186,7 +190,7 @@ export function ChatWidget() {
                 if (m.role === "user") {
                   return (
                     <div key={i} className="flex justify-end">
-                      <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground">
+                      <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl bg-ink px-3 py-2 text-sm text-ground">
                         {m.content}
                       </div>
                     </div>
@@ -195,16 +199,16 @@ export function ChatWidget() {
                 const { body, followups } = parseAssistant(m.content);
                 return (
                   <div key={i} className="flex flex-col items-start gap-2">
-                    <div className="max-w-[85%] rounded-2xl bg-secondary px-3 py-2 text-secondary-foreground">
+                    <div className="max-w-[85%] rounded-2xl border border-rule bg-paper px-3 py-2">
                       {m.content ? (
                         <MarkdownMessage>{body}</MarkdownMessage>
                       ) : streaming && isLast ? (
                         <span className="flex flex-col gap-1">
-                          <span className="flex items-center gap-2 text-muted-foreground">
+                          <span className="flex items-center gap-2 text-sm text-ink-2">
                             <Loader2 className="size-4 animate-spin" /> Thinking…
                           </span>
                           {thinking && (
-                            <span className="line-clamp-2 text-xs italic text-muted-foreground/70">
+                            <span className="line-clamp-2 text-xs italic text-ink-2">
                               {thinking}
                             </span>
                           )}
@@ -216,9 +220,10 @@ export function ChatWidget() {
                         {followups.map((f) => (
                           <button
                             key={f}
+                            type="button"
                             onClick={() => send(f)}
                             disabled={streaming}
-                            className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/10 disabled:opacity-50"
+                            className="capsule capsule--sm whitespace-normal text-left"
                           >
                             {f}
                           </button>
@@ -229,10 +234,10 @@ export function ChatWidget() {
                 );
               })
             )}
-            {error && <p className="text-xs text-destructive">{error}</p>}
+            {error && <p className="text-sm font-semibold text-[color:var(--status-critical)]">{error}</p>}
           </div>
 
-          <div className="border-t px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div className="border-t border-rule px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -251,13 +256,14 @@ export function ChatWidget() {
                   }
                 }}
                 placeholder="Ask a question…"
-                className="max-h-28 min-h-[2.5rem] flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Your question"
+                className="field max-h-28 min-h-11 flex-1 resize-none rounded-2xl py-2 text-sm"
               />
-              <Button type="submit" size="icon" disabled={streaming || !input.trim()}>
-                {streaming ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+              <Button type="submit" variant="ink" size="sm" className="min-h-11 px-3" aria-label="Send" disabled={streaming || !input.trim()}>
+                {streaming ? <Loader2 className="animate-spin" /> : <Send />}
               </Button>
             </form>
-            <p className="mt-1.5 text-[10px] leading-tight text-muted-foreground">
+            <p className="mt-1.5 text-xs leading-tight text-ink-2">
               AI can be wrong. Confirm against the linked FDA/CDC sources. Not medical advice.
             </p>
           </div>
