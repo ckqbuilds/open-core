@@ -1,12 +1,13 @@
 import { Chip } from "@/components/ui/chip";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Activity,
   AlertTriangle,
+  ArrowRight,
   Ban,
   ChevronDown,
   Clock,
-  RadioTower,
   ShieldAlert,
   Timer,
 } from "lucide-react";
@@ -208,97 +209,135 @@ export function PathogenCard({
   activeOutbreaks: Outbreak[];
 }) {
   const [open, setOpen] = useState(false);
+  const detailsId = useId();
   const notes = notesForGroups(p, selected);
   const urgent = notes.some((n) => n.severity === "urgent");
+  const anyCurated = activeOutbreaks.some((o) => o.curated);
 
   return (
-    <article className="row-rule space-y-4 py-5">
-      <div className="grid items-start gap-3 md:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)_auto] md:gap-5">
-        <div className="min-w-0">
+    <article className="row-rule flex flex-col gap-4 py-5 md:grid md:grid-cols-[15rem_minmax(0,1fr)] md:gap-8 md:py-6">
+      <div className="min-w-0 space-y-2">
+        <div>
           <h3 className="text-lg font-extrabold">{p.name}</h3>
           {p.aka && <div className="text-sm text-ink-2">{p.aka}</div>}
         </div>
 
-        <div className="min-w-0 space-y-2">
-          {activeOutbreaks.length > 0 && (
-            <div className="flex items-start gap-1.5 text-sm font-bold">
-              <RadioTower className="mt-0.5 size-4 shrink-0" aria-hidden />
-              <span>
-                {activeOutbreaks.length === 1
-                  ? `${activeOutbreaks[0].curated ? `Active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})` : "Active outbreak in the current FDA data"}: ${activeOutbreaks[0].vehicle}`
-                  : activeOutbreaks.some((o) => o.curated)
-                    ? `${activeOutbreaks.length} active in the curated list (checked ${formatIsoShort(CURATED_CHECKED_AT)})`
-                    : `${activeOutbreaks.length} active outbreaks in the current FDA data`}
-              </span>
-            </div>
-          )}
-          <p className="text-sm text-ink-2">{p.summary}</p>
-        </div>
-
-        <div className="flex flex-wrap items-start gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {urgent && <Chip color="coral">Urgent for your selection</Chip>}
           <Chip color="lilac">{p.category}</Chip>
         </div>
-      </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Fact icon={<Clock className="size-3.5" aria-hidden />} label="Starts" value={p.onset} />
-        <Fact icon={<Timer className="size-3.5" aria-hidden />} label="Lasts" value={p.duration} />
-      </div>
-
-      {notes.map((n) => (
-        <RiskNoteBlock key={`${n.group}-${n.severity}`} note={n} />
-      ))}
-
-      <button
-        type="button"
-        className="capsule capsule--sm"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        {open ? "Hide details" : "Signs, spread & what to do"}
-        <ChevronDown aria-hidden className={cn("size-4 shrink-0 transition-transform ease-over", open && "rotate-180")} />
-      </button>
-
-      {open && (
-        <div className="space-y-4">
-          <Block icon={<Activity className="size-3.5" aria-hidden />} title="Signs">
-            <ul className="list-inside list-disc space-y-1 text-sm marker:text-ink-2">
-              {p.signs.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-          </Block>
-
-          <Block title="How it spreads">
-            <p className="text-sm">{p.spread}</p>
-          </Block>
-
-          <Block title="What to do">
-            <ul className="space-y-2 text-sm">
-              {p.care.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-          </Block>
-
-          {p.doNot && (
-            <div className="rounded-lg border-2 border-coral p-3">
-              <div className="mb-1 flex items-center gap-1.5 text-sm font-bold">
-                <Ban className="size-4" aria-hidden />
-                Do not
+        {activeOutbreaks.length > 0 && (
+          <div className="space-y-1.5">
+            <Chip color="coral">
+              {activeOutbreaks.length === 1
+                ? "Active outbreak"
+                : `${activeOutbreaks.length} active outbreaks`}
+            </Chip>
+            {anyCurated && (
+              <div className="text-xs text-ink-2">
+                {`Curated list, checked ${formatIsoShort(CURATED_CHECKED_AT)}`}
               </div>
-              <ul className="space-y-1 text-sm">
-                {p.doNot.map((d) => (
-                  <li key={d}>{d}</li>
+            )}
+            <ul className="space-y-1 text-sm">
+              {activeOutbreaks.map((o, i) => {
+                // Unidentified foods read the same, so the FDA number tells them apart.
+                const vehicle =
+                  !o.vehicle || /not (yet )?identified/i.test(o.vehicle)
+                    ? o.refId
+                      ? `Food not yet identified (FDA #${o.refId})`
+                      : "Food not yet identified"
+                    : o.vehicle;
+                return (
+                  <li key={o.refId ?? `${o.vehicle}-${i}`}>
+                    {o.refId ? (
+                      <Link
+                        to={`/outbreak/${o.refId}`}
+                        className="link pointer-coarse:inline-block pointer-coarse:py-2"
+                      >
+                        {vehicle}
+                        <ArrowRight className="ml-1 inline size-3.5 align-[-0.15em]" aria-hidden />
+                      </Link>
+                    ) : (
+                      vehicle
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div className="min-w-0 space-y-4">
+        <p className="prose-measure text-base">{p.summary}</p>
+
+        <dl className="prose-measure grid gap-4 sm:grid-cols-2">
+          <Fact icon={<Clock className="size-3.5" aria-hidden />} label="Starts" value={p.onset} />
+          <Fact icon={<Timer className="size-3.5" aria-hidden />} label="Lasts" value={p.duration} />
+        </dl>
+
+        {notes.length > 0 && (
+          <div className="prose-measure space-y-4">
+            {notes.map((n) => (
+              <RiskNoteBlock key={`${n.group}-${n.severity}`} note={n} />
+            ))}
+          </div>
+        )}
+
+        <button
+          type="button"
+          className="capsule capsule--sm"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-controls={detailsId}
+        >
+          {open ? "Hide details" : "Signs, spread & what to do"}
+          <ChevronDown aria-hidden className={cn("size-4 shrink-0 transition-transform ease-over", open && "rotate-180")} />
+        </button>
+
+        {open && (
+          <div id={detailsId} className="prose-measure space-y-4">
+            <Block icon={<Activity className="size-3.5" aria-hidden />} title="Signs">
+              <ul className="list-inside list-disc space-y-1 text-sm marker:text-ink-2">
+                {p.signs.map((s) => (
+                  <li key={s}>{s}</li>
                 ))}
               </ul>
-            </div>
-          )}
-        </div>
-      )}
+            </Block>
 
-      <SourceLink source={p.source} />
+            <Block title="How it spreads">
+              <p className="text-sm">{p.spread}</p>
+            </Block>
+
+            <Block title="What to do">
+              <ul className="space-y-2 text-sm">
+                {p.care.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+            </Block>
+
+            {p.doNot && (
+              <div className="rounded-lg border-2 border-coral p-3">
+                <div className="mb-1 flex items-center gap-1.5 text-sm font-bold">
+                  <Ban className="size-4" aria-hidden />
+                  Do not
+                </div>
+                <ul className="space-y-1 text-sm">
+                  {p.doNot.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div>
+          <SourceLink source={p.source} />
+        </div>
+      </div>
     </article>
   );
 }
@@ -329,12 +368,12 @@ function Fact({
   value: string;
 }) {
   return (
-    <div className="border-l-2 border-ink pl-3">
-      <div className="mb-0.5 flex items-center gap-1.5 text-xs font-bold text-ink-2">
+    <div>
+      <dt className="mb-0.5 flex items-center gap-1.5 text-xs font-bold text-ink-2">
         {icon}
         {label}
-      </div>
-      <div className="text-sm">{value}</div>
+      </dt>
+      <dd className="text-sm">{value}</dd>
     </div>
   );
 }
