@@ -26,6 +26,12 @@ export interface Recall {
    * normalized to digits-only. Only present when the notice discloses them.
    */
   upcs?: string[];
+  /**
+   * USDA establishment numbers printed in an FSIS notice ("EST. 47991", "P-894"),
+   * as printed. Each names the plant that made the product; it appears inside the
+   * round USDA mark of inspection on the package.
+   */
+  establishments?: string[];
   /** Regulating agency. Absent ⇒ FDA (openFDA), the original source. */
   agency?: "FDA" | "FSIS";
   /** Link to the official recall notice (FSIS provides one; openFDA does not). */

@@ -25,13 +25,13 @@ const cdcCyclospora: SourceCitation = {
   url: "https://www.cdc.gov/cyclosporiasis/outbreaks/07-26/investigation.html",
   date: "2026-07-21",
 };
-const fdaIceberg: SourceCitation = {
+export const fdaIceberg: SourceCitation = {
   agency: "FDA",
   label: "FDA: Investigation of 5-State Cyclospora Outbreak — Iceberg Lettuce (July 2026)",
   url: "https://www.fda.gov/food/outbreaks-foodborne-illness/investigation-5-state-outbreak-cyclospora-illnesses-iceberg-lettuce-july-2026",
   date: "2026-07-18",
 };
-const fdaEggs: SourceCitation = {
+export const fdaEggs: SourceCitation = {
   agency: "FDA",
   label: "FDA: Outbreak Investigation of Salmonella — Eggs (July 2026)",
   url: "https://www.fda.gov/food/outbreaks-foodborne-illness/outbreak-investigation-salmonella-eggs-july-2026",

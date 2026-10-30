@@ -1,5 +1,6 @@
 import type { Recall } from "./types";
 import { extractUpcs } from "./avoidance";
+import { extractEstablishments } from "./plants";
 
 // FSIS publishes each recall in English AND Spanish as separate records that
 // share a recall number. We keep the English one. These markers score a record's
@@ -50,9 +51,16 @@ export async function loadFsisRecalls(signal?: AbortSignal): Promise<FsisFeed> {
     // Best-effort UPCs: FSIS leans on establishment (EST) numbers and lot codes,
     // so barcodes are usually absent — extract from the product text when the
     // notice does print them, and leave upcs undefined otherwise.
+    // Plant numbers come from the same text, so a shopper can match the number in
+    // the USDA mark of inspection on a package.
     const recalls = englishOnly(feed.recalls as Recall[]).map((r) => {
       const upcs = extractUpcs(r.codeInfo, r.productDescription);
-      return upcs.length > 0 ? { ...r, upcs } : r;
+      const establishments = extractEstablishments(r.productDescription);
+      return {
+        ...r,
+        ...(upcs.length > 0 && { upcs }),
+        ...(establishments.length > 0 && { establishments }),
+      };
     });
     return { generatedAt: feed.generatedAt ?? null, recalls, stale: false };
   } catch (err) {

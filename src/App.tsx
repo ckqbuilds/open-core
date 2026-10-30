@@ -10,6 +10,7 @@ import { OutbreakPage } from "@/pages/OutbreakPage";
 import { RecallsPage } from "@/pages/RecallsPage";
 import { ShopLocalPage } from "@/pages/ShopLocalPage";
 import { LearnPage } from "@/pages/LearnPage";
+import { SuppliersPage } from "@/pages/SuppliersPage";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/outbreaks" element={<OutbreaksPage />} />
               <Route path="/outbreak/:refId" element={<OutbreakPage />} />
               <Route path="/recalls" element={<RecallsPage />} />
+              <Route path="/suppliers" element={<SuppliersPage />} />
               <Route path="/shop-local" element={<ShopLocalPage />} />
               {/* Barcode check lives on the Recalls page; keep old links working. */}
               <Route path="/check" element={<Navigate to="/recalls" replace />} />
@@ -47,9 +49,9 @@ export default function App() {
                 <p className="prose-measure text-sm text-ink-2">
                   <strong className="text-ink">Not medical or official guidance.</strong> OpenCORE shows
                   what public FDA, CDC and USDA FSIS records say, each with a citation. It never decides
-                  that a store is unsafe and never infers risk from supplier relationships; only
-                  companies named in the official record appear. Always confirm against the linked
-                  sources. If you are ill, contact a healthcare provider.
+                  that a store is unsafe. Supplier links come from the recall notices; parent companies
+                  and store brands come from public sources and are marked as such. Always confirm
+                  against the linked sources. If you are ill, contact a healthcare provider.
                 </p>
               </div>
               <div className="space-y-3 text-sm">

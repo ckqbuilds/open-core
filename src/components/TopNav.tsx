@@ -10,11 +10,12 @@ const LINKS = [
   { to: "/", label: "Foods", end: true },
   { to: "/outbreaks", label: "Outbreaks" },
   { to: "/recalls", label: "Recalls" },
+  { to: "/suppliers", label: "Suppliers" },
   { to: "/shop-local", label: "Shop local" },
   { to: "/learn", label: "Learn" },
 ];
 
-/** The thin band across the top of the map: wordmark, five places, your ZIP. */
+/** The thin band across the top of the map: wordmark, six places, your ZIP. */
 export function TopNav() {
   const [menuOpen, setMenuOpen] = useState(false);
 
