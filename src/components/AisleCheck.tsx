@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Search } from "lucide-react";
 import { Chip } from "@/components/ui/chip";
 import { Lobe } from "@/components/common";
@@ -16,52 +16,40 @@ import {
   type ShelfGroup,
 } from "@/data/supplyChain";
 
-const TRY = ["State Fair", "Simple Truth", "47991", "Walmart"];
-
-const brandNodeId = (name: string) => NODES.find((x) => x.tier === 2 && x.name === name)?.id;
+const TRY = ["Jimmy Dean", "Great Value", "Boar's Head", "47991"];
 
 /**
  * The in-store check: type a brand, company, store or the plant number from the
  * USDA stamp, and the answer comes first: who made it, the supplier's plant
- * numbers, and what else came from the same place.
+ * numbers, and what else came from the same place. The page owns the query,
+ * because the supplier map below draws whatever is searched here.
  */
 export function AisleCheck({
+  query,
+  onQuery,
   groups,
   fsis,
   onTrace,
-  onHover,
-  onLeave,
 }: {
+  query: string;
+  onQuery: (q: string) => void;
   groups: ShelfGroup[];
   fsis: Recall[];
   onTrace: (nodeId: string) => void;
-  onHover: (id: string | null, e: React.PointerEvent) => void;
-  onLeave: () => void;
 }) {
-  const [query, setQuery] = useState("State Fair");
-  const hits = useMemo(() => groups.filter((g) => groupMatches(g, query)), [groups, query]);
+  const setQuery = onQuery;
+  const hits = useMemo(() => (query.trim() ? groups.filter((g) => groupMatches(g, query)) : []), [groups, query]);
   const exact = useMemo(() => exactBrand(hits, query), [hits, query]);
   // Plant numbers also match across the whole FSIS feed, beyond the traced examples.
   const traced = useMemo(() => new Set(groups.map((g) => g.recall.fsisNumber).filter(Boolean)), [groups]);
   const plantHits = useMemo(() => findPlant(query, fsis).filter((h) => !traced.has(h.recall.recallNumber)), [query, fsis, traced]);
   const total = hits.length + plantHits.length;
 
-  const brandChip = (b: string) => {
-    const id = brandNodeId(b);
-    return (
-      <button
-        key={b}
-        type="button"
-        className="chip chip--outline cursor-pointer"
-        onPointerMove={(e) => id && onHover(id, e)}
-        onPointerLeave={onLeave}
-        onClick={() => id && onTrace(id)}
-        title="Show on the supplier map"
-      >
-        {b}
-      </button>
-    );
-  };
+  const brandChip = (b: string) => (
+    <button key={b} type="button" className="chip chip--outline cursor-pointer" onClick={() => setQuery(b)} title="Map this brand">
+      {b}
+    </button>
+  );
 
   return (
     <div className="space-y-5">
@@ -86,9 +74,6 @@ export function AisleCheck({
               {/^\d+$/.test(t) ? `EST. ${t}` : t}
             </button>
           ))}
-          <button type="button" onClick={() => setQuery("")} className="capsule capsule--sm capsule--ghost">
-            Show all
-          </button>
         </div>
       </div>
 
@@ -139,9 +124,10 @@ export function AisleCheck({
         </Lobe>
       )}
 
-      {total === 0 ? (
+      {!query.trim() ? null : total === 0 ? (
         <p className="text-sm text-ink-2">
-          No traced recall or FSIS notice names “{query}”. Try a brand, a company, or the number inside the round USDA stamp.
+          None of the hand-checked examples or FSIS plant numbers match “{query}”. The supplier map below shows every
+          current notice that names it, and who owns the brand.
         </p>
       ) : (
         <div>

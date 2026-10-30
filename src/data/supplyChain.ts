@@ -45,6 +45,16 @@ export interface SupplyEdge {
   recall?: string;
   /** Where an ownership link comes from, in a sentence. */
   note?: string;
+  /** The public record an ownership link cites, when it has a page. */
+  source?: { label: string; url: string };
+}
+
+/** One drawable map: its boxes, links, printed plant numbers and the recalls the links cite. */
+export interface SupplyGraph {
+  nodes: SupplyNode[];
+  edges: SupplyEdge[];
+  plants: Record<string, PlantInfo>;
+  recalls: Record<string, ChainRecall>;
 }
 
 /** A plant the recall prints USDA numbers for, and the supplier that runs it. */
@@ -279,14 +289,7 @@ export const EDGES: SupplyEdge[] = [
   own("wild-fork-brand", "wild-fork", "Wild Fork sells under its own label."),
 ];
 
-export const NODE_BY_ID: Record<string, SupplyNode> = Object.fromEntries(NODES.map((x) => [x.id, x]));
-
-const DOWN: Record<string, string[]> = {};
-const UP: Record<string, string[]> = {};
-for (const e of EDGES) {
-  (DOWN[e.from] ??= []).push(e.to);
-  (UP[e.to] ??= []).push(e.from);
-}
+const NODE_BY_ID: Record<string, SupplyNode> = Object.fromEntries(NODES.map((x) => [x.id, x]));
 
 function walk(start: string, adj: Record<string, string[]>): Set<string> {
   const seen = new Set([start]);
@@ -295,20 +298,60 @@ function walk(start: string, adj: Record<string, string[]>): Set<string> {
   return seen;
 }
 
-/** The chain through a node: everything upstream of it and everything downstream of it. */
-export function chainOf(id: string): Set<string> {
-  return new Set([...walk(id, UP), ...walk(id, DOWN)]);
-}
-
-/** Everything that shares a source with a node: its upstream, then all of their downstream. */
-export function familyOf(id: string): Set<string> {
-  const fam = new Set<string>();
-  for (const u of walk(id, UP)) for (const d of walk(u, DOWN)) fam.add(d);
-  return fam;
-}
-
 export function edgeOn(e: SupplyEdge, set: Set<string>): boolean {
   return set.has(e.from) && set.has(e.to);
+}
+
+/** Lookups over one map: its boxes by id, chains, shared sources, and what the links cite. */
+export interface GraphIndex {
+  byId: Record<string, SupplyNode>;
+  /** The chain through a node: everything upstream of it and everything downstream of it. */
+  chainOf: (id: string) => Set<string>;
+  /** Everything that shares a source with a node: its upstream, then all of their downstream. */
+  familyOf: (id: string) => Set<string>;
+  /** Recalls on the edges inside a set of nodes, newest first. */
+  recallsIn: (set: Set<string>) => ChainRecall[];
+  /** Ownership notes on the edges inside a set of nodes, with the record each cites. */
+  ownershipNotesIn: (set: Set<string>) => { note: string; source?: SupplyEdge["source"] }[];
+}
+
+export function indexGraph(g: SupplyGraph): GraphIndex {
+  const down: Record<string, string[]> = {};
+  const up: Record<string, string[]> = {};
+  for (const e of g.edges) {
+    (down[e.from] ??= []).push(e.to);
+    (up[e.to] ??= []).push(e.from);
+  }
+  return {
+    byId: Object.fromEntries(g.nodes.map((x) => [x.id, x])),
+    chainOf: (id) => new Set([...walk(id, up), ...walk(id, down)]),
+    familyOf: (id) => {
+      const fam = new Set<string>();
+      for (const u of walk(id, up)) for (const d of walk(u, down)) fam.add(d);
+      return fam;
+    },
+    recallsIn: (set) => {
+      const keys = new Set(g.edges.filter((e) => e.recall && edgeOn(e, set)).map((e) => e.recall!));
+      return [...keys].map((k) => g.recalls[k]).filter(Boolean).sort((a, b) => b.date.localeCompare(a.date));
+    },
+    ownershipNotesIn: (set) => {
+      const seen = new Set<string>();
+      return g.edges
+        .filter((e) => e.evidence === "ownership" && edgeOn(e, set) && !seen.has(e.note!) && seen.add(e.note!))
+        .map((e) => ({ note: e.note!, source: e.source }));
+    },
+  };
+}
+
+/** The hand-verified chains behind some shelf groups, as one map. */
+export function curatedGraph(groups: ShelfGroup[], recalls: Record<string, ChainRecall>): SupplyGraph {
+  const ids = new Set(groups.flatMap((g) => g.nodes));
+  return {
+    nodes: NODES.filter((x) => ids.has(x.id)),
+    edges: EDGES.filter((e) => edgeOn(e, ids)),
+    plants: Object.fromEntries(Object.entries(PLANTS).filter(([id]) => ids.has(id))),
+    recalls: Object.fromEntries(groups.map((g) => [g.recall.key, recalls[g.recall.key]])),
+  };
 }
 
 /** Merge live FSIS fields (status, class, date, link) over the hand-verified recall detail. */
@@ -331,22 +374,6 @@ export function resolveRecalls(fsis: Recall[]): Record<string, ChainRecall> {
       ];
     })
   );
-}
-
-/** Recalls on the edges inside a set of nodes, newest first. */
-export function recallsIn(set: Set<string>, recalls: Record<string, ChainRecall>): ChainRecall[] {
-  const keys = new Set(EDGES.filter((e) => e.recall && edgeOn(e, set)).map((e) => e.recall!));
-  return [...keys].map((k) => recalls[k]).filter(Boolean).sort((a, b) => b.date.localeCompare(a.date));
-}
-
-/** Ownership notes on the edges inside a set of nodes. */
-export function ownershipNotesIn(set: Set<string>): string[] {
-  return EDGES.filter((e) => e.evidence === "ownership" && edgeOn(e, set)).map((e) => e.note!);
-}
-
-/** Plants with printed numbers inside a set of nodes. */
-export function plantsIn(set: Set<string>): { id: string; plant: PlantInfo }[] {
-  return [...set].filter((id) => PLANTS[id]).map((id) => ({ id, plant: PLANTS[id] }));
 }
 
 /** "Hillshire Brands" → "Hillshire Brands’"; "Rajbhog Foods" → "Rajbhog Foods’"; "Perdue" → "Perdue’s". */

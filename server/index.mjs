@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
 import { isChatConfigured, providerConfig, streamChat } from "./chat.mjs";
 import { fetchUsdaMarkets, isMarketsConfigured } from "./markets.mjs";
+import { fetchBrandOwners } from "./brands.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -40,6 +41,20 @@ app.get("/api/markets", async (req, res) => {
   } catch (err) {
     if (controller.signal.aborted) return;
     res.status(502).json({ error: "usda_error", message: String(err?.message ?? err) });
+  }
+});
+
+// Who owns a brand, from USDA FoodData Central. Key stays server-side.
+app.get("/api/brand-owners", async (req, res) => {
+  const brand = String(req.query.brand ?? "").trim();
+  if (!brand) {
+    res.status(400).json({ error: "bad_request", message: "brand required" });
+    return;
+  }
+  try {
+    res.json(await fetchBrandOwners(brand));
+  } catch (err) {
+    res.status(502).json({ error: "fdc_error", message: String(err?.message ?? err) });
   }
 });
 

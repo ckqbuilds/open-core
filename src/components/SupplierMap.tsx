@@ -1,5 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { EDGES, NODES, PLANTS, TIER_LABEL, chainOf, edgeOn, type Tier } from "@/data/supplyChain";
+import { TIER_LABEL, edgeOn, type GraphIndex, type SupplyGraph, type SupplyNode, type Tier } from "@/data/supplyChain";
 import { PlantNumbers } from "@/components/SupplyParts";
 import { cn } from "@/lib/utils";
 
@@ -18,13 +18,13 @@ interface Placed {
 }
 
 /** Bands top to bottom, one per supplier; within a band each tier is centred. */
-function layout() {
+function layout(nodes: SupplyNode[]) {
   const placed: Placed[] = [];
   const rules: number[] = [];
-  const groups = [...new Set(NODES.map((x) => x.group))];
+  const groups = [...new Set(nodes.map((x) => x.group))];
   let y = TOP;
   groups.forEach((g, i) => {
-    const tiers = ([0, 1, 2, 3] as Tier[]).map((t) => NODES.filter((x) => x.group === g && x.tier === t));
+    const tiers = ([0, 1, 2, 3] as Tier[]).map((t) => nodes.filter((x) => x.group === g && x.tier === t));
     const rows = Math.max(...tiers.map((a) => a.length));
     if (i > 0) rules.push(y - GROUP_GAP / 2);
     tiers.forEach((arr, t) =>
@@ -46,32 +46,31 @@ interface EdgePath {
 /**
  * The supplier map: company → supplier's plant → brand → store, left to right.
  * Clicking a box lights its chain (everything upstream and downstream of it)
- * and fades the rest; the parent page owns the selection.
+ * and fades the rest; the parent page owns the map and the selection.
  */
 export function SupplierMap({
+  graph,
+  index,
   selected,
   onSelect,
-  onHover,
-  onFocusNode,
-  onLeave,
 }: {
+  graph: SupplyGraph;
+  index: GraphIndex;
   selected: string | null;
   onSelect: (id: string | null) => void;
-  onHover: (id: string | null, e: React.PointerEvent) => void;
-  onFocusNode: (id: string, el: HTMLElement) => void;
-  onLeave: () => void;
 }) {
-  const { placed, rules, height } = useMemo(layout, []);
+  const { nodes, edges, plants } = graph;
+  const { placed, rules, height } = useMemo(() => layout(nodes), [nodes]);
   const nodeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const boxRef = useRef<HTMLDivElement>(null);
   const [paths, setPaths] = useState<Omit<EdgePath, "on">[]>([]);
-  const chain = useMemo(() => (selected ? chainOf(selected) : null), [selected]);
+  const chain = useMemo(() => (selected && index.byId[selected] ? index.chainOf(selected) : null), [selected, index]);
 
   // Edges join the measured boxes, so they follow node heights that wrap.
   useLayoutEffect(() => {
     const measure = () =>
       setPaths(
-        EDGES.flatMap((e, i) => {
+        edges.flatMap((e, i) => {
           const a = nodeRefs.current[e.from];
           const b = nodeRefs.current[e.to];
           if (!a || !b) return [];
@@ -88,12 +87,12 @@ export function SupplierMap({
     if (boxRef.current) ro.observe(boxRef.current);
     document.fonts?.ready.then(measure);
     return () => ro.disconnect();
-  }, []);
+  }, [edges]);
 
-  const byId = Object.fromEntries(NODES.map((x) => [x.id, x]));
+  const byId = index.byId;
 
   return (
-    <div className="sheet overflow-x-auto" onPointerLeave={onLeave}>
+    <div className="sheet overflow-x-auto">
       <div
         ref={boxRef}
         className="relative"
@@ -104,7 +103,9 @@ export function SupplierMap({
       >
         <svg aria-hidden className="pointer-events-none absolute inset-0" width={WIDTH} height={height}>
           {paths.map((p) => {
-            const on = !!chain && edgeOn(EDGES[p.edge], chain);
+            const edge = edges[p.edge];
+            if (!edge) return null; // measured against the previous map; re-measures next frame
+            const on = !!chain && edgeOn(edge, chain);
             return (
               <path
                 key={p.key}
@@ -135,7 +136,7 @@ export function SupplierMap({
           const node = byId[id];
           const on = !chain || chain.has(id);
           const isSel = selected === id;
-          const plant = PLANTS[id];
+          const plant = plants[id];
           return (
             <button
               key={id}
@@ -146,9 +147,6 @@ export function SupplierMap({
               aria-pressed={isSel}
               aria-label={`${TIER_LABEL[node.tier]}: ${node.name}${plant ? `, plant numbers ${plant.establishments.join(", ")}` : ""}`}
               onClick={() => onSelect(isSel ? null : id)}
-              onPointerMove={(e) => onHover(id, e)}
-              onFocus={(e) => onFocusNode(id, e.currentTarget)}
-              onBlur={onLeave}
               className={cn(
                 "absolute grid gap-px rounded-lg border-[1.5px] px-2.5 py-1.5 text-left transition-opacity duration-200",
                 node.tier === 0 ? "border-ink bg-ink text-ground" : "border-ink bg-paper text-ink",

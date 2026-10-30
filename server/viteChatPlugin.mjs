@@ -1,5 +1,6 @@
 import { isChatConfigured, providerConfig, streamChat } from "./chat.mjs";
 import { fetchUsdaMarkets, isMarketsConfigured } from "./markets.mjs";
+import { fetchBrandOwners } from "./brands.mjs";
 
 /**
  * Vite dev plugin: serves /api/chat and /api/chat/status inside the Vite dev
@@ -44,6 +45,23 @@ export function chatDevPlugin() {
         } catch (err) {
           res.statusCode = 502;
           res.end(JSON.stringify({ error: "usda_error", message: String(err?.message ?? err) }));
+        }
+      });
+
+      // Who owns a brand, from USDA FoodData Central.
+      server.middlewares.use("/api/brand-owners", async (req, res) => {
+        const brand = (new URL(req.url ?? "", "http://localhost").searchParams.get("brand") ?? "").trim();
+        res.setHeader("Content-Type", "application/json");
+        if (!brand) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: "bad_request", message: "brand required" }));
+          return;
+        }
+        try {
+          res.end(JSON.stringify(await fetchBrandOwners(brand)));
+        } catch (err) {
+          res.statusCode = 502;
+          res.end(JSON.stringify({ error: "fdc_error", message: String(err?.message ?? err) }));
         }
       });
 
